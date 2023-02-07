@@ -1,0 +1,30 @@
+[user]
+  name = Leonardo Mello
+  email = lsvmello@gmail.com
+
+[core]
+  editor = nvim
+
+[help]
+  autocorrect = 1
+
+[color]
+  ui = true
+
+[ui "color"]
+  ui = always
+
+[fetch]
+  prune = true
+
+[pull]
+  rebase = true
+
+[rebase]
+  autoStash = true
+
+[alias]
+  c = commit
+  s = status
+  co = checkout
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Creset(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative

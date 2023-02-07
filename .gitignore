@@ -1,0 +1,5 @@
+# node and npm
+configstore/
+
+# fish history and variables
+fish_*
