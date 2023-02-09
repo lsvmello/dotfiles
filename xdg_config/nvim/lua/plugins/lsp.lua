@@ -142,17 +142,22 @@ return {
             end,
           })
         end
+
         -- keymaps
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = buffer })
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = buffer })
-        vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, { buffer = buffer })
-        vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, { buffer = buffer })
-        vim.keymap.set("n", "[d", vim.diagnostic.goto_next, { buffer = buffer })
-        vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, { buffer = buffer })
-        vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = buffer })
-        vim.keymap.set("n", "<leader>rr", vim.lsp.buf.references, { buffer = buffer })
-        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = buffer })
-        vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, { buffer = buffer })
+        local function map(mode, l, r, desc)
+          vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
+        end
+
+        map("n", "gd", vim.lsp.buf.definition, "Go to definition")
+        map("n", "K", vim.lsp.buf.hover, "Peek definition")
+        map("n", "<leader>fws", vim.lsp.buf.workspace_symbol, "Find Workspace Symbol")
+        map("n", "<leader>vd", vim.diagnostic.open_float, "View Diagnostics")
+        map("n", "[d", vim.diagnostic.goto_next, "Next Diagnostic")
+        map("n", "]d", vim.diagnostic.goto_prev, "Preview Diagnostic")
+        map("n", "<leader>ca", vim.lsp.buf.code_action, "Code Actions")
+        map("n", "<leader>rr", vim.lsp.buf.references, "View References")
+        map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
+        map("i", "<C-h>", vim.lsp.buf.signature_help, "Signature Help")
       end)
 
       for name, icon in pairs(require("config.icons").diagnostics) do

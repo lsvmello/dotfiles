@@ -36,12 +36,12 @@ return {
       local ui = require("harpoon.ui")
 
       -- stylua: ignore start
-      vim.keymap.set("n", "<leader>m", mark.add_file)
-      vim.keymap.set("n", "<leader>h", ui.toggle_quick_menu)
-      vim.keymap.set("n", "<leader>1", function() ui.nav_file(1) end)
-      vim.keymap.set("n", "<leader>2", function() ui.nav_file(2) end)
-      vim.keymap.set("n", "<leader>3", function() ui.nav_file(3) end)
-      vim.keymap.set("n", "<leader>4", function() ui.nav_file(4) end)
+      vim.keymap.set("n", "<leader>m", mark.add_file, { desc = "Harpoon Mark" })
+      vim.keymap.set("n", "<leader>h", ui.toggle_quick_menu, { desc = "Harpoon Toggle Menu" })
+      vim.keymap.set("n", "<leader>1", function() ui.nav_file(1) end, { desc = "Harpoon Go to 1" })
+      vim.keymap.set("n", "<leader>2", function() ui.nav_file(2) end, { desc = "Harpoon Go to 2" })
+      vim.keymap.set("n", "<leader>3", function() ui.nav_file(3) end, { desc = "Harpoon Go to 3" })
+      vim.keymap.set("n", "<leader>4", function() ui.nav_file(4) end, { desc = "Harpoon Go to 4" })
     end,
   },
 }

@@ -20,7 +20,7 @@ map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 map("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
 
--- navigation
+-- better navigation
 map("n", "J", "mzJ`z")
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
@@ -29,14 +29,10 @@ map("n", "N", "Nzzzv")
 
 -- better copy and paste
 map("x", "<leader>p", '"_dP')
-map("n", "<leader>y", '"+y')
-map("v", "<leader>y", '"+y')
-map("n", "<leader>Y", '"+Y')
-map("v", "<leader>Y", '"+Y')
-map("n", "<leader>d", '"_d')
-map("v", "<leader>d", '"_d')
-map("n", "<leader>D", '"_D')
-map("v", "<leader>D", '"_D')
+map({ "n", "v" }, "<leader>y", '"+y')
+map({ "n", "v" }, "<leader>Y", '"+Y')
+map({ "n", "v" }, "<leader>d", '"_d')
+map({ "n", "v" }, "<leader>D", '"_D')
 
 -- utilities
 map("n", "<leader>x", "<cmd>!chmod +x %<CR>", { desc = "Make executable", silent = true })
