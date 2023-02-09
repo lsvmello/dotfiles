@@ -22,9 +22,7 @@ require("lazy").setup("plugins", {
   },
   install = {
     colorscheme = {
-      "rose-pine",
       "catppuccin",
-      "tokyonight",
       "habamax",
     },
   },
