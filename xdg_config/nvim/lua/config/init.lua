@@ -3,10 +3,9 @@ require("config.options")
 require("config.keymaps")
 require("config.autocmds")
 
--- include package manager
+-- bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  -- bootstrap lazy.nvim
   -- stylua: ignore
   vim.fn.system({
     "git", "clone", "--filter=blob:none",
@@ -16,8 +15,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- use package manager
+-- use lazy.nvim
 require("lazy").setup("plugins", {
+  dev = {
+    path = "~/git",
+  },
   install = {
     colorscheme = {
       "rose-pine",
