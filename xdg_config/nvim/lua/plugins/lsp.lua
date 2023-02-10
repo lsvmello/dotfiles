@@ -109,13 +109,14 @@ return {
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
       setup = {
-        -- example to setup with typescript.nvim
-        -- tsserver = function(_, opts)
-        --   require("typescript").setup({ server = opts })
-        --   return true
-        -- end,
-        -- Specify * to use this function as a fallback for any server
-        -- ["*"] = function(server, opts) end,
+        -- Fallback for any server
+        ["*"] = function()
+          local lsp = vim.lsp
+          local win_opts = { border = "single" }
+
+          lsp.handlers["textDocument/hover"] = lsp.with(lsp.handlers.hover, win_opts)
+          lsp.handlers["textDocument/signatureHelp"] = lsp.with(lsp.handlers.signature_help, win_opts)
+        end,
       },
     },
     config = function(_, opts)
@@ -157,7 +158,7 @@ return {
         map("n", "<leader>ca", vim.lsp.buf.code_action, "Code Actions")
         map("n", "<leader>rr", vim.lsp.buf.references, "View References")
         map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
-        map("i", "<C-h>", vim.lsp.buf.signature_help, "Signature Help")
+        map({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
       end)
 
       for name, icon in pairs(require("config.icons").diagnostics) do
