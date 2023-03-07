@@ -1,7 +1,7 @@
 -- include configuration files
-require("config.options")
-require("config.keymaps")
-require("config.autocmds")
+require("lsvmello.options")
+require("lsvmello.keymaps")
+require("lsvmello.autocmds")
 
 -- bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

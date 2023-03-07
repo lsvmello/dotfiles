@@ -149,7 +149,7 @@ return {
         map({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
       end)
 
-      for name, icon in pairs(require("config.icons").diagnostics) do
+      for name, icon in pairs(require("lsvmello.icons").diagnostics) do
         name = "DiagnosticSign" .. name
         vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
       end
