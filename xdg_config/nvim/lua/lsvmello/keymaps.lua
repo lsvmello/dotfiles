@@ -38,12 +38,12 @@ map({ "n", "v" }, "<leader>D", '"_D')
 map("n", "<leader>x", "<cmd>!chmod +x %<CR>", { desc = "Make executable", silent = true })
 
 -- quickfix list
-map("n", "<C-k>", "<cmd>cnext<CR>zz", { desc = "Quickfix next" })
-map("n", "<C-j>", "<cmd>cprev<CR>zz", { desc = "Quickfix previous" })
+map("n", "]q", "<cmd>cnext<CR>zz", { desc = "Quickfix next" })
+map("n", "[q", "<cmd>cprev<CR>zz", { desc = "Quickfix previous" })
 
 -- location list
-map("n", "<leader>k", "<cmd>lnext<CR>zz", { desc = "Location list next" })
-map("n", "<leader>j", "<cmd>lprev<CR>zz", { desc = "Location list previous" })
+map("n", "]l", "<cmd>lnext<CR>zz", { desc = "Location list next" })
+map("n", "[l", "<cmd>lprev<CR>zz", { desc = "Location list previous" })
 
 -- add undo break-points
 map("i", ",", ",<c-g>u")
