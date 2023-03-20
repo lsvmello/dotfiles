@@ -94,7 +94,7 @@ popd
 # if folder already exists then create a backup
 if [[ -d ~/.config ]]; then
   TEMP_CONFIG_DIR=_config_temp
-  mv ~/.config $TEMP_CONFIG_DIR
+  mv ~/.config/* $TEMP_CONFIG_DIR
 fi
   
 # link the .config directory
@@ -104,7 +104,7 @@ ln -sv ~/git/dotfiles/xdg_config/ ~/.config
 # if the files are different the changes
 # will show up on the `git status`
 if [[ $TEMP_CONFIG_DIR ]]; then
-  cp -r $TEMP_CONFIG_DIR ~/.config
+  cp -r $TEMP_CONFIG_DIR/* ~/.config
   rm -rf $TEMP_CONFIG_DIR
 fi
 
