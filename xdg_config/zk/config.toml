@@ -1,0 +1,50 @@
+[note]
+filename = "{{id}}-{{title}}"
+ignore = ["README.md"]
+template = "basic.md"
+
+[group.fleeting.note]
+filename = "{{format-date now 'timestamp'}}"
+template = "basic.md"
+
+[group.reference.note]
+filename = "{{format-date now 'timestamp'}}-{{slug title}}"
+template = "with-reference.md"
+
+[group.permanent.note]
+filename = "{{slug title}}"
+template = "with-reference.md"
+
+[filter]
+recents = "--sort created- --created-after 'last two weeks'"
+
+[alias]
+# git
+commit = "git -C $ZK_NOTEBOOK_DIR add -A && git -C $ZK_NOTEBOOK_DIR commit -m '$*'"
+pull = "git -C $ZK_NOTEBOOK_DIR pull --autostash" # TODO: test this
+push = "git -C $ZK_NOTEBOOK_DIR push" # TODO: test this
+# helpers
+config = "nvim $DOTFILES/zk/config.toml"
+inline = "zk list --quiet --format {{path}} delimiter=',' $@"
+ls = "zk edit --interactive"
+recent = "zk edit --interactive --sort created- --created-after 'last two weeks'" # TODO: test
+# notes
+fleeting = "zk new fleeting --no-input"
+permanent = "zk new permanent --no-input --title $@"
+reference = "zk new reference --no-input --title $@"
+# workflow
+review = "zk edit --interactive fleeting reference --orphan"
+
+[tool]
+shell = "/bin/bash"
+editor = "nvim"
+fzf-preview = "bat -p --color=always {-1}"
+
+[lsp.diagnostics]
+wiki-title = "hint" # Report titles of wiki-links as hints.
+dead-link = "error" # Warn for dead links between notes.
+
+[lsp.completion] # TODO: test this
+note-label = "{{title-or-path}}"
+note-filter-text = "{{title}} {{path}}"
+note-detail = "{{filename-stem}}"
