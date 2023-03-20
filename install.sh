@@ -12,7 +12,7 @@ function pull_or_clone {
   if [[ -d $1 ]]; then
     git -C $1 pull --autostash
   else
-    git clone $2 $1
+    git clone --depth 1 $2 $1
   fi
 }
 
@@ -25,8 +25,8 @@ curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 
 # install tools
 sudo apt install -y \
-  fish tmux git curl \
-  fzf jq nodejs \
+  fish tmux git \
+  curl jq nodejs \
   python3-pip python3.8-venv \
 
 # install rust
@@ -38,6 +38,11 @@ fi;
 if ! command -v go &> /dev/null; then
   curl --proto '=https' --tlsv1.2 -sSfL https://go.dev/dl/go1.20.2.linux-amd64.tar.gz | sudo tar -C /usr/local -xzf -
 fi;
+
+# install fzf from source
+pull_or_clone ~/build/fzf https://github.com/junegunn/fzf.git
+
+sudo ~/build/fzf/install --key-bindings --no-bash --no-zsh --no-completion --update-rc
 
 # install neovim's dependencies
 sudo apt install -y \
@@ -99,7 +104,7 @@ ln -sv ~/git/dotfiles/xdg_config/ ~/.config
 # if the files are different the changes
 # will show up on the `git status`
 if [[ $TEMP_CONFIG_DIR ]]; then
-  cp -r $TEMP_CONFIG_DIR /.config
+  cp -r $TEMP_CONFIG_DIR ~/.config
   rm -rf $TEMP_CONFIG_DIR
 fi
 
