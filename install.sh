@@ -3,8 +3,9 @@
 set -e # exit immediately if a command exits with a non-zero status.
 set -x # print commands and their arguments as they are executed.
 
-mkdir -p ~/build # build from source projects
-mkdir -p ~/git   # personal projects
+mkdir -p ~/build    # build from source projects
+mkdir -p ~/personal # personal projects
+mkdir -p ~/work     # work projects
 
 # pulls the latest version of the directory (arg1)
 # or clones the repository (arg2) into the directory (arg1)
@@ -40,9 +41,8 @@ if ! command -v go &> /dev/null; then
 fi;
 
 # install fzf from source
-pull_or_clone ~/build/fzf https://github.com/junegunn/fzf.git
-
-sudo ~/build/fzf/install --key-bindings --no-bash --no-zsh --no-completion --update-rc
+pull_or_clone ~/build/fzf https://personalhub.com/junegunn/fzf.git
+~/build/fzf/install --key-bindings --no-bash --no-zsh --no-completion --update-rc
 
 # install neovim's dependencies
 sudo apt install -y \
@@ -52,7 +52,7 @@ sudo apt install -y \
   g++ pkg-config unzip doxygen
 
 # install neovim
-pull_or_clone ~/build/neovim https://github.com/neovim/neovim
+pull_or_clone ~/build/neovim https://personalhub.com/neovim/neovim
 
 pushd ~/build/neovim
 sudo make CMAKE_BUILD_TYPE=RelWithDebInfo
@@ -60,7 +60,7 @@ sudo make install
 popd 
 
 # install zk
-pull_or_clone ~/build/zk https://github.com/mickael-menu/zk
+pull_or_clone ~/build/zk https://personalhub.com/mickael-menu/zk
 
 pushd ~/build/zk
 make install
@@ -77,14 +77,14 @@ pip install \
   pre-commit
 
 # get the latest dotfiles
-pull_or_clone ~/git/dotfiles https://github.com/lsvmello/dotfiles 
+pull_or_clone ~/personal/dotfiles https://github.com/lsvmello/dotfiles 
 
 # get the latest zettelkasten
-pull_or_clone ~/git/zettelkasten https://github.com/lsvmello/zettelkasten
+pull_or_clone ~/personal/zettelkasten https://github.com/lsvmello/zettelkasten
 
 # initialize the notebook
-pushd ~/git/zettelkasten
-if [[ -d ~/git/zettelkasten/.zk ]]; then
+pushd ~/personal/zettelkasten
+if [[ -d ~/personal/zettelkasten/.zk ]]; then
   zk index --verbose
 else
   zk init --no-input
@@ -98,7 +98,7 @@ if [[ -d ~/.config ]]; then
 fi
   
 # link the .config directory
-ln -sv ~/git/dotfiles/xdg_config/ ~/.config
+ln -sv ~/personal/dotfiles/xdg_config/ ~/.config
   
 # restores and deletes the backup
 # if the files are different the changes

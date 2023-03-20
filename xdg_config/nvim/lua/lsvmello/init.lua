@@ -18,7 +18,7 @@ vim.opt.rtp:prepend(lazypath)
 -- use lazy.nvim
 require("lazy").setup("plugins", {
   dev = {
-    path = "~/git",
+    path = "~/work",
   },
   install = {
     colorscheme = {

@@ -7,12 +7,12 @@ _Currently I use this only on **WSL Ubuntu 22.04**, so something might not work 
 ## How it works
 
 The `install.sh` script install all the dependencies that I use and creates symbolic links for the `xdg_config` folder on the `$HOME\.config` folder.  
-It also creates the `git` folder where I keep all my git projects and a `build` folder where I keep the programs that I like to 'build from source'.
+It also creates the `personal` and `work` folder where I keep all my git projects and a `build` folder where I keep the programs that I like to 'build from source'.
 
 ### Installation using `git`:
 
 ```bash
-mkdir ~/git && cd ~/git
+mkdir ~/personal && cd ~/personal
 git clone https://github.com/lsvmello/dotfiles.git
 cd dotfiles
 chmod +x install.sh

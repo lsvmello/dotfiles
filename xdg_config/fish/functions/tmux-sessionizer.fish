@@ -4,7 +4,7 @@ function tmux-sessionizer
   if test (count $argv) -gt 0
     set selected $argv[1]
   else
-    set selected (find ~/git -mindepth 1 -maxdepth 1 -type d | fzf --height=100% --margin=15% --layout=reverse --border --border-label="Choose your session")
+    set selected (find ~/personal ~/work -mindepth 1 -maxdepth 1 -type d | fzf --height=100% --margin=15% --layout=reverse --border --border-label="Choose your session")
   end
 
   if test -z $selected
