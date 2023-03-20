@@ -11,7 +11,7 @@ set -x DOTFILES ~/git/dotfiles/xdg_config
 set -x ZK_SHELL /bin/bash # TODO: add this to config.toml
 set -x ZK_NOTEBOOK_DIR ~/git/zettelkasten
 set -x FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
-set -x FZF_DEFAULT_OPTS '--height 40%'
+set -x FZF_DEFAULT_OPTS '--height=~40%'
 
 # Add cargo, go and pip installation folder to PATH
 set -x PATH ~/.cargo/bin /usr/local/go/bin ~/go/bin ~/.local/bin $PATH
