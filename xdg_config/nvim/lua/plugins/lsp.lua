@@ -18,6 +18,7 @@ return {
       ensure_installed = {
         "clang-format",
         "clangd",
+        "gopls",
         "lua-language-server",
         "rust-analyzer",
         "shellcheck",
