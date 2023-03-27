@@ -48,11 +48,10 @@ return {
       { "<leader>fd", telescope_builtin("diagnostics"), desc = "[F]ind [D]iagnostics" },
       { "<leader>ff", telescope_builtin("find_files"), desc = "[F]ind [F]iles" },
       { "<leader>fg", telescope_builtin("live_grep"), desc = "[F]ind by [G]rep" },
-      { "<leader>fgc", telescope_builtin("git_commits"), desc = "[F]ind [G]it [C]ommits" },
       { "<leader>fh", telescope_builtin("help_tags"), desc = "[F]ind [H]elp Tags" },
       { "<leader>fk", telescope_builtin("keymaps"), desc = "[F]ind [K]eymaps" },
       { "<leader>ft", telescope_builtin("builtin"), desc = "[F]ind [T]elescope" },
-      { "<leader>fw", telescope_builtin("grep_string"), desc = "[F]ind current [W]ord" },
+      { "<leader>fw", telescope_builtin("grep_string"), mode = { "n", "v" }, desc = "[F]ind current [W]ord" },
     },
   },
 }
