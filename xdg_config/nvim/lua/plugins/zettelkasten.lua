@@ -72,6 +72,13 @@ return {
       desc = "[Z]ettelkasten New [P]ermanent Note",
     },
   },
+  ft = function(_, fts)
+    -- loads the plugin if it is on a notebook folder
+    if require("zk.util").notebook_root(vim.fn.expand("%:p")) ~= nil then
+      table.insert(fts, "markdown")
+    end
+    return fts
+  end,
   config = function(_, opts)
     local zk = require("zk")
     local commands = require("zk.commands")
