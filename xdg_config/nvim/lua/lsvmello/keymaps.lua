@@ -49,3 +49,6 @@ map("n", "[l", "<cmd>lprev<CR>zz", { desc = "Location list previous" })
 map("i", ",", ",<c-g>u")
 map("i", ".", ".<c-g>u")
 map("i", ";", ";<c-g>u")
+
+-- tmux
+map("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
