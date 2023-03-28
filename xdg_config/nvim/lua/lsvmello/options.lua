@@ -26,7 +26,7 @@ opt.scrolloff = 4 -- lines of context
 opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize" }
 opt.shiftround = true -- round indent
 opt.shiftwidth = 2 -- size of an indent
-opt.shortmess:append({ w = true, i = true, c = true, c = true })
+opt.shortmess:append({ w = true, i = true, c = true })
 opt.showbreak = "↪ " -- hint shown when a line is wrapped
 opt.showmode = false -- dont show mode since we have a statusline
 opt.sidescrolloff = 8 -- columns of context
