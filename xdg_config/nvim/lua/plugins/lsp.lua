@@ -76,7 +76,7 @@ return {
           text = { spinner = "moon" },
           window = {
             relative = "editor",
-            blend = 10,
+            blend = 0,
           },
         },
       },

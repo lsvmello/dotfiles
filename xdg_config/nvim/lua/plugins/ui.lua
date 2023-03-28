@@ -8,6 +8,9 @@ return {
       transparent_background = true,
       show_end_of_buffer = true,
       term_colors = true,
+      integrations = {
+        fidget = true,
+      },
     },
     config = function(_, opts)
       require("catppuccin").setup(opts)
