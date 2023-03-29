@@ -36,8 +36,8 @@ reference = "zk new reference --no-input --title $@"
 review = "zk edit --interactive fleeting reference --orphan"
 
 [tool]
-shell = "/bin/bash"
 editor = "nvim"
+shell = "/bin/bash"
 fzf-preview = "bat -p --color=always {-1}"
 
 [lsp.diagnostics]
