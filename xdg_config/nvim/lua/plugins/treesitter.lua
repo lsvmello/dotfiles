@@ -4,6 +4,11 @@ return {
     version = false, -- last release is way too old and doesn't work on Windows
     build = ":TSUpdate",
     event = "BufReadPost",
+    dependencies = {
+      "JoosepAlviste/nvim-ts-context-commentstring",
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      "nvim-treesitter/playground",
+    },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
     end,
@@ -13,6 +18,9 @@ return {
       highlight = {
         enable = true,
         additional_vim_regex_highlighting = false,
+      },
+      context_commentstring = {
+        enable = true,
       },
       -- stylua: ignore
       ensure_installed = {
@@ -64,7 +72,4 @@ return {
       },
     },
   },
-  "nvim-treesitter/nvim-treesitter-textobjects",
-  "nvim-treesitter/playground",
-  "JoosepAlviste/nvim-ts-context-commentstring",
 }
