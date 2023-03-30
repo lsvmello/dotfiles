@@ -15,16 +15,11 @@ return {
       local actions = require("telescope.actions")
       return {
         defaults = {
-          winblend = 10,
+          -- stylua: ignore
           vimgrep_arguments = {
-            "rg",
-            "--color=never",
-            "--no-heading",
-            "--with-filename",
-            "--line-number",
-            "--column",
-            "--smart-case",
-            "--trim",
+            "rg", "--color=never", "--no-heading",
+            "--with-filename", "--line-number",
+            "--column", "--smart-case", "--trim",
           },
           mappings = {
             i = {
