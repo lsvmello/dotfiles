@@ -3,11 +3,9 @@ vim.g.maplocalleader = " "
 
 local opt = vim.opt
 
-opt.autowrite = true -- enable auto write
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 3 -- hide * markup for bold and italic
 opt.confirm = true -- confirm to save changes before exiting modified buffer
-opt.cursorline = true -- enable highlighting of the current line
 opt.expandtab = true -- use spaces instead of tabs
 opt.formatoptions = "jcroqlnt" -- tcqj
 opt.grepformat = "%f:%l:%c:%m"
@@ -39,10 +37,9 @@ opt.splitkeep = "screen"
 opt.splitright = true -- put new windows right of current
 opt.tabstop = 2 -- number of spaces tabs count for
 opt.termguicolors = true -- true color support
-opt.timeoutlen = 300
+opt.timeoutlen = 500 -- milliseconds to wait for a mapped sequence to complete
 opt.undofile = true -- enable undo files to use UndoTree
 opt.undolevels = 10000
 opt.updatetime = 200 -- save swap file and trigger cursorhold
 opt.wildmode = "longest:full,full" -- command-line completion mode
-opt.winminwidth = 5 -- minimum window width
 opt.wrap = false -- disable line wrap
