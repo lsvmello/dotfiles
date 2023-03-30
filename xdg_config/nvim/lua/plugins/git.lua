@@ -3,15 +3,19 @@ return {
     "tpope/vim-fugitive",
     -- stylua: ignore
     cmd = {
-      "G", "GBrowse", "GDelete",
-      "GMove", "GRemove", "GRename",
-      "GUnlink", "Gcd", "Gclog",
-      "Gdiffsplit", "Gdrop", "Gedit",
-      "Ggrep", "Ghdiffsplit", "Git",
-      "Glcd", "Glgrep", "Gllog",
-      "Gpedit", "Gread", "Gsplit",
-      "Gtabedit", "Gvdiffsplit",
-      "Gvsplit", "Gwq", "Gwrite",
+      -- fill other commands
+      "G", "GBrowse", "GDelete", "GMove",
+      "GRemove", "GRename", "GUnlink",
+      "GcLog", "Gcd", "Gclog",
+      "Gdiffsplit", "Gdrop", "Ge",
+      "Gedit", "Ggrep", "Ghdiffsplit",
+      "Git", "GlLog", "Glcd", "Glgrep",
+      "Gllog", "Gpedit", "Gr", "Gread",
+      "Gsplit", "Gtabedit", "Gvdiffsplit",
+      "Gvsplit", "Gw", "Gwq", "Gwrite",
+    },
+    keys = {
+      { "<leader>gs", "<Cmd>Git<CR>", desc = "Git status" },
     },
   },
   {
