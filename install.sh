@@ -93,12 +93,14 @@ popd
 
 # if folder already exists then create a backup
 if [[ -d ~/.config ]]; then
-  TEMP_CONFIG_DIR=_config_temp
+  TEMP_CONFIG_DIR=~/_temp_config
+  mkdir $TEMP_CONFIG_DIR
   mv ~/.config/* $TEMP_CONFIG_DIR
+  rm -rf ~/.config
 fi
   
 # link the .config directory
-ln -sv ~/personal/dotfiles/xdg_config/ ~/.config
+ln -sv ~/personal/dotfiles/xdg_config ~/.config
   
 # restores and deletes the backup
 # if the files are different the changes
