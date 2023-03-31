@@ -8,6 +8,7 @@ return {
       "JoosepAlviste/nvim-ts-context-commentstring",
       "nvim-treesitter/nvim-treesitter-textobjects",
       "nvim-treesitter/playground",
+      { "nvim-treesitter/nvim-treesitter-context", config = true },
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
