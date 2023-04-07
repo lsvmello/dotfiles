@@ -1,15 +1,9 @@
-local telescope_builtin = function(builtin, opts)
-  if builtin == "files" then
-    return function()
-      local ok = pcall(require("telescope.builtin").git_files, opts)
-      if not ok then
-        require("telescope.builtin").find_files(opts)
-      end
-    end
-  end
-
+local find_files = function()
   return function()
-    require("telescope.builtin")[builtin](opts)
+    local ok = pcall(require("telescope.builtin").git_files, { show_untracked = true })
+    if not ok then
+      require("telescope.builtin").find_files()
+    end
   end
 end
 
@@ -17,6 +11,7 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
+    version = false, -- use HEAD
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
@@ -45,17 +40,26 @@ return {
     end,
     -- stylua: ignore
     keys = {
-      { "<leader>?", telescope_builtin("oldfiles"), desc = "[?] Find recently opened files" },
-      { "<leader><space>", telescope_builtin("buffers"), desc = "[ ] Find existing buffers" },
-      { "<leader>/", telescope_builtin( "current_buffer_fuzzy_find"), desc = "[/] Fuzzily search in current buffer]" },
-      { "<leader>fc", telescope_builtin("command_history"), desc = "[F]ind [C]ommand History" },
-      { "<leader>fd", telescope_builtin("diagnostics"), desc = "[F]ind [D]iagnostics" },
-      { "<leader>ff", telescope_builtin("files"), desc = "[F]ind [F]iles" },
-      { "<leader>fg", telescope_builtin("live_grep"), desc = "[F]ind by [G]rep" },
-      { "<leader>fh", telescope_builtin("help_tags"), desc = "[F]ind [H]elp Tags" },
-      { "<leader>fk", telescope_builtin("keymaps"), desc = "[F]ind [K]eymaps" },
-      { "<leader>ft", telescope_builtin("builtin"), desc = "[F]ind [T]elescope" },
-      { "<leader>fw", telescope_builtin("grep_string"), mode = { "n", "v" }, desc = "[F]ind current [W]ord" },
+      -- quick keymaps
+      { "<Leader><Leader>", "<Cmd>Telescope resume<CR>", desc = "Telescope Resume" },
+      { "<Leader>/", "<Cmd>Telescope current_buffer_fuzzy_find<CR>", desc = "Find in Files (Grep)" },
+      { "<Leader>:", "<Cmd>Telescope command_history<CR>", desc = "Command History" },
+      { "<Leader><Space>", find_files(), desc = "Find Files" },
+      -- f keymaps
+      { "<Leader>fM", "<Cmd>Telescope man_pages<CR>", desc = "[F]ind [M]an Pages" },
+      { "<Leader>fr", "<Cmd>Telescope oldfiles<CR>", desc = "[F]ind [R]ecent Files" },
+      { "<Leader>fb", "<Cmd>Telescope buffers show_all_buffers=true<CR>", desc = "[F]ind [B]uffers" },
+      { "<Leader>fc", "<Cmd>Telescope command_history<CR>", desc = "[F]ind [C]ommand History" },
+      { "<Leader>fd", "<Cmd>Telescope diagnostics<CR>", desc = "[F]ind [D]iagnostics" },
+      { "<Leader>ff", "<Cmd>Telescope files<CR>", desc = "[F]ind [F]iles" },
+      { "<Leader>fg", "<Cmd>Telescope live_grep<CR>", desc = "[F]ind by [G]rep" },
+      { "<Leader>fh", "<Cmd>Telescope help_tags<CR>", desc = "[F]ind [H]elp Tags" },
+      { "<Leader>fk", "<Cmd>Telescope keymaps<CR>", desc = "[F]ind [K]eymaps" },
+      { "<Leader>fo", "<Cmd>Telescope vim_options<CR>", desc = "[F]ind [O]ptions" },
+      { "<Leader>fs", "<Cmd>Telescope lsp_document_symbols<CR>", desc = "[F]ind Document [S]ymbols", },
+      { "<Leader>fS", "<Cmd>Telescope lsp_workspace_symbols<CR>", desc = "[F]ind Document [S]ymbols", },
+      { "<Leader>ft", "<Cmd>Telescope builtin<CR>", desc = "[F]ind [T]elescope" },
+      { "<Leader>fw", "<Cmd>Telescope grep_string<CR>", mode = { "n", "v" }, desc = "[F]ind [W]ord" },
     },
   },
 }

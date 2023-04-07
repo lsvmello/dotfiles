@@ -2,7 +2,8 @@
 configstore/
 
 # fish history and variables
-fish_*
+fish_history
+fish_variables
 
 # fzf_key_bindings is symlinked by fzf installation
 fzf_key_bindings.fish

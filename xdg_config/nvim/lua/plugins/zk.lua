@@ -3,70 +3,70 @@ return {
   opts = {
     picker = "telescope",
   },
-    -- stylua: ignore
-    cmd = {
-      "ZkBacklinks", "ZkCd", "ZkIndex", "ZkInsertLink",
-      "ZkInsertLinkAtSelection", "ZkLinks", "ZkMatch",
-      "ZkNew", "ZkNewFromContentSelection",
-      "ZkNewFromTitleSelection", "ZkNotes", "ZkTags",
-      -- custom commands
-      "ZkFleeting", "ZkPermanent", "ZkReference",
-    },
+  -- stylua: ignore
+  cmd = {
+    "ZkBacklinks", "ZkCd", "ZkIndex", "ZkInsertLink",
+    "ZkInsertLinkAtSelection", "ZkLinks", "ZkMatch",
+    "ZkNew", "ZkNewFromContentSelection",
+    "ZkNewFromTitleSelection", "ZkNotes", "ZkTags",
+    -- custom commands
+    "ZkFleeting", "ZkPermanent", "ZkReference",
+  },
   keys = {
     -- Normal Mode
     {
-      "<leader>zo",
+      "<Leader>zo",
       "<Cmd>ZkNotes { sort = { 'modified' } }<CR>",
       desc = "[Z]ettelkasten [O]pen Notes",
     },
     {
-      "<leader>zt",
+      "<Leader>zt",
       "<Cmd>ZkTags<CR>",
       desc = "[Z]ettelkasten [T]ags",
     },
     {
-      "<leader>zf",
+      "<Leader>zf",
       "<Cmd>ZkNotes { sort = { 'modified' }, match = { vim.fn.input('Search: ') } }<CR>",
       desc = "[Z]ettelkasten [F]ind",
     },
     {
-      "<leader>zn",
+      "<Leader>zn",
       "<Cmd>ZkFleeting<CR>",
       desc = "[Z]ettelkasten [N]ew Fleeting Note",
     },
     {
-      "<leader>zr",
+      "<Leader>zr",
       "<Cmd>ZkReference { title = vim.fn.input('Title: ') }<CR>",
       desc = "[Z]ettelkasten New [R]eference Note",
     },
     {
-      "<leader>zp",
+      "<Leader>zp",
       "<Cmd>ZkPermanent { title = vim.fn.input('Title: ') }<CR>",
       desc = "[Z]ettelkasten New [P]ermanent Note",
     },
-    { "<leader>zb", "<Cmd>ZkBacklinks<CR>", desc = "[Z]ettelkasten [B]acklinks" },
-    { "<leader>zl", "<Cmd>ZkLinks<CR>", desc = "[Z]ettelkasten [L]inks" },
+    { "<Leader>zb", "<Cmd>ZkBacklinks<CR>", desc = "[Z]ettelkasten [B]acklinks" },
+    { "<Leader>zl", "<Cmd>ZkLinks<CR>", desc = "[Z]ettelkasten [L]inks" },
     -- Visual Mode
     {
-      "<leader>zf",
+      "<Leader>zf",
       ":'<,'>ZkMatch<CR>",
       mode = "v",
       desc = "[Z]ettelkasten [F]ind",
     },
     {
-      "<leader>zn",
+      "<Leader>zn",
       ":'<,'>ZkNewFromContentSelection { dir = 'fleeting', group = 'fleeting' } }<CR>",
       mode = "v",
       desc = "[Z]ettelkasten [N]ew Fleeting Note",
     },
     {
-      "<leader>zr",
+      "<Leader>zr",
       ":'<,'>ZkNewFromContentSelection { dir = 'reference', group = 'reference' }, title = vim.fn.input('Title: ') }<CR>",
       mode = "v",
       desc = "[Z]ettelkasten New [R]eference Note",
     },
     {
-      "<leader>zp",
+      "<Leader>zp",
       ":'<,'>ZkNewFromContentSelection { dir = 'permanent', group = 'permanent' }, title = vim.fn.input('Title: ') }<CR>",
       mode = "v",
       desc = "[Z]ettelkasten New [P]ermanent Note",
