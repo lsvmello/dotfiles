@@ -1,10 +1,3 @@
-# Abbreviations
-abbr -a e nvim
-abbr -a g git
-abbr -a l 'ls'
-abbr -a ll 'ls -l'
-abbr -a lll 'ls -la'
-
 # Environment Variables
 set -x XDG_CONFIG_HOME ~/.config
 set -x DOTFILES ~/personal/dotfiles/xdg_config
