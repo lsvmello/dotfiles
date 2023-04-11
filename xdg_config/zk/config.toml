@@ -1,3 +1,6 @@
+[notebook]
+dir = "~/personal/zettelkasten"
+
 [note]
 filename = "{{id}}-{{title}}"
 ignore = ["README.md"]

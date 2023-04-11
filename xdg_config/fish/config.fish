@@ -1,7 +1,7 @@
 # Environment Variables
 set -x XDG_CONFIG_HOME ~/.config
+set -x EDITOR nvim
 set -x DOTFILES ~/personal/dotfiles/xdg_config
-set -x ZK_NOTEBOOK_DIR ~/personal/zettelkasten
 set -x FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
 set -x FZF_DEFAULT_OPTS '--height=~40%'
 
