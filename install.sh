@@ -17,6 +17,9 @@ function pull_or_clone {
   fi
 }
 
+# add apt-repositories
+sudo add-apt-repository --yes ppa:fish-shell/release-3
+
 # updates the distro
 sudo apt update
 sudo apt -y upgrade
