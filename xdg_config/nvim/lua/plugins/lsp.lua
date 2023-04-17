@@ -23,7 +23,9 @@ return {
         "rust-analyzer",
         "shellcheck",
         "shfmt",
+        "shellcheck",
         "stylua",
+        "zk",
       },
     },
     config = function(_, opts)
