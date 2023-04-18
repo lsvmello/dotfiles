@@ -37,9 +37,8 @@ vim.api.nvim_create_autocmd("FileType", {
     "man",
     "notify",
     "qf",
-    "spectre_panel",
+    "query",
     "startuptime",
-    "tsplayground",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false

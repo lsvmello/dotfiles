@@ -7,7 +7,6 @@ return {
     dependencies = {
       "JoosepAlviste/nvim-ts-context-commentstring",
       "nvim-treesitter/nvim-treesitter-textobjects",
-      "nvim-treesitter/playground",
       { "nvim-treesitter/nvim-treesitter-context", config = true },
     },
     config = function(_, opts)
@@ -25,11 +24,11 @@ return {
       },
       -- stylua: ignore
       ensure_installed = {
-        "bash", "c", "cpp", "diff", "go",
-        "help", "javascript", "json", "lua",
-        "markdown", "markdown_inline", "python",
+        "bash", "c", "cpp", "diff", "fish", "gitcommit",
+        "gitignore", "git_rebase", "go", "help", "javascript",
+        "json", "lua", "markdown", "markdown_inline", "python",
         "query", "regex", "rust", "toml", "typescript",
-        "vim", "yaml",
+        "vim", "vimdoc", "yaml",
       },
       textobjects = {
         select = {
