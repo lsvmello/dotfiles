@@ -32,15 +32,16 @@ return {
         untracked = { text = "┆" },
       },
     },
-    -- stylua: ignore start
+    -- stylua: ignore
     keys = {
       { "]h", "Gitsigns next_hunk<CR>", "Next Hunk" },
       { "[h", "Gitsigns prev_hunk<CR>", "Previous Hunk" },
-      { "<Leader>gb", function() require("gitsigns").blame_line({ full = true }) end, desc = "[G]it [B]lame Line" },
+      { "<Leader>gb", function() require("gitsigns").blame_line({ full = true }) end, desc = "[G]it [B]lame Line", },
       { "<Leader>gd", "Gitsigns diffthis<CR>", desc = "[G]it [D]iff This" },
-      { "<Leader>gD", function() require("gitsigns").diffthis("~") end, desc = "[G]it [D]iff This ~" },
+      { "<Leader>gD", function() require("gitsigns").diffthis("~") end, desc = "[G]it [D]iff This ~", },
       -- Text Objects
       { "ih", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, desc = "GitSigns Select Hunk" },
+    },
   },
   {
     "sindrets/diffview.nvim",

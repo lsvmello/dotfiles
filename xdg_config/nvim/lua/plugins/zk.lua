@@ -73,8 +73,9 @@ return {
     },
   },
   ft = function(_, fts)
+    local ok, zk_util = pcall(require, "zk.util")
     -- loads the plugin if it is on a notebook folder
-    if require("zk.util").notebook_root(vim.fn.expand("%:p")) ~= nil then
+    if ok and zk_util.notebook_root(vim.fn.expand("%:p")) then
       table.insert(fts, "markdown")
     end
     return fts
