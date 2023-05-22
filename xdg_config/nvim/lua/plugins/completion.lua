@@ -58,7 +58,7 @@ return {
   },
   {
     "L3MON4D3/LuaSnip",
-    event = "VeryLazy",
+    event = "InsertEnter",
     dependencies = {
       "rafamadriz/friendly-snippets",
       config = function()
