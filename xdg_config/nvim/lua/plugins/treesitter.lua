@@ -24,11 +24,12 @@ return {
       },
       -- stylua: ignore
       ensure_installed = {
-        "bash", "c", "cpp", "diff", "fish", "gitcommit",
-        "gitignore", "git_rebase", "go", "help", "javascript",
-        "json", "lua", "markdown", "markdown_inline", "python",
-        "query", "regex", "rust", "toml", "typescript",
-        "vim", "vimdoc", "yaml",
+        "bash", "c", "cpp", "diff", "fish",
+        "gitcommit", "gitignore", "git_rebase",
+        "go", "javascript", "json", "lua",
+        "markdown", "markdown_inline", "python",
+        "query", "regex", "rust", "toml",
+        "typescript", "vim", "vimdoc", "yaml",
       },
       textobjects = {
         select = {
