@@ -51,6 +51,11 @@ for _, char in ipairs({ ",", ".", ";" }) do
   map("i", char, char .. "<C-G>u")
 end
 
+-- pt-br keyboard fix
+for _, char in ipairs({ "~", "^", "`", "´" }) do
+  map({ "n", "i", "v", "c", "t" }, char .. char, char)
+end
+
 -- utilities
 map("n", "<Leader>x", "<Cmd>!chmod +x %<CR>", { desc = "Make executable", silent = true })
 map("n", "<C-f>", "<Cmd>silent !tmux neww tmux-sessionizer<CR>", { desc = "Change tmux session" })
