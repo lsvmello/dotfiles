@@ -41,6 +41,8 @@ return {
             ["ia"] = "@parameter.inner",
             ["af"] = "@function.outer",
             ["if"] = "@function.inner",
+            ["am"] = "@function.outer",
+            ["im"] = "@function.inner",
             ["ac"] = "@class.outer",
             ["ic"] = "@class.inner",
           },
@@ -50,10 +52,12 @@ return {
           set_jumps = true, -- whether to set jumps in the jumplist
           goto_next_start = {
             ["]m"] = "@function.outer",
+            ["]f"] = "@function.outer",
             ["]]"] = "@class.outer",
           },
           goto_next_end = {
             ["]M"] = "@function.outer",
+            ["]F"] = "@function.outer",
             ["]["] = "@class.outer",
           },
           goto_previous_start = {
@@ -67,8 +71,8 @@ return {
         },
         swap = {
           enable = true,
-          swap_next = { ["<leader>a"] = "@parameter.inner" },
-          swap_previous = { ["<leader>A"] = "@parameter.inner" },
+          swap_next = { ["<LocalLeader>a"] = "@parameter.inner" },
+          swap_previous = { ["<LocalLeader>A"] = "@parameter.inner" },
         },
       },
     },

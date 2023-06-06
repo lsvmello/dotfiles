@@ -13,7 +13,6 @@ return {
   {
     "williamboman/mason.nvim",
     cmd = "Mason",
-    keys = { { "<Leader>cm", "<Cmd>Mason<CR>", desc = "Mason" } },
     opts = {
       ensure_installed = {
         "clang-format",
@@ -152,16 +151,14 @@ return {
           vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
         end
 
-        map("n", "gd", vim.lsp.buf.definition, "Go to definition")
+        map("n", "gd", vim.lsp.buf.definition, "[G]o to [D]efinition")
+        map("n", "gI", vim.lsp.buf.implementation, "[G]o to [I]mplementation")
         map("n", "K", vim.lsp.buf.hover, "Peek definition")
-        map("n", "<Leader>fws", vim.lsp.buf.workspace_symbol, "Find Workspace Symbol")
-        map("n", "<Leader>vd", vim.diagnostic.open_float, "View Diagnostics")
+        map({ "n", "i" }, "<C-K>", vim.lsp.buf.signature_help, "Signature Help")
         map("n", "[d", vim.diagnostic.goto_prev, "Previous Diagnostic")
         map("n", "]d", vim.diagnostic.goto_next, "Next Diagnostic")
-        map("n", "<Leader>vca", vim.lsp.buf.code_action, "View Code Actions")
-        map("n", "<Leader>vr", vim.lsp.buf.references, "View References")
-        map("n", "<Leader>rn", vim.lsp.buf.rename, "Rename")
-        map({ "n", "i" }, "<C-K>", vim.lsp.buf.signature_help, "Signature Help")
+        map("n", "<Leader>a", vim.lsp.buf.code_action, "Code [A]ctions")
+        map("n", "<Leader>R", vim.lsp.buf.rename, "[R]ename")
       end)
 
       for name, icon in pairs(require("lsvmello.icons").diagnostics) do

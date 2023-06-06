@@ -5,22 +5,66 @@ return {
     config = true,
   },
   {
-    "tpope/vim-surround",
+    "kylechui/nvim-surround",
     event = "VeryLazy",
-    dependencies = {
-      "tpope/vim-repeat",
+    config = true,
+  },
+  {
+    "Wansmer/treesj",
+    dependencies = { "nvim-treesitter" },
+    opts = {
+      use_default_keymaps = false,
+    },
+    -- stylua: ignore
+    keys = {
+      { "<LocalLeader>m", "<Cmd>TSJToggle<CR>", desc = "TreeSJ Toggle" },
+      { "<LocalLeader>j", "<Cmd>TSJJoin<CR>", desc = "TreeSJ Join" },
+      { "<LocalLeader>s", "<Cmd>TSJSplit<CR>", desc = "TreeSJ Split" },
+      { "<LocalLeader>M", function() require("treesj").toggle({ split = { recursive = true } }) end, desc = "TreeSJ Toggle" },
     },
   },
   {
     "ThePrimeagen/harpoon",
     -- stylua: ignore
     keys = {
-      { "<leader>m", function() require("harpoon.mark").add_file() end, desc = "Harpoon Mark" },
-      { "<leader>h", function() require("harpoon.ui").toggle_quick_menu() end, desc = "Harpoon Toggle Menu" },
-      { "<leader>1", function() require("harpoon.ui").nav_file(1) end, desc = "Harpoon Go to 1" },
-      { "<leader>2", function() require("harpoon.ui").nav_file(2) end, desc = "Harpoon Go to 2" },
-      { "<leader>3", function() require("harpoon.ui").nav_file(3) end, desc = "Harpoon Go to 3" },
-      { "<leader>4", function() require("harpoon.ui").nav_file(4) end, desc = "Harpoon Go to 4" },
+      { "<Leader>m", function() require("harpoon.mark").add_file() end, desc = "Harpoon Mark" },
+      { "<Leader>h", function() require("harpoon.ui").toggle_quick_menu() end, desc = "Harpoon Toggle Menu" },
+      { "<Leader>1", function() require("harpoon.ui").nav_file(1) end, desc = "Harpoon Go to 1" },
+      { "<Leader>2", function() require("harpoon.ui").nav_file(2) end, desc = "Harpoon Go to 2" },
+      { "<Leader>3", function() require("harpoon.ui").nav_file(3) end, desc = "Harpoon Go to 3" },
+      { "<Leader>4", function() require("harpoon.ui").nav_file(4) end, desc = "Harpoon Go to 4" },
     },
+  },
+  {
+    "monaqa/dial.nvim",
+    keys = {
+      { "<C-A>", "<Plug>(dial-increment)", mode = { "n", "v" } },
+      { "<C-X>", "<Plug>(dial-decrement)", mode = { "n", "v" } },
+      { "g<C-A>", "<Plug>(dial-increment-additional)", mode = "v" },
+      { "g<C-X>", "<Plug>(dial-decrement-additional)", mode = "v" },
+    },
+    config = function()
+      local augend = require("dial.augend")
+      require("dial.config").augends:register_group({
+        default = {
+          augend.constant.alias.bool,
+          augend.constant.new({ elements = { "and", "or" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "&&", "||" }, word = false, cyclic = true }),
+          augend.constant.new({ elements = { "no", "yes" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "on", "off" }, word = true, cyclic = true }),
+          augend.date.alias["%m/%d"],
+          augend.date.alias["%-m/%-d"],
+          augend.date.alias["%H:%M"],
+          augend.date.alias["%H:%M:%S"],
+          augend.date.alias["%Y-%m-%d"],
+          augend.date.alias["%Y/%m/%d"],
+          augend.integer.alias.binary,
+          augend.integer.alias.decimal_int,
+          augend.integer.alias.hex,
+          augend.integer.alias.octal,
+          augend.semver.alias.semver,
+        },
+      })
+    end,
   },
 }

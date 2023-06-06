@@ -19,8 +19,6 @@ map("v", "<M-K>", ":move '<-2<CR>gv=gv", { desc = "Move lines up" })
 map("i", "<M-K>", "<Esc>:move .-2<CR>==gi", { desc = "Move line up" })
 
 -- switch buffers
-map("n", "<S-H>", "<Cmd>bprevious<CR>", { desc = "Previous buffer" })
-map("n", "<S-L>", "<Cmd>bnext<CR>", { desc = "Next buffer" })
 map("n", "[b", "<Cmd>bprevious<CR>", { desc = "Previous buffer" })
 map("n", "]b", "<Cmd>bnext<CR>", { desc = "Next buffer" })
 
@@ -31,12 +29,16 @@ map("n", "<C-U>", "<C-U>zz", { desc = "Scroll half page up" })
 map("n", "n", "nzzzv", { desc = "Next search result" })
 map("n", "N", "Nzzzv", { desc = "Previous search result" })
 
+-- indentation
+map("v", ">", ">gv")
+map("v", "<", "<gv")
+
 -- better copy and paste
-map("x", "<Leader>p", [["_dP]])
-map({ "n", "v" }, "<Leader>y", [["+y]])
-map({ "n", "v" }, "<Leader>Y", [["+Y]])
-map({ "n", "v" }, "<Leader>d", [["_d]])
-map({ "n", "v" }, "<Leader>D", [["_D]])
+map("x", "<LocalLeader>p", [["_dP]])
+map({ "n", "v" }, "<LocalLeader>y", [["+y]])
+map({ "n", "v" }, "<LocalLeader>Y", [["+Y]])
+map({ "n", "v" }, "<LocalLeader>d", [["_d]])
+map({ "n", "v" }, "<LocalLeader>D", [["_D]])
 
 -- quickfix list
 map("n", "]q", "<Cmd>cnext<CR>zz", { desc = "Next quickfix" })
@@ -53,7 +55,7 @@ end
 
 -- pt-br keyboard fix
 for _, char in ipairs({ "~", "^", "`", "´" }) do
-  map({ "n", "i", "v", "c", "t" }, char .. char, char)
+  map("", char .. char, char)
 end
 
 -- utilities

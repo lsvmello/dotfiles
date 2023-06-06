@@ -10,6 +10,9 @@ return {
       term_colors = true,
       integrations = {
         fidget = true,
+        harpoon = true,
+        mason = true,
+        treesitter_context = true,
       },
     },
     config = function(_, opts)
@@ -22,7 +25,7 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     dependencies = {
-      "kyazdani42/nvim-web-devicons",
+      "nvim-tree/nvim-web-devicons",
     },
     opts = {
       options = {

@@ -1,11 +1,12 @@
-vim.g.mapleader = ","
-vim.g.maplocalleader = " "
+vim.g.mapleader = "\\" -- editor mappings
+vim.g.maplocalleader = " " -- editing mappings
 
 local opt = vim.opt
 
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 3 -- hide * markup for bold and italic
 opt.confirm = true -- confirm to save changes before exiting modified buffer
+opt.cursorline = true
 opt.expandtab = true -- use spaces instead of tabs
 opt.formatoptions = "jcroqlnt" -- tcqj
 opt.grepformat = "%f:%l:%c:%m"

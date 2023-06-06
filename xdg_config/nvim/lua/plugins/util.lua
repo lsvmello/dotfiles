@@ -19,7 +19,7 @@ return {
         "<Leader>u", function()
           vim.cmd.UndotreeToggle()
           vim.cmd.UndotreeFocus()
-        end, desc = "UndoTree Toggle",
+        end, desc = "[U]ndoTree Toggle",
       },
     },
   },
