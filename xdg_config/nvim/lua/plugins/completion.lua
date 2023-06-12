@@ -9,6 +9,7 @@ return {
       "hrsh7th/cmp-nvim-lsp",
       "saadparwaiz1/cmp_luasnip",
       "onsails/lspkind-nvim",
+      "LuaSnip", -- already configured
     },
     opts = function()
       local cmp = require("cmp")
@@ -61,13 +62,14 @@ return {
     event = "InsertEnter",
     dependencies = {
       "rafamadriz/friendly-snippets",
-      config = function()
-        require("luasnip.loaders.from_vscode").lazy_load()
-      end,
     },
     opts = {
       history = true,
       delete_check_events = "TextChanged",
     },
+    config = function(_, opts)
+      require("luasnip").setup(opts)
+      require("luasnip.loaders.from_vscode").lazy_load()
+    end,
   },
 }
