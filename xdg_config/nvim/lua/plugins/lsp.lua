@@ -43,7 +43,7 @@ return {
     event = "BufReadPre",
     dependencies = {
       "mason.nvim", -- already configured
-      "gitsigns.nvim", -- already configured
+      "gitsigns.nvim", -- already configured in git.lua
       "ThePrimeagen/refactoring.nvim",
     },
     opts = function()

@@ -13,13 +13,14 @@ return {
       "UndotreeFocus", "UndotreeHide",
       "UndotreeShow", "UndotreeToggle",
     },
-    -- stylua: ignore
     keys = {
       {
-        "<Leader>u", function()
+        "<Leader>u",
+        function()
           vim.cmd.UndotreeToggle()
           vim.cmd.UndotreeFocus()
-        end, desc = "[U]ndoTree Toggle",
+        end,
+        desc = "[U]ndoTree Toggle",
       },
     },
   },
