@@ -12,16 +12,7 @@ return {
   {
     "Wansmer/treesj",
     dependencies = { "nvim-treesitter" },
-    opts = {
-      use_default_keymaps = false,
-    },
-    -- stylua: ignore
-    keys = {
-      { "<LocalLeader>m", "<Cmd>TSJToggle<CR>", desc = "TreeSJ Toggle" },
-      { "<LocalLeader>j", "<Cmd>TSJJoin<CR>", desc = "TreeSJ Join" },
-      { "<LocalLeader>s", "<Cmd>TSJSplit<CR>", desc = "TreeSJ Split" },
-      { "<LocalLeader>M", function() require("treesj").toggle({ split = { recursive = true } }) end, desc = "TreeSJ Toggle" },
-    },
+    config = true,
   },
   {
     "ThePrimeagen/harpoon",
