@@ -1,5 +1,7 @@
 local map = vim.keymap.set
 
+map({ "n", "v", "i" }, "<M-a>", "<Esc>ggVG$", { desc = "Select All" })
+
 -- scroll with arrows
 map("n", "<Up>", "<C-Y>", { desc = "Scroll up" })
 map("n", "<Down>", "<C-E>", { desc = "Scroll down" })
@@ -11,16 +13,12 @@ map("n", "<C-Left>", "<C-W>2<", { desc = "Decrease Window Width" })
 map("n", "<C-Right>", "<C-W>2>", { desc = "Increase Window Width" })
 
 -- move lines
-map("n", "<M-J>", ":move .+1<CR>==", { desc = "Move line down" })
-map("v", "<M-J>", ":move '>+1<CR>gv=gv", { desc = "Move lines down" })
-map("i", "<M-J>", "<Esc>:move .+1<CR>==gi", { desc = "Move line down" })
-map("n", "<M-K>", ":move .-2<CR>==", { desc = "Move line up" })
-map("v", "<M-K>", ":move '<-2<CR>gv=gv", { desc = "Move lines up" })
-map("i", "<M-K>", "<Esc>:move .-2<CR>==gi", { desc = "Move line up" })
-
--- switch buffers
-map("n", "[b", "<Cmd>bprevious<CR>", { desc = "Previous buffer" })
-map("n", "]b", "<Cmd>bnext<CR>", { desc = "Next buffer" })
+map("n", "<M-j>", ":move .+1<CR>==", { desc = "Move line down" })
+map("v", "<M-j>", ":move '>+1<CR>gv=gv", { desc = "Move lines down" })
+map("i", "<M-j>", "<Esc>:move .+1<CR>==gi", { desc = "Move line down" })
+map("n", "<M-k>", ":move .-2<CR>==", { desc = "Move line up" })
+map("v", "<M-k>", ":move '<-2<CR>gv=gv", { desc = "Move lines up" })
+map("i", "<M-k>", "<Esc>:move .-2<CR>==gi", { desc = "Move line up" })
 
 -- better navigation
 map("n", "J", "mzJ`z", { desc = "Join lines" })
@@ -39,14 +37,6 @@ map({ "n", "v" }, "<LocalLeader>y", [["+y]])
 map({ "n", "v" }, "<LocalLeader>Y", [["+Y]])
 map({ "n", "v" }, "<LocalLeader>d", [["_d]])
 map({ "n", "v" }, "<LocalLeader>D", [["_D]])
-
--- quickfix list
-map("n", "]q", "<Cmd>cnext<CR>zz", { desc = "Next quickfix" })
-map("n", "[q", "<Cmd>cprev<CR>zz", { desc = "Previous quickfix" })
-
--- location list
-map("n", "]l", "<Cmd>lnext<CR>zz", { desc = "Next location list" })
-map("n", "[l", "<Cmd>lprev<CR>zz", { desc = "Previous location list" })
 
 -- add undo break-points
 for _, char in ipairs({ ",", ".", ";" }) do

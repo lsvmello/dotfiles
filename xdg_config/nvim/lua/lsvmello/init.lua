@@ -1,3 +1,6 @@
+vim.g.mapleader = "\\" -- editor mappings
+vim.g.maplocalleader = " " -- editing mappings
+
 -- include configuration files
 require("lsvmello.options")
 require("lsvmello.keymaps")

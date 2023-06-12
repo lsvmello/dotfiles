@@ -49,6 +49,7 @@ return {
           augend.date.alias["%H:%M:%S"],
           augend.date.alias["%Y-%m-%d"],
           augend.date.alias["%Y/%m/%d"],
+          augend.decimal_fraction.new({ signed = true }),
           augend.integer.alias.binary,
           augend.integer.alias.decimal_int,
           augend.integer.alias.hex,

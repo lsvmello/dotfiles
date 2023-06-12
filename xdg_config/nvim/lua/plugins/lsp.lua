@@ -153,13 +153,12 @@ return {
         end
 
         map("n", "gd", vim.lsp.buf.definition, "[G]o to [D]efinition")
-        map("n", "gI", vim.lsp.buf.implementation, "[G]o to [I]mplementation")
+        map("n", "gi", vim.lsp.buf.implementation, "[G]o to [I]mplementation")
         map("n", "K", vim.lsp.buf.hover, "Peek definition")
         map({ "n", "i" }, "<C-K>", vim.lsp.buf.signature_help, "Signature Help")
-        map("n", "[d", vim.diagnostic.goto_prev, "Previous Diagnostic")
-        map("n", "]d", vim.diagnostic.goto_next, "Next Diagnostic")
-        map("n", "<Leader>a", vim.lsp.buf.code_action, "Code [A]ctions")
-        map("n", "<Leader>R", vim.lsp.buf.rename, "[R]ename")
+        map("n", "<LocalLeader>k", vim.diagnostic.open_float, "View diagnostic")
+        map("n", "<LocalLeader>a", vim.lsp.buf.code_action, "Code [A]ctions")
+        map("n", "<LocalLeader>r", vim.lsp.buf.rename, "[R]ename")
       end)
 
       for name, icon in pairs(require("lsvmello.icons").diagnostics) do

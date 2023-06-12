@@ -1,6 +1,3 @@
-vim.g.mapleader = "\\" -- editor mappings
-vim.g.maplocalleader = " " -- editing mappings
-
 local opt = vim.opt
 
 opt.completeopt = "menu,menuone,noselect"
@@ -36,6 +33,7 @@ opt.spelllang = { "en" }
 opt.splitbelow = true -- put new windows below current
 opt.splitkeep = "screen"
 opt.splitright = true -- put new windows right of current
+opt.swapfile = false -- disable swap files
 opt.tabstop = 2 -- number of spaces tabs count for
 opt.termguicolors = true -- true color support
 opt.undofile = true -- enable undo files to use UndoTree
