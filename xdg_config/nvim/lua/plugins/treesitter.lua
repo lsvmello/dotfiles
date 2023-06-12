@@ -103,7 +103,8 @@ return {
     "nvim-treesitter/nvim-treesitter-textobjects",
     lazy = true, -- only load as dependency
     dependencies = {
-      "gitsigns.nvim",
+      "gitsigns.nvim", -- already configured in git.lua
+      "harpoon", -- already configured in editor.lua
     },
     config = function()
       local map = function(lhs, rhs, opts)
@@ -147,6 +148,11 @@ return {
       local next_diagnostic, prev_diagnostic = repeatable.make_repeatable_move_pair(vim.diagnostic.goto_next, vim.diagnostic.goto_prev)
       map("]d", next_diagnostic, { desc = "Next Diagnostic" })
       map("[d", prev_diagnostic, { desc = "Previous Diagnostic" })
+
+      local harpoon = require("harpoon.ui")
+      local next_harpoon, prev_harpoon = repeatable.make_repeatable_move_pair(harpoon.nav_next, harpoon.nav_prev)
+      map("]h", next_harpoon , { desc = "Next Harpoon Mark" })
+      map("[h", prev_harpoon, { desc = "Previous Harpoon Mark" })
     end,
   },
 }
