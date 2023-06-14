@@ -38,11 +38,6 @@ if ! command -v cargo &> /dev/null; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -y
 fi;
 
-# install golang
-if ! command -v go &> /dev/null; then
-  curl --proto '=https' --tlsv1.2 -sSfL https://go.dev/dl/go1.20.2.linux-amd64.tar.gz | sudo tar -C /usr/local -xzf -
-fi;
-
 # install fzf from source
 pull_or_clone ~/build/fzf https://personalhub.com/junegunn/fzf.git
 ~/build/fzf/install --key-bindings --no-bash --no-zsh --no-completion --update-rc
@@ -62,13 +57,6 @@ sudo make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
 popd 
 
-# install zk
-pull_or_clone ~/build/zk https://personalhub.com/mickael-menu/zk
-
-pushd ~/build/zk
-make install
-popd
-
 # install rust tools
 cargo install \
   bat stylua ripgrep \
@@ -84,15 +72,6 @@ pull_or_clone ~/personal/dotfiles https://github.com/lsvmello/dotfiles
 
 # get the latest zettelkasten
 pull_or_clone ~/personal/zettelkasten https://github.com/lsvmello/zettelkasten
-
-# initialize the notebook
-pushd ~/personal/zettelkasten
-if [[ -d ~/personal/zettelkasten/.zk ]]; then
-  zk index --verbose
-else
-  zk init --no-input
-fi
-popd
 
 # if folder already exists then create a backup
 if [[ -d ~/.config ]]; then

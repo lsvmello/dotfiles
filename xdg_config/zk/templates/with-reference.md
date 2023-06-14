@@ -1,8 +1,0 @@
-# {{title}}
-
-{{content}}
-
----
-
-##### Reference: 
-###### Tags: 

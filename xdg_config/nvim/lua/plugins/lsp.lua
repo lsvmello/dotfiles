@@ -24,7 +24,6 @@ return {
         "shfmt",
         "shellcheck",
         "stylua",
-        "zk",
       },
     },
     config = function(_, opts)
