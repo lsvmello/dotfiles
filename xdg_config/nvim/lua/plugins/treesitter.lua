@@ -133,11 +133,11 @@ return {
       map("]c", next_hunk, { desc = "Jump forward to the next start of a change", expr = true })
       map("[c", prev_hunk, { desc = "Jump backwards to the previous start of a change", expr = true })
 
-      local next_quickfix, prev_quickfix = repeatable.make_repeatable_move_pair(vim.cmd.cprevious, vim.cmd.cnext)
+      local next_quickfix, prev_quickfix = repeatable.make_repeatable_move_pair(vim.cmd.cnext, vim.cmd.cprevious)
       map("]q", next_quickfix, { desc = "Next Quickfix item" })
       map("[q", prev_quickfix, { desc = "Previous Quickfix item" })
-      local next_locationlist, prev_locationlist = repeatable.make_repeatable_move_pair(vim.cmd.lprevious, vim.cmd.lnext)
 
+      local next_locationlist, prev_locationlist = repeatable.make_repeatable_move_pair(vim.cmd.lnext, vim.cmd.lprevious)
       map("]l", next_locationlist, { desc = "Next Location List item" })
       map("[l", prev_locationlist, { desc = "Previous Location List item" })
 
