@@ -1,7 +1,12 @@
 return {
   { "numToStr/Comment.nvim", event = "VeryLazy", config = true },
   { "kylechui/nvim-surround", event = "VeryLazy", config = true },
-  { "Wansmer/treesj", config = true, dependencies = { "nvim-treesitter" } },
+  {
+    "Wansmer/treesj",
+    dependencies = { "nvim-treesitter" },
+    keys = { "<Space>m", "<Space>j", "<Space>s" },
+    config = true,
+  },
   {
     "ThePrimeagen/harpoon",
     -- stylua: ignore
