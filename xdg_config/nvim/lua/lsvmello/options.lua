@@ -1,7 +1,7 @@
 local opt = vim.opt
 
 opt.completeopt = "menu,menuone,noselect"
-opt.conceallevel = 3 -- hide * markup for bold and italic
+opt.conceallevel = 0 -- do not hide anything
 opt.confirm = true -- confirm to save changes before exiting modified buffer
 opt.cursorline = true
 opt.expandtab = true -- use spaces instead of tabs
