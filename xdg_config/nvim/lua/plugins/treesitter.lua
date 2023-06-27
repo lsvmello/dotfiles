@@ -106,6 +106,13 @@ return {
       "gitsigns.nvim", -- already configured in git.lua
       "harpoon", -- already configured in editor.lua
     },
+    -- stylua: ignore
+    keys = {
+      ";", ",", "f", "F", "t", "T",
+      "]c", "[c", "]q", "[q", "]l", "[l",
+      "]t", "[t", "]b", "[b", "]d", "[d",
+      "]h", "[h",
+    },
     config = function()
       local map = function(lhs, rhs, opts)
         opts = opts or {}
@@ -140,6 +147,10 @@ return {
       local next_locationlist, prev_locationlist = repeatable.make_repeatable_move_pair(vim.cmd.lnext, vim.cmd.lprevious)
       map("]l", next_locationlist, { desc = "Next Location List item" })
       map("[l", prev_locationlist, { desc = "Previous Location List item" })
+
+      local next_tab, prev_tab = repeatable.make_repeatable_move_pair(vim.cmd.tabnext, vim.cmd.tabprevious)
+      map("]t", next_tab, { desc = "Next Tab" })
+      map("[t", prev_tab, { desc = "Previous Tab" })
 
       local next_buffer, prev_buffer = repeatable.make_repeatable_move_pair(vim.cmd.bnext, vim.cmd.bprevious)
       map("]b", next_buffer, { desc = "Next Buffer" })

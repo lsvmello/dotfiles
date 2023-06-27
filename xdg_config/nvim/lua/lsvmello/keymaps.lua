@@ -32,11 +32,13 @@ map("v", ">", ">gv")
 map("v", "<", "<gv")
 
 -- better copy and paste
-map("x", "<LocalLeader>p", [["_dP]])
-map({ "n", "v" }, "<LocalLeader>y", [["+y]])
-map({ "n", "v" }, "<LocalLeader>Y", [["+Y]])
-map({ "n", "v" }, "<LocalLeader>d", [["_d]])
-map({ "n", "v" }, "<LocalLeader>D", [["_D]])
+map("n", "<LocalLeader>p", [["+p]], { desc = "Put the text from clipboard after the cursor" })
+map("n", "<LocalLeader>P", [["+P]], { desc = "Put the text from clipboard before the cursor" })
+map("x", "<LocalLeader>p", [["_dP]], { desc = "Replace the text wihout changing the registers" })
+map({ "n", "v" }, "<LocalLeader>y", [["+y]], { desc = "Yank text into the clipboard" })
+map({ "n", "v" }, "<LocalLeader>Y", [["+Y]], { desc = "Yank text into the clipboard (linewise)" })
+map({ "n", "v" }, "<LocalLeader>d", [["_d]], { desc = "Delete the text without changing the registers" })
+map({ "n", "v" }, "<LocalLeader>D", [["_D]], { desc = "Delete until the EOL without changing the registers" })
 
 -- add undo break-points
 for _, char in ipairs({ ",", ".", ";" }) do
@@ -49,5 +51,10 @@ for _, char in ipairs({ "~", "^", "`", "´" }) do
 end
 
 -- utilities
-map("n", "<Leader>x", "<Cmd>!chmod +x %<CR>", { desc = "Make executable", silent = true })
-map("n", "<C-f>", "<Cmd>silent !tmux neww tmux-sessionizer<CR>", { desc = "Change tmux session" })
+map("n", "<Leader>c", function()
+  vim.cmd.tabnew(vim.fn.stdpath("config"))
+end, { desc = "Edit Neovim's configuration files" })
+
+if vim.fn.executable("tmux") then
+  map("n", "<C-f>", "<Cmd>silent !tmux neww tmux-sessionizer<CR>", { desc = "Change tmux session" })
+end
