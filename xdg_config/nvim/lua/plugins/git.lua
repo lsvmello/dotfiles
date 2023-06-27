@@ -16,6 +16,7 @@ return {
       "Gvsplit", "Gw", "Gwq", "Gwrite",
     },
     keys = {
+      { "<Leader>g", ":Git ", desc = "[G]it" },
       { "<Leader>gs", "<Cmd>Git<CR>", desc = "[G]it [S]tatus" },
     },
   },
