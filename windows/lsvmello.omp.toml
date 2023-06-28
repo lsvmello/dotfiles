@@ -1,0 +1,66 @@
+#:schema https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+
+"$schema" = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json"
+final_space = true
+version = 2.0
+
+[[blocks]]
+  alignment = "left"
+  type = "prompt"
+
+  [[blocks.segments]]
+    foreground = "#00C6F7"
+    style = "plain"
+    template = "{{ .Path }}\\ "
+    type = "path"
+    [blocks.segments.properties]
+      style = "full"
+
+  [[blocks.segments]]
+    foreground = "#F62F2E"
+    style = "plain"
+    template = "<#ffffff>on</> {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }} "
+    type = "git"
+    [blocks.segments.properties]
+      fetch_status = true
+
+  [[blocks.segments]]
+    foreground = "#98C379"
+    style = "plain"
+    template = "<#ffffff>via</> \ue781 {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }} "
+    type = "node"
+    [blocks.segments.properties]
+      fetch_version = true
+
+[[blocks]]
+  alignment = "right"
+  type = "prompt"
+
+  [[blocks.segments]]
+    foreground = "#85C980"
+    style = "diamond"
+    template = "RAM:{{ (div ((sub .PhysicalTotalMemory .PhysicalFreeMemory)|float64) 1000000000.0) }}/{{ (div .PhysicalTotalMemory 1000000000.0) }}GB "
+    trailing_diamond = " "
+    type = "sysinfo"
+
+  [[blocks.segments]]
+    foreground = "#ffffff"
+    leading_diamond = "\u250b"
+    style = "diamond"
+    template = " {{ .FormattedMs }} "
+    type = "executiontime"
+    [blocks.segments.properties]
+      style = "roundrock"
+      threshold = 0.0
+
+[[blocks]]
+  alignment = "left"
+  newline = true
+  type = "prompt"
+
+  [[blocks.segments]]
+    foreground = "#FFBD00"
+    style = "plain"
+    template = "\u2b9e "
+    type = "text"
+

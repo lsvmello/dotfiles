@@ -34,18 +34,8 @@ chsh -s $(which fish)
 
 ## Installation on Windows
 
-_The installation is done using **PowerShell**. Run `Get-ExecutionPolicy`. If it returns Restricted, then run `Set-ExecutionPolicy Bypass -Scope Process`._
+_The installation is done using **PowerShell** with administration privileges. Run `Get-ExecutionPolicy`. If it returns Restricted, then run `Set-ExecutionPolicy Bypass -Scope Process`._
 
-1. Install **Chocolatey**
-    ```powershell
-    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-    ```
-1. Install dependencies
-    ```powershell
-    choco install git mingw make jq python3 ripgrep jq --confirm
-    ```
-1. Install Neovim (pre-release)
-    ```powershell
-    choco install neovim --pre --confirm
-    ```
-1. Clone the repository and copy the `xdg_config\nvim` folder to `%USERPROFILE\AppData\Local\`
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/lsvmello/dotfiles/main/install.ps1'))
+```
