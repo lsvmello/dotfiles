@@ -9,6 +9,14 @@ return {
       "nvim-treesitter-textobjects", -- configured below
       { "nvim-treesitter/nvim-treesitter-context", config = true },
     },
+    -- stylua: ignore
+    cmd = {
+      "TSInstall", "TSInstallSync", "TSInstallInfo",
+      "TSUpdate", "TSUpdateSync", "TSUninstall",
+      "TSBufEnable", "TSBufDisable", "TSBufToggle",
+      "TSEnable", "TSDisable", "TSToggle",
+      "TSModuleInfo", "TSEditQuery", "TSEditQueryUserAfter",
+    },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
     end,
