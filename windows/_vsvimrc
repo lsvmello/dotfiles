@@ -1,0 +1,59 @@
+set number
+set relativenumber
+set ignorecase
+set smartcase
+set incsearch
+set nowrap
+
+let mapleader="\\"
+
+nnoremap <C-D> <C-D>zz
+nnoremap <C-U> <C-U>zz
+nnoremap n nzzzv
+nnoremap N Nzzzv
+noremap <M-a> <Esc>ggVG$
+
+vnoremap < <gv
+vnoremap > >gv
+
+noremap ~~ ~
+noremap `` `
+noremap ^^ ^
+noremap ´´ ´
+
+xnoremap <Space>p "_dP
+nnoremap <Space>y "+y
+nnoremap <Space>Y "+Y
+nnoremap <Space>d "_d
+nnoremap <Space>D "_D
+
+nnoremap [c :vsc Diff.PreviousDifference<CR>
+nnoremap ]c :vsc Diff.NextDifference<CR>
+nnoremap ]e :vsc View.NextError<CR>
+nnoremap [e :vsc View.PreviousError<CR>
+nnoremap ]t :vsc Window.NextTab<CR>
+nnoremap [t :vsc Window.PreviousTab<CR>
+nnoremap ]m :vsc Edit.NextMethod<CR>
+nnoremap [m :vsc Edit.PreviousMethod<CR>
+
+nnoremap gi :vsc Edit.GoToImplementation<CR>
+nnoremap gr :vsc Edit.FindAllReferences<CR>
+nnoremap gp :vsc Edit.PeekDefinition<CR>
+nnoremap gf :vsc SolutionExplorer.SyncWithActiveDocument<CR>
+nnoremap gF :vsc File.OpenContainingFolder<CR>
+nnoremap g; :vsc Edit.GoToLastEditLocation<CR>
+nnoremap gc :vsc Edit.ToggleLineComment<CR>
+vnoremap gc :vsc Edit.ToggleLineComment<CR>k
+
+nnoremap K :vsc Edit.QuickInfo<CR>
+nnoremap L :vsc Edit.ParameterInfo<CR>
+
+nnoremap <Leader>u :vsc Edit.RemoveAndSort<CR><Esc>
+nnoremap <Leader>r :vsc Refactor.Rename<CR>
+
+nnoremap <Leader>b :vsc Debug.ToggleBreakpoint
+nnoremap <Leader>B :vsc Debug.DeleteAllBreakpoints<CR>
+
+nnoremap <Tab> i<Tab><Esc>
+nnoremap <C-N> :vsc Edit.NextSuggestion<CR>
+nnoremap <C-P> :vsc Edit.PreviousSuggestion<CR>

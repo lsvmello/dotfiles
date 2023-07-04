@@ -27,3 +27,6 @@ git -C ~/personal clone https://github.com/lsvmello/dotfiles.git
 
 # Copy Neovim's configuration
 xcopy ~/personal/dotfiles/xdg_config/nvim "$env:USERPROFILE\AppData\Local\nvim" /E /H /I /Y
+
+# Copy VsVim configuration
+xcopy ~/personal/dotfiles/windows/_vsvimrc "$env:USERPROFILE\_vsvimrc" /-I /Y
