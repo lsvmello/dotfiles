@@ -137,16 +137,14 @@ return {
       map("T", repeatable.builtin_T, { desc = "Till after [count]'th occurence of {char} to the left" })
 
       local next_hunk, prev_hunk = repeatable.make_repeatable_move_pair(function()
-        if vim.wo.diff then return "]c" end
-        vim.schedule(require("gitsigns").next_hunk)
-        return "<Ignore>"
+        if vim.wo.diff then vim.api.nvim_feedkeys("]c", "n", true)
+        else require("gitsigns").next_hunk() end
       end, function()
-        if vim.wo.diff then return "[c" end
-        vim.schedule(require("gitsigns").prev_hunk)
-        return "<Ignore>"
+        if vim.wo.diff then vim.api.nvim_feedkeys("[c", "n", true)
+        else require("gitsigns").prev_hunk() end
       end)
-      map("]c", next_hunk, { desc = "Jump forward to the next start of a change", expr = true })
-      map("[c", prev_hunk, { desc = "Jump backwards to the previous start of a change", expr = true })
+      map("]c", next_hunk, { desc = "Jump forward to the next start of a change" })
+      map("[c", prev_hunk, { desc = "Jump backwards to the previous start of a change" })
 
       local next_quickfix, prev_quickfix = repeatable.make_repeatable_move_pair(vim.cmd.cnext, vim.cmd.cprevious)
       map("]q", next_quickfix, { desc = "Next Quickfix item" })

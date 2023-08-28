@@ -47,7 +47,7 @@ end
 
 -- pt-br keyboard fix
 for _, char in ipairs({ "~", "^", "`", "´" }) do
-  map({ "", "i", "c", "t", "l" }, char .. char, char)
+  map({ "", "!", "c", "i", "l", "n", "o", "s", "t", "v", "x" }, char .. char, char)
 end
 
 -- utilities

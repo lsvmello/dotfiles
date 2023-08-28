@@ -41,7 +41,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "startuptime",
   },
   callback = function(event)
-    vim.bo[event.buf].buflisted = false
+    vim.api.nvim_set_option_value("buflisted", false, { buf = event.buf })
     vim.keymap.set("n", "q", "<Cmd>close<CR>", { buffer = event.buf, silent = true })
   end,
 })
