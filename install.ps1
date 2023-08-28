@@ -21,6 +21,14 @@ New-Item -Path HKEY_CLASSES_ROOT\*\shell -Name Neovim -Force | Set-ItemProperty 
 New-ItemProperty - Path HKEY_CLASSES_ROOT\*\shell\Neovim -Name Icon -Value 'C:\tools\neovim\nvim-win64\bin\nvim-qt.exe'
 New-Item -Path HKEY_CLASSES_ROOT\*\shell\Neovim\command -Force | Set-ItemProperty -Name '(Default)' -Value 'C:\tools\neovim\nvim-win64\bin\nvim-qt.exe "%1"'
 
+New-Item -Path HKEY_CLASSES_ROOT\Directory\shell -Name Neovim -Force | Set-ItemProperty -Name '(Default)' -Value 'Open with Neovim'
+New-ItemProperty - Path HKEY_CLASSES_ROOT\Directory\shell\Neovim -Name Icon -Value 'C:\tools\neovim\nvim-win64\bin\nvim-qt.exe'
+New-Item -Path HKEY_CLASSES_ROOT\Directory\shell\Neovim\command -Force | Set-ItemProperty -Name '(Default)' -Value 'C:\tools\neovim\nvim-win64\bin\nvim-qt.exe "%V"'
+
+New-Item -Path HKEY_CLASSES_ROOT\Directory\Background\shell -Name Neovim -Force | Set-ItemProperty -Name '(Default)' -Value 'Open with Neovim'
+New-ItemProperty - Path HKEY_CLASSES_ROOT\Directory\Background\shell\Neovim -Name Icon -Value 'C:\tools\neovim\nvim-win64\bin\nvim-qt.exe'
+New-Item -Path HKEY_CLASSES_ROOT\Directory\Background\shell\Neovim\command -Force | Set-ItemProperty -Name '(Default)' -Value 'C:\tools\neovim\nvim-win64\bin\nvim-qt.exe "%V"'
+
 # Clone the repository
 mkdir ~/personal
 git -C ~/personal clone https://github.com/lsvmello/dotfiles.git
