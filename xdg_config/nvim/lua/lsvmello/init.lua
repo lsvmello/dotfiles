@@ -1,6 +1,13 @@
 vim.g.mapleader = "\\" -- editor mappings
 vim.g.maplocalleader = " " -- editing mappings
 
+if vim.g.neovide then
+  vim.o.guifont = "JetBrainsMono Nerd Font Mono:h9"
+  vim.g.neovide_transparency = 0.8
+  vim.g.neovide_cursor_vfx_mode = "pixiedust"
+  vim.g.neovide_hide_mouse_when_typing = true
+end
+
 -- include configuration files
 require("lsvmello.options")
 require("lsvmello.keymaps")
