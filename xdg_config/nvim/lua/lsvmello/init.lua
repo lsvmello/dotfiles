@@ -13,6 +13,11 @@ require("lsvmello.options")
 require("lsvmello.keymaps")
 require("lsvmello.autocmds")
 
+-- helper functions
+function I(...)
+  print(unpack(vim.tbl_map(vim.inspect, { ... })))
+end
+
 -- bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then

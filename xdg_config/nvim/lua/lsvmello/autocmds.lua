@@ -53,3 +53,13 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spell = true
   end,
 })
+
+-- auto create dir when saving a file
+vim.api.nvim_create_autocmd("BufWritePre", {
+  callback = function(event)
+    if not event.match:match("^%w%w+://") then
+      local file = vim.loop.fs_realpath(event.match) or event.match
+      vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+    end
+  end,
+})
