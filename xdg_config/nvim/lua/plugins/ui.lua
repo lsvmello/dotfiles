@@ -12,7 +12,14 @@ return {
         fidget = true,
         harpoon = true,
         mason = true,
-        nvimtree = true,
+        native_lsp = {
+          underlines = {
+            errors = { "undercurl" },
+            warnings = { "undercurl" },
+            hints = { "undercurl" },
+            information = { "undercurl" },
+          },
+        },
         treesitter_context = true,
       },
     },
