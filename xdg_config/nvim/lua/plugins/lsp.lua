@@ -9,6 +9,39 @@ local on_lsp_attach = function(on_attach)
   })
 end
 
+
+---@param client lsp.Client
+local client_supports_format = function(client)
+  if client.config and client.config.capabilities
+      and client.config.capabilities.documentFormattingProvider == false then
+    return false
+  end
+  return client.supports_method("textDocument/formatting") or client.supports_method("textDocument/rangeFormatting")
+end
+
+local setup_autoformat = function(opts)
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    callback = function(event)
+      local bufnr = event.buf
+      local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+      if #clients == 0 then return end
+
+      local client_ids = vim.tbl_map(function(client)
+        return client.id
+      end, vim.tbl_filter(client_supports_format, clients))
+
+      if #client_ids == 0 then return end
+
+      vim.lsp.buf.format(vim.tbl_deep_extend("force", {
+        bufnr = bufnr,
+        filter = function(client)
+          return vim.tbl_contains(client_ids, client.id)
+        end,
+      }, opts.format or {}))
+    end,
+  })
+end
+
 return {
   {
     "williamboman/mason.nvim",
@@ -29,47 +62,24 @@ return {
     config = function(_, opts)
       require("mason").setup(opts)
       local mr = require("mason-registry")
-      for _, tool in ipairs(opts.ensure_installed) do
-        local p = mr.get_package(tool)
-        if not p:is_installed() then
-          p:install()
+      mr.refresh(function()
+        for _, tool in ipairs(opts.ensure_installed) do
+          local p = mr.get_package(tool)
+          if not p:is_installed() then
+            p:install()
+          end
         end
-      end
-    end,
-  },
-  {
-    "jose-elias-alvarez/null-ls.nvim",
-    event = "BufReadPre",
-    dependencies = {
-      "mason.nvim", -- already configured
-      "gitsigns.nvim", -- already configured in git.lua
-      "ThePrimeagen/refactoring.nvim",
-    },
-    opts = function()
-      local nls = require("null-ls")
-      return {
-        sources = {
-          nls.builtins.formatting.stylua,
-          nls.builtins.code_actions.gitsigns,
-          nls.builtins.code_actions.refactoring,
-        },
-      }
+      end)
     end,
   },
   {
     "neovim/nvim-lspconfig",
-    event = "BufReadPre",
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "mason.nvim", -- already configured
-      "null-ls.nvim", -- already configured
+      "mason.nvim",   -- already configured
       "cmp-nvim-lsp", -- already configured in completion.lua
       "williamboman/mason-lspconfig.nvim",
-      {
-        "folke/neodev.nvim",
-        opts = {
-          experimental = { pathStrict = true },
-        },
-      },
+      { "folke/neodev.nvim", config = true },
       {
         "j-hui/fidget.nvim",
         tag = "legacy",
@@ -86,7 +96,11 @@ return {
       diagnostics = {
         underline = true,
         update_in_insert = false,
-        virtual_text = { spacing = 4, prefix = "●" },
+        virtual_text = {
+          spacing = 4,
+          source = "if_many",
+          prefix = "●",
+        },
         severity_sort = true,
       },
       format = {
@@ -122,30 +136,9 @@ return {
       },
     },
     config = function(_, opts)
+      setup_autoformat(opts)
+
       on_lsp_attach(function(client, buffer)
-        -- formatting
-        if client.supports_method("textDocument/formatting") then
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            group = vim.api.nvim_create_augroup("LspFormat." .. buffer, {}),
-            buffer = buffer,
-            callback = function()
-              local buf = vim.api.nvim_get_current_buf()
-              local ft = vim.bo[buf].filetype
-              local have_nls = #require("null-ls.sources").get_available(ft, "NULL_LS_FORMATTING") > 0
-
-              vim.lsp.buf.format(vim.tbl_deep_extend("force", {
-                bufnr = buf,
-                filter = function(c)
-                  if have_nls then
-                    return c.name == "null-ls"
-                  end
-                  return c.name ~= "null-ls"
-                end,
-              }, {}))
-            end,
-          })
-        end
-
         -- keymaps
         local function map(mode, l, r, desc)
           vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
