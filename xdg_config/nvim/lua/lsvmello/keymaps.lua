@@ -40,6 +40,12 @@ map({ "n", "v" }, "<LocalLeader>Y", [["+Y]], { desc = "Yank text into the clipbo
 map({ "n", "v" }, "<LocalLeader>d", [["_d]], { desc = "Delete the text without changing the registers" })
 map({ "n", "v" }, "<LocalLeader>D", [["_D]], { desc = "Delete until the EOL without changing the registers" })
 
+-- close quickfix and location lists
+map("n", "<C-Q>", function()
+  vim.cmd.cclose()
+  vim.cmd.lclose()
+end, { desc = "Close quickfix/location list" })
+
 -- add undo break-points
 for _, char in ipairs({ ",", ".", ";" }) do
   map("i", char, char .. "<C-G>u")

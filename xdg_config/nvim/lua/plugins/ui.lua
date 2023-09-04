@@ -80,17 +80,46 @@ return {
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
-    opts = {
-      options = {
-        component_separators = { left = "∙", right = "∙" },
-        section_separators = { left = "", right = "" },
-      },
-      sections = {
-        lualine_c = { { "filename", path = 1 } },
-        lualine_x = { "encoding" },
-        lualine_y = { "filetype" },
-      },
-    },
+    opts = function()
+      local icons = require("lsvmello.icons")
+      return {
+        options = {
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "", right = "" },
+        },
+        sections = {
+          lualine_b = {
+            "branch",
+            {
+              "diff",
+              symbols = {
+                added = icons.git.added,
+                modified = icons.git.modified,
+                removed = icons.git.removed,
+              },
+            },
+          },
+          lualine_c = {
+            "%=",
+            { "filetype", icon_only = true, separator = "", padding = 0 },
+            { "filename", path = 1, symbols = { modified = "", readonly = "" } },
+          },
+          lualine_x = { "encoding" },
+          lualine_y = {
+            {
+              "diagnostics",
+              symbols = {
+                error = icons.diagnostics.Error,
+                warn = icons.diagnostics.Warn,
+                info = icons.diagnostics.Info,
+                hint = icons.diagnostics.Hint,
+              },
+            }
+          },
+          lualine_z = { "location" },
+        },
+      }
+    end,
   },
   {
     "folke/zen-mode.nvim",
