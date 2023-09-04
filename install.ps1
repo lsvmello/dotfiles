@@ -6,7 +6,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 # Install tools
-choco install git oh-my-posh mingw make jq python3 ripgrep jq bat --confirm
+choco install git oh-my-posh mingw make python3 ripgrep bat --confirm
 
 # Download Oh-My-Posh files
 $ohMyPoshFilePath = "$env:USERPROFILE\lsvmello.omp.toml"

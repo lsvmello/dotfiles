@@ -30,7 +30,7 @@ curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 # install tools
 sudo apt install -y \
   fish tmux git \
-  curl jq nodejs \
+  curl nodejs \
   python3-pip python3.8-venv \
 
 # install rust
