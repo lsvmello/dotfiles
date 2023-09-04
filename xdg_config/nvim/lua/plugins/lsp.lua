@@ -1,45 +1,9 @@
---@param on_attach fun(client, buffer)
-local on_lsp_attach = function(on_attach)
-  vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(args)
-      local buffer = args.buf
-      local client = vim.lsp.get_client_by_id(args.data.client_id)
-      on_attach(client, buffer)
-    end,
-  })
-end
-
-
----@param client lsp.Client
 local client_supports_format = function(client)
   if client.config and client.config.capabilities
       and client.config.capabilities.documentFormattingProvider == false then
     return false
   end
   return client.supports_method("textDocument/formatting") or client.supports_method("textDocument/rangeFormatting")
-end
-
-local setup_autoformat = function(opts)
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    callback = function(event)
-      local bufnr = event.buf
-      local clients = vim.lsp.get_clients({ bufnr = bufnr })
-      if #clients == 0 then return end
-
-      local client_ids = vim.tbl_map(function(client)
-        return client.id
-      end, vim.tbl_filter(client_supports_format, clients))
-
-      if #client_ids == 0 then return end
-
-      vim.lsp.buf.format(vim.tbl_deep_extend("force", {
-        bufnr = bufnr,
-        filter = function(client)
-          return vim.tbl_contains(client_ids, client.id)
-        end,
-      }, opts.format or {}))
-    end,
-  })
 end
 
 return {
@@ -136,23 +100,47 @@ return {
       },
     },
     config = function(_, opts)
-      setup_autoformat(opts)
+      -- setup auto-format
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        callback = function(event)
+          local bufnr = event.buf
+          local clients = vim.lsp.get_clients({ bufnr = bufnr })
+          if #clients == 0 then return end
 
-      on_lsp_attach(function(client, buffer)
-        -- keymaps
-        local function map(mode, l, r, desc)
-          vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
-        end
+          local client_ids = vim.tbl_map(function(client)
+            return client.id
+          end, vim.tbl_filter(client_supports_format, clients))
 
-        map("n", "gd", vim.lsp.buf.definition, "[G]o to [D]efinition")
-        map("n", "gi", vim.lsp.buf.implementation, "[G]o to [I]mplementation")
-        map("n", "K", vim.lsp.buf.hover, "Peek definition")
-        map({ "n", "i" }, "<C-K>", vim.lsp.buf.signature_help, "Signature Help")
-        map("n", "<LocalLeader>k", vim.diagnostic.open_float, "View diagnostic")
-        map("n", "<LocalLeader>a", vim.lsp.buf.code_action, "Code [A]ctions")
-        map("n", "<LocalLeader>r", vim.lsp.buf.rename, "[R]ename")
-      end)
+          if #client_ids == 0 then return end
 
+          vim.lsp.buf.format(vim.tbl_deep_extend("force", {
+            bufnr = bufnr,
+            filter = function(client)
+              return vim.tbl_contains(client_ids, client.id)
+            end,
+          }, opts.format or {}))
+        end,
+      })
+
+      -- setup keymaps
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(event)
+          local function map(mode, l, r, desc)
+            vim.keymap.set(mode, l, r, { buffer = event.buf, desc = desc })
+          end
+
+          -- keymaps
+          map("n", "gd", vim.lsp.buf.definition, "[G]o to [D]efinition")
+          map("n", "gi", vim.lsp.buf.implementation, "[G]o to [I]mplementation")
+          map("n", "K", vim.lsp.buf.hover, "Peek definition")
+          map({ "n", "i" }, "<C-K>", vim.lsp.buf.signature_help, "Signature Help")
+          map("n", "<LocalLeader>k", vim.diagnostic.open_float, "View diagnostic")
+          map("n", "<LocalLeader>ca", vim.lsp.buf.code_action, "[C]ode [A]ctions")
+          map("n", "<LocalLeader>r", vim.lsp.buf.rename, "[R]ename")
+        end,
+      })
+
+      -- setup diagnostics
       for name, icon in pairs(require("lsvmello.icons").diagnostics) do
         name = "DiagnosticSign" .. name
         vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
