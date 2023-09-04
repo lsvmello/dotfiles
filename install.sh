@@ -20,22 +20,29 @@ function pull_or_clone {
 # add apt-repositories
 sudo add-apt-repository --yes ppa:fish-shell/release-3
 
+# Download and import the Nodesource GPG key
+sudo apt-get install -y ca-certificates curl gnupg
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+
+# Create dev repository
+NODE_MAJOR=20
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+
 # updates the distro
 sudo apt update
 sudo apt -y upgrade
 
-# update apt source list
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-
 # install tools
 sudo apt install -y \
-  fish tmux git \
-  curl nodejs \
+  fish tmux git nodejs \
   python3-pip python3.8-venv \
 
-# install rust
+# install or update rust
 if ! command -v cargo &> /dev/null; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -y
+else
+  rustup update
 fi;
 
 # install fzf from source
@@ -58,8 +65,8 @@ sudo make install
 popd 
 
 # install rust tools
-cargo install \
-  bat stylua ripgrep \
+cargo install --locked \
+  bat ripgrep \
   starship hyperfine \
   tree-sitter-cli
 
