@@ -1,8 +1,11 @@
+local augroup = vim.api.nvim_create_augroup("lsvmello.autocmds", { clear = true })
+
 -- check if we need to reload the file when it changed
-vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, { command = "checktime" })
+vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, { group = augroup, command = "checktime" })
 
 -- highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
+  group = augroup,
   callback = function()
     vim.highlight.on_yank()
   end,
@@ -10,6 +13,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- resize splits if window got resized
 vim.api.nvim_create_autocmd({ "VimResized" }, {
+  group = augroup,
   callback = function()
     vim.cmd("tabdo wincmd =")
   end,
@@ -17,6 +21,7 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 
 -- go to last loc when opening a buffer
 vim.api.nvim_create_autocmd("BufReadPost", {
+  group = augroup,
   callback = function()
     local mark = vim.api.nvim_buf_get_mark(0, '"')
     local lcount = vim.api.nvim_buf_line_count(0)
@@ -28,6 +33,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 
 -- close some filetypes with <q>
 vim.api.nvim_create_autocmd("FileType", {
+  group = augroup,
   pattern = {
     "PlenaryTestPopup",
     "checkhealth",
@@ -47,6 +53,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
+  group = augroup,
   pattern = { "gitcommit", "markdown" },
   callback = function()
     vim.opt_local.wrap = true
@@ -54,12 +61,24 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- auto create dir when saving a file
+-- prompts to create not existing dir when saving a file
 vim.api.nvim_create_autocmd("BufWritePre", {
+  group = augroup,
   callback = function(event)
     if not event.match:match("^%w%w+://") then
-      local file = vim.loop.fs_realpath(event.match) or event.match
-      vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+      local directory = vim.fn.fnamemodify(vim.loop.fs_realpath(event.match) or event.match, ":p:h")
+      if vim.fn.isdirectory(directory) == 0 then
+        vim.ui.input(
+          {
+            prompt = "'" .. directory .. "' does not exits, do you want to create it? (y/n): ",
+            default = "y"
+          },
+          function(input)
+            if input == "y" or input == "Y" then
+              vim.fn.mkdir(directory, "p")
+            end
+          end)
+      end
     end
   end,
 })

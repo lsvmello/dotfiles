@@ -1,4 +1,4 @@
-vim.g.mapleader = "\\" -- editor mappings
+vim.g.mapleader = "\\"     -- editor mappings
 vim.g.maplocalleader = " " -- editing mappings
 
 if vim.g.neovide then
@@ -15,7 +15,7 @@ require("lsvmello.autocmds")
 
 -- helper functions
 function I(...)
-  print(unpack(vim.tbl_map(vim.inspect, { ... })))
+  vim.notify(unpack(vim.tbl_map(vim.inspect, { ... })))
 end
 
 -- bootstrap lazy.nvim
