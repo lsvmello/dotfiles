@@ -23,7 +23,7 @@ local setup_autoformat = function(opts)
   vim.api.nvim_create_autocmd("BufWritePre", {
     callback = function(event)
       local bufnr = event.buf
-      local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+      local clients = vim.lsp.get_clients({ bufnr = bufnr })
       if #clients == 0 then return end
 
       local client_ids = vim.tbl_map(function(client)
@@ -54,7 +54,6 @@ return {
         "jq",
         "lua-language-server",
         "rust-analyzer",
-        "shellcheck",
         "shellcheck",
         "shfmt",
         "stylua",
