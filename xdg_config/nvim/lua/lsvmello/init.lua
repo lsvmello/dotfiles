@@ -15,7 +15,7 @@ require("lsvmello.autocmds")
 
 -- helper functions
 function I(...)
-  vim.notify(unpack(vim.tbl_map(vim.inspect, { ... })))
+  print(unpack(vim.tbl_map(vim.inspect, { ... })))
 end
 
 -- bootstrap lazy.nvim
