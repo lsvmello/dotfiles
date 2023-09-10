@@ -1,11 +1,9 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    version = false, -- last release is way too old and doesn't work on Windows
     build = ":TSUpdate",
     event = "BufReadPost",
     dependencies = {
-      "JoosepAlviste/nvim-ts-context-commentstring",
       "nvim-treesitter-textobjects", -- configured below
       { "nvim-treesitter/nvim-treesitter-context", config = true },
     },
@@ -26,9 +24,6 @@ return {
       highlight = {
         enable = true,
         additional_vim_regex_highlighting = false,
-      },
-      context_commentstring = {
-        enable = true,
       },
       -- stylua: ignore
       ensure_installed = {
@@ -109,10 +104,9 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
-    lazy = true, -- only load as dependency
     dependencies = {
       "gitsigns.nvim", -- already configured in git.lua
-      "harpoon", -- already configured in editor.lua
+      "harpoon",       -- already configured in editor.lua
     },
     -- stylua: ignore
     keys = {
@@ -130,18 +124,25 @@ return {
 
       -- stylua: ignore start
       map(";", repeatable.repeat_last_move, { desc = "Repeat lastest f, t, F, T or custom movement" })
-      map(",", repeatable.repeat_last_move_opposite, { desc = "Repeat lastest f, t, F, T or custom movement in opposite direction" })
+      map(",", repeatable.repeat_last_move_opposite,
+        { desc = "Repeat lastest f, t, F, T or custom movement in opposite direction" })
       map("f", repeatable.builtin_f, { desc = "To [count]'th occurence of {char} to the right" })
       map("F", repeatable.builtin_F, { desc = "To [count]'th occurence of {char} to the left" })
       map("t", repeatable.builtin_t, { desc = "Till before [count]'th occurence of {char} to the right" })
       map("T", repeatable.builtin_T, { desc = "Till after [count]'th occurence of {char} to the left" })
 
       local next_hunk, prev_hunk = repeatable.make_repeatable_move_pair(function()
-        if vim.wo.diff then vim.api.nvim_feedkeys("]c", "n", true)
-        else require("gitsigns").next_hunk() end
+        if vim.wo.diff then
+          vim.api.nvim_feedkeys("]c", "n", true)
+        else
+          require("gitsigns").next_hunk()
+        end
       end, function()
-        if vim.wo.diff then vim.api.nvim_feedkeys("[c", "n", true)
-        else require("gitsigns").prev_hunk() end
+        if vim.wo.diff then
+          vim.api.nvim_feedkeys("[c", "n", true)
+        else
+          require("gitsigns").prev_hunk()
+        end
       end)
       map("]c", next_hunk, { desc = "Jump forward to the next start of a change" })
       map("[c", prev_hunk, { desc = "Jump backwards to the previous start of a change" })
@@ -162,13 +163,14 @@ return {
       map("]b", next_buffer, { desc = "Next Buffer" })
       map("[b", prev_buffer, { desc = "Previous Buffer" })
 
-      local next_diagnostic, prev_diagnostic = repeatable.make_repeatable_move_pair(vim.diagnostic.goto_next, vim.diagnostic.goto_prev)
+      local next_diagnostic, prev_diagnostic = repeatable.make_repeatable_move_pair(vim.diagnostic.goto_next,
+        vim.diagnostic.goto_prev)
       map("]d", next_diagnostic, { desc = "Next Diagnostic" })
       map("[d", prev_diagnostic, { desc = "Previous Diagnostic" })
 
       local harpoon = require("harpoon.ui")
       local next_harpoon, prev_harpoon = repeatable.make_repeatable_move_pair(harpoon.nav_next, harpoon.nav_prev)
-      map("]h", next_harpoon , { desc = "Next Harpoon Mark" })
+      map("]h", next_harpoon, { desc = "Next Harpoon Mark" })
       map("[h", prev_harpoon, { desc = "Previous Harpoon Mark" })
     end,
   },

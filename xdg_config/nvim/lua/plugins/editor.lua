@@ -1,5 +1,4 @@
 return {
-  { "numToStr/Comment.nvim", event = "VeryLazy", config = true },
   { "kylechui/nvim-surround", event = "VeryLazy", config = true },
   {
     "Wansmer/treesj",
@@ -8,24 +7,30 @@ return {
     config = true,
   },
   {
+    "tpope/vim-commentary",
+    dependencies = { "nvim-treesitter" },
+    keys = { { "gc", mode = { "n", "v", "o" } } },
+    cmds = { "Commentary" },
+  },
+  {
     "ThePrimeagen/harpoon",
     -- stylua: ignore
     keys = {
-      { "<Leader>h", function() require("harpoon.ui").toggle_quick_menu() end, desc = "Harpoon" },
+      { "<Leader>h",  function() require("harpoon.ui").toggle_quick_menu() end, desc = "Harpoon" },
       { "<Leader>hh", function() require("harpoon.ui").toggle_quick_menu() end, desc = "Harpoon Toggle Menu" },
-      { "<Leader>hm", function() require("harpoon.mark").add_file() end, desc = "Harpoon Mark" },
-      { "<Leader>ha", function() require("harpoon.ui").nav_file(1) end, desc = "Harpoon Go to 1" },
-      { "<Leader>hs", function() require("harpoon.ui").nav_file(2) end, desc = "Harpoon Go to 2" },
-      { "<Leader>hd", function() require("harpoon.ui").nav_file(3) end, desc = "Harpoon Go to 3" },
-      { "<Leader>hf", function() require("harpoon.ui").nav_file(4) end, desc = "Harpoon Go to 4" },
-      { "<Leader>hg", function() require("harpoon.ui").nav_file(5) end, desc = "Harpoon Go to 5" },
+      { "<Leader>hm", function() require("harpoon.mark").add_file() end,        desc = "Harpoon Mark" },
+      { "<Leader>ha", function() require("harpoon.ui").nav_file(1) end,         desc = "Harpoon Go to 1" },
+      { "<Leader>hs", function() require("harpoon.ui").nav_file(2) end,         desc = "Harpoon Go to 2" },
+      { "<Leader>hd", function() require("harpoon.ui").nav_file(3) end,         desc = "Harpoon Go to 3" },
+      { "<Leader>hf", function() require("harpoon.ui").nav_file(4) end,         desc = "Harpoon Go to 4" },
+      { "<Leader>hg", function() require("harpoon.ui").nav_file(5) end,         desc = "Harpoon Go to 5" },
     },
   },
   {
     "monaqa/dial.nvim",
     keys = {
-      { "<C-A>", "<Plug>(dial-increment)", mode = { "n", "v" } },
-      { "<C-X>", "<Plug>(dial-decrement)", mode = { "n", "v" } },
+      { "<C-A>",  "<Plug>(dial-increment)",            mode = { "n", "v" } },
+      { "<C-X>",  "<Plug>(dial-decrement)",            mode = { "n", "v" } },
       { "g<C-A>", "<Plug>(dial-increment-additional)", mode = "v" },
       { "g<C-X>", "<Plug>(dial-decrement-additional)", mode = "v" },
     },
