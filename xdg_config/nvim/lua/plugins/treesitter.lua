@@ -29,17 +29,25 @@ return {
       ensure_installed = {
         "bash", "c", "cpp", "diff", "fish",
         "gitcommit", "gitignore", "git_rebase",
-        "go", "javascript", "json", "lua",
+        "go", "javascript", "json", "lua", "luap", "luadoc",
         "markdown", "markdown_inline", "python",
         "query", "regex", "rust", "toml",
         "typescript", "vim", "vimdoc", "yaml",
       },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<C-Space>",
+          node_incremental = "<C-Space>",
+          scope_incremental = false,
+          node_decremental = "<BS>",
+        },
+      },
       textobjects = {
         select = {
           enable = true,
-          lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+          lookahead = true,
           keymaps = {
-            -- You can use the capture groups defined in textobjects.scm
             ["a/"] = { query = "@comment.outer", desc = "Select outer part of a comment" },
             ["aa"] = { query = "@parameter.outer", desc = "Select outer part of a parameter" },
             ["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
@@ -111,9 +119,10 @@ return {
     -- stylua: ignore
     keys = {
       ";", ",", "f", "F", "t", "T",
-      "]c", "[c", "]q", "[q", "]l", "[l",
-      "]t", "[t", "]b", "[b", "]d", "[d",
-      "]h", "[h",
+      "[b", "]b", "[c", "]c",
+      "[d", "]d", "[e", "]e",
+      "[h", "]h", "[l", "]l",
+      "[q", "]q", "]t", "[t",
     },
     config = function()
       local map = function(lhs, rhs, opts)
@@ -131,6 +140,10 @@ return {
       map("t", repeatable.builtin_t, { desc = "Till before [count]'th occurence of {char} to the right" })
       map("T", repeatable.builtin_T, { desc = "Till after [count]'th occurence of {char} to the left" })
 
+      local next_buffer, prev_buffer = repeatable.make_repeatable_move_pair(vim.cmd.bnext, vim.cmd.bprevious)
+      map("]b", next_buffer, { desc = "Next Buffer" })
+      map("[b", prev_buffer, { desc = "Previous Buffer" })
+
       local next_hunk, prev_hunk = repeatable.make_repeatable_move_pair(function()
         if vim.wo.diff then
           vim.api.nvim_feedkeys("]c", "n", true)
@@ -147,31 +160,34 @@ return {
       map("]c", next_hunk, { desc = "Jump forward to the next start of a change" })
       map("[c", prev_hunk, { desc = "Jump backwards to the previous start of a change" })
 
-      local next_quickfix, prev_quickfix = repeatable.make_repeatable_move_pair(vim.cmd.cnext, vim.cmd.cprevious)
-      map("]q", next_quickfix, { desc = "Next Quickfix item" })
-      map("[q", prev_quickfix, { desc = "Previous Quickfix item" })
-
-      local next_locationlist, prev_locationlist = repeatable.make_repeatable_move_pair(vim.cmd.lnext, vim.cmd.lprevious)
-      map("]l", next_locationlist, { desc = "Next Location List item" })
-      map("[l", prev_locationlist, { desc = "Previous Location List item" })
-
-      local next_tab, prev_tab = repeatable.make_repeatable_move_pair(vim.cmd.tabnext, vim.cmd.tabprevious)
-      map("]t", next_tab, { desc = "Next Tab" })
-      map("[t", prev_tab, { desc = "Previous Tab" })
-
-      local next_buffer, prev_buffer = repeatable.make_repeatable_move_pair(vim.cmd.bnext, vim.cmd.bprevious)
-      map("]b", next_buffer, { desc = "Next Buffer" })
-      map("[b", prev_buffer, { desc = "Previous Buffer" })
-
-      local next_diagnostic, prev_diagnostic = repeatable.make_repeatable_move_pair(vim.diagnostic.goto_next,
+      local next_diagnostic, prev_diagnostic = repeatable.make_repeatable_move_pair(
+        vim.diagnostic.goto_next,
         vim.diagnostic.goto_prev)
       map("]d", next_diagnostic, { desc = "Next Diagnostic" })
       map("[d", prev_diagnostic, { desc = "Previous Diagnostic" })
+
+      local next_error, prev_error = repeatable.make_repeatable_move_pair(
+        function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
+        function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end)
+      map("]e", next_error, { desc = "Next Error" })
+      map("[e", prev_error, { desc = "Previous Error" })
 
       local harpoon = require("harpoon.ui")
       local next_harpoon, prev_harpoon = repeatable.make_repeatable_move_pair(harpoon.nav_next, harpoon.nav_prev)
       map("]h", next_harpoon, { desc = "Next Harpoon Mark" })
       map("[h", prev_harpoon, { desc = "Previous Harpoon Mark" })
+
+      local next_locationlist, prev_locationlist = repeatable.make_repeatable_move_pair(vim.cmd.lnext, vim.cmd.lprevious)
+      map("]l", next_locationlist, { desc = "Next Location List item" })
+      map("[l", prev_locationlist, { desc = "Previous Location List item" })
+
+      local next_quickfix, prev_quickfix = repeatable.make_repeatable_move_pair(vim.cmd.cnext, vim.cmd.cprevious)
+      map("]q", next_quickfix, { desc = "Next Quickfix item" })
+      map("[q", prev_quickfix, { desc = "Previous Quickfix item" })
+
+      local next_tab, prev_tab = repeatable.make_repeatable_move_pair(vim.cmd.tabnext, vim.cmd.tabprevious)
+      map("]t", next_tab, { desc = "Next Tab" })
+      map("[t", prev_tab, { desc = "Previous Tab" })
     end,
   },
 }

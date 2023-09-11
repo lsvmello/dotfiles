@@ -1,26 +1,29 @@
 local augroup = vim.api.nvim_create_augroup("lsvmello.autocmds", { clear = true })
 
--- check if we need to reload the file when it changed
-vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, { group = augroup, command = "checktime" })
+vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+  desc = "reload the file when it changed",
+  group = augroup,
+  command = "checktime"
+})
 
--- highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
+  desc = "highlight on yank",
   group = augroup,
   callback = function()
     vim.highlight.on_yank()
   end,
 })
 
--- resize splits if window got resized
 vim.api.nvim_create_autocmd({ "VimResized" }, {
+  desc = "resize splits if window got resized",
   group = augroup,
   callback = function()
     vim.cmd("tabdo wincmd =")
   end,
 })
 
--- go to last loc when opening a buffer
 vim.api.nvim_create_autocmd("BufReadPost", {
+  desc = "go to last loc when opening a buffer",
   group = augroup,
   callback = function()
     local mark = vim.api.nvim_buf_get_mark(0, '"')
@@ -31,19 +34,14 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
--- close some filetypes with <q>
 vim.api.nvim_create_autocmd("FileType", {
+  desc = "close some filetypes with q",
   group = augroup,
   pattern = {
-    "PlenaryTestPopup",
-    "checkhealth",
-    "fugitive",
-    "help",
-    "lspinfo",
-    "man",
-    "notify",
-    "qf",
-    "query",
+    -- stylua: ignore
+    "PlenaryTestPopup", "checkhealth",
+    "fugitive", "help", "lspinfo",
+    "man", "notify", "qf", "query",
     "startuptime",
   },
   callback = function(event)
@@ -53,6 +51,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
+  desc = "enable spell and wrap for some filetypes",
   group = augroup,
   pattern = { "gitcommit", "markdown" },
   callback = function()
@@ -61,8 +60,8 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- prompts to create not existing dir when saving a file
 vim.api.nvim_create_autocmd("BufWritePre", {
+  desc = "prompts to create not existing dir when saving a file",
   group = augroup,
   callback = function(event)
     if not event.match:match("^%w%w+://") then

@@ -178,7 +178,7 @@ return {
           map("n", "gd", vim.lsp.buf.definition, "[G]o to [D]efinition")
           map("n", "gi", vim.lsp.buf.implementation, "[G]o to [I]mplementation")
           map("n", "K", vim.lsp.buf.hover, "Peek definition")
-          map({ "n", "i" }, "<C-K>", vim.lsp.buf.signature_help, "Signature Help")
+          map({ "n", "i" }, "<C-K>", vim.lsp.buf.signature_help, "Signature help")
           map("n", "<LocalLeader>k", vim.diagnostic.open_float, "View diagnostic")
           map("n", "<LocalLeader>ca", vim.lsp.buf.code_action, "[C]ode [A]ctions")
           map("n", "<LocalLeader>r", vim.lsp.buf.rename, "[R]ename")
@@ -188,7 +188,7 @@ return {
       -- setup diagnostics
       for name, icon in pairs(require("lsvmello.icons").diagnostics) do
         name = "DiagnosticSign" .. name
-        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
+        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "", icon = "" })
       end
       vim.diagnostic.config(opts.diagnostics)
 
@@ -198,14 +198,9 @@ return {
       local function setup(server)
         local server_opts = servers[server] or {}
         server_opts.capabilities = capabilities
-        if opts.setup[server] then
-          if opts.setup[server](server, server_opts) then
-            return
-          end
-        elseif opts.setup["*"] then
-          if opts.setup["*"](server, server_opts) then
-            return
-          end
+        if (opts.setup[server] and opts.setup[server](server, server_opts))
+            or (opts.setup["*"] and opts.setup["*"](server, server_opts)) then
+          return
         end
         require("lspconfig")[server].setup(server_opts)
       end
