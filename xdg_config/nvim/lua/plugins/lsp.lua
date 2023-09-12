@@ -12,17 +12,9 @@ return {
     cmd = "Mason",
     opts = {
       ensure_installed = {
-        "clang-format",
-        "clangd",
-        "gopls",
-        "jq",
-        "json-lsp",
-        "lua-language-server",
-        "rust-analyzer",
         "shellcheck",
         "shfmt",
         "stylua",
-        "yaml-language-server",
       },
     },
     config = function(_, opts)
@@ -45,8 +37,6 @@ return {
       "mason.nvim",   -- already configured
       "cmp-nvim-lsp", -- already configured in completion.lua
       "williamboman/mason-lspconfig.nvim",
-      "b0o/SchemaStore.nvim",
-      { "folke/neodev.nvim", config = true },
       {
         "j-hui/fidget.nvim",
         tag = "legacy",
@@ -74,66 +64,10 @@ return {
         formatting_options = nil,
         timeout = nil,
       },
-      servers = {
-        jsonls = {
-          settings = {
-            json = {
-              validate = { enable = true },
-            }
-          }
-        },
-        lua_ls = {
-          settings = {
-            Lua = {
-              workspace = {
-                checkThirdParty = false,
-              },
-              completion = {
-                callSnippet = "Replace",
-              },
-            },
-          },
-        },
-        yamlls = {
-          -- Have to add this for yamlls to understand that we support line folding
-          capabilities = {
-            textDocument = {
-              foldingRange = {
-                dynamicRegistration = false,
-                lineFoldingOnly = true,
-              },
-            },
-          },
-          settings = {
-            redhat = { telemetry = { enabled = false } },
-            yaml = {
-              keyOrdering = false,
-              format = {
-                enable = true,
-              },
-              validate = true,
-              schemaStore = {
-                -- Must disable built-in schemaStore support to use
-                -- schemas from SchemaStore.nvim plugin
-                enable = false,
-                -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
-                url = "",
-              },
-            },
-          },
-        },
-      },
+      servers = {},
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
       setup = {
-        jsonls = function(_, server_opts)
-          server_opts.settings.json.schemas = server_opts.settings.json.schemas or {}
-          vim.list_extend(server_opts.settings.json.schemas, require("schemastore").json.schemas())
-        end,
-        yamlls = function(_, server_opts)
-          server_opts.settings.yaml.schemas = server_opts.settings.yaml.schemas or {}
-          vim.list_extend(server_opts.settings.yaml.schemas, require("schemastore").yaml.schemas())
-        end,
         -- Fallback for any server
         ["*"] = function()
           local lsp = vim.lsp

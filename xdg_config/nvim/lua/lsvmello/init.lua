@@ -31,7 +31,11 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- use lazy.nvim
-require("lazy").setup("plugins", {
+require("lazy").setup({
+  spec = {
+    { import = "plugins" },
+    { import = "plugins.coding" },
+  },
   dev = {
     path = "~/work",
   },
@@ -43,5 +47,15 @@ require("lazy").setup("plugins", {
   },
   change_detection = {
     notify = false,
+  },
+  performance = {
+    rtp = {
+      -- stylua: ignore
+      disabled_plugins = {
+        "gzip", "matchit", "matchparen",
+        "tarPlugin", "tohtml", "tutor",
+        "zipPlugin",
+      },
+    },
   },
 })

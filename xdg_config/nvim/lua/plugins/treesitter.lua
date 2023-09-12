@@ -27,12 +27,9 @@ return {
       },
       -- stylua: ignore
       ensure_installed = {
-        "bash", "c", "cpp", "diff", "fish",
-        "gitcommit", "gitignore", "git_rebase",
-        "go", "javascript", "json", "lua", "luap", "luadoc",
-        "markdown", "markdown_inline", "python",
-        "query", "regex", "rust", "toml",
-        "typescript", "vim", "vimdoc", "yaml",
+        "diff", "git_rebase", "gitcommit", "gitignore",
+        "markdown", "markdown_inline", "query",
+        "regex", "vim", "vimdoc",
       },
       incremental_selection = {
         enable = true,
@@ -123,12 +120,23 @@ return {
       "[d", "]d", "[e", "]e",
       "[h", "]h", "[l", "]l",
       "[q", "]q", "]t", "[t",
+      "[w", "]w",
     },
     config = function()
       local map = function(lhs, rhs, opts)
         opts = opts or {}
         vim.keymap.set({ "n", "x", "o" }, lhs, rhs, opts)
       end
+      local safe_cmd = function(cmd)
+        return function()
+          local ok, error_msg = pcall(vim.cmd --[[@as fun()]], cmd)
+          if not ok then
+            local split_msg = vim.split(error_msg, ":")
+            vim.notify(split_msg[#split_msg], vim.log.levels.WARN)
+          end
+        end
+      end
+
       local repeatable = require("nvim-treesitter.textobjects.repeatable_move")
 
       -- stylua: ignore start
@@ -140,7 +148,7 @@ return {
       map("t", repeatable.builtin_t, { desc = "Till before [count]'th occurence of {char} to the right" })
       map("T", repeatable.builtin_T, { desc = "Till after [count]'th occurence of {char} to the left" })
 
-      local next_buffer, prev_buffer = repeatable.make_repeatable_move_pair(vim.cmd.bnext, vim.cmd.bprevious)
+      local next_buffer, prev_buffer = repeatable.make_repeatable_move_pair(safe_cmd("bnext"), safe_cmd("bprevious"))
       map("]b", next_buffer, { desc = "Next Buffer" })
       map("[b", prev_buffer, { desc = "Previous Buffer" })
 
@@ -177,17 +185,22 @@ return {
       map("]h", next_harpoon, { desc = "Next Harpoon Mark" })
       map("[h", prev_harpoon, { desc = "Previous Harpoon Mark" })
 
-      local next_locationlist, prev_locationlist = repeatable.make_repeatable_move_pair(vim.cmd.lnext, vim.cmd.lprevious)
+      local next_locationlist, prev_locationlist = repeatable.make_repeatable_move_pair(safe_cmd("lnext"),
+        safe_cmd("lprevious"))
       map("]l", next_locationlist, { desc = "Next Location List item" })
       map("[l", prev_locationlist, { desc = "Previous Location List item" })
 
-      local next_quickfix, prev_quickfix = repeatable.make_repeatable_move_pair(vim.cmd.cnext, vim.cmd.cprevious)
+      local next_quickfix, prev_quickfix = repeatable.make_repeatable_move_pair(safe_cmd("cnext"), safe_cmd("cprevious"))
       map("]q", next_quickfix, { desc = "Next Quickfix item" })
       map("[q", prev_quickfix, { desc = "Previous Quickfix item" })
 
-      local next_tab, prev_tab = repeatable.make_repeatable_move_pair(vim.cmd.tabnext, vim.cmd.tabprevious)
+      local next_tab, prev_tab = repeatable.make_repeatable_move_pair(safe_cmd("tabnext"), safe_cmd("tabprevious"))
       map("]t", next_tab, { desc = "Next Tab" })
       map("[t", prev_tab, { desc = "Previous Tab" })
+
+      local next_window, prev_window = repeatable.make_repeatable_move_pair(safe_cmd("wnext"), safe_cmd("wprevious"))
+      map("]w", next_window, { desc = "Next Window" })
+      map("[w", prev_window, { desc = "Previous Window" })
     end,
   },
 }
