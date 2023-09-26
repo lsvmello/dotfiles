@@ -53,7 +53,7 @@ require("lazy").setup({
       -- stylua: ignore
       disabled_plugins = {
         "gzip", "matchit", "matchparen",
-        "tarPlugin", "tohtml", "tutor",
+        "tarPlugin", "tohtml",
         "zipPlugin",
       },
     },

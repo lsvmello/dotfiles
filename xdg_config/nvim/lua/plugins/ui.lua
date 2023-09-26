@@ -104,7 +104,7 @@ return {
             { "filetype", icon_only = true, separator = "", padding = 0 },
             { "filename", path = 1, symbols = { modified = "", readonly = "" } },
           },
-          lualine_x = { "encoding" },
+          lualine_x = { require("lsvmello.format").status, "encoding" },
           lualine_y = {
             {
               "diagnostics",

@@ -61,6 +61,9 @@ map("n", "<Leader>c", function()
   vim.cmd.tabnew(vim.fn.stdpath("config"))
 end, { desc = "Edit Neovim's configuration files" })
 
+-- toggles
+map("n", "<Leader>F", require("lsvmello.format").toggle, { desc = "Toggle format on Save" })
+
 if vim.fn.executable("tmux") then
   map("n", "<C-f>", "<Cmd>silent !tmux neww tmux-sessionizer<CR>", { desc = "Change tmux session" })
 end

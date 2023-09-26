@@ -1,11 +1,3 @@
-local client_supports_format = function(client)
-  if client.config and client.config.capabilities
-      and client.config.capabilities.documentFormattingProvider == false then
-    return false
-  end
-  return client.supports_method("textDocument/formatting") or client.supports_method("textDocument/rangeFormatting")
-end
-
 return {
   {
     "williamboman/mason.nvim",
@@ -80,26 +72,7 @@ return {
     },
     config = function(_, opts)
       -- setup auto-format
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        callback = function(event)
-          local bufnr = event.buf
-          local clients = vim.lsp.get_clients({ bufnr = bufnr })
-          if #clients == 0 then return end
-
-          local client_ids = vim.tbl_map(function(client)
-            return client.id
-          end, vim.tbl_filter(client_supports_format, clients))
-
-          if #client_ids == 0 then return end
-
-          vim.lsp.buf.format(vim.tbl_deep_extend("force", {
-            bufnr = bufnr,
-            filter = function(client)
-              return vim.tbl_contains(client_ids, client.id)
-            end,
-          }, opts.format or {}))
-        end,
-      })
+      require("lsvmello.format").setup(opts.format)
 
       -- setup keymaps
       vim.api.nvim_create_autocmd("LspAttach", {
