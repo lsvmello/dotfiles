@@ -4,7 +4,6 @@ return {
     ft = { "git", "gitcommit", "gitrebase" },
     -- stylua: ignore
     cmd = {
-      -- fill other commands
       "G", "GBrowse", "GDelete", "GMove",
       "GRemove", "GRename", "GUnlink",
       "GcLog", "Gcd", "Gclog",
@@ -35,52 +34,30 @@ return {
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
 
-        local function map(mode, l, r, opts)
-          opts = opts or {}
-          opts.buffer = bufnr
-          vim.keymap.set(mode, l, r, opts)
+        local function map(mode, l, r, desc)
+          vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc })
         end
 
         -- stylua: ignore start
         -- Actions
-        map("n", "<LocalLeader>hs", gs.stage_hunk)
-        map("n", "<LocalLeader>hr", gs.reset_hunk)
-        map("v", "<LocalLeader>hs", function() gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") }) end)
-        map("v", "<LocalLeader>hr", function() gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") }) end)
-        map("n", "<LocalLeader>hS", gs.stage_buffer)
-        map("n", "<LocalLeader>hu", gs.undo_stage_hunk)
-        map("n", "<LocalLeader>hR", gs.reset_buffer)
-        map("n", "<LocalLeader>hp", gs.preview_hunk)
-        map("n", "<LocalLeader>hb", function() gs.blame_line({ full = true }) end)
-        map("n", "<LocalLeader>tb", gs.toggle_current_line_blame)
-        map("n", "<LocalLeader>hd", gs.diffthis)
-        map("n", "<LocalLeader>hD", function() gs.diffthis("~") end)
-        map("n", "<LocalLeader>td", gs.toggle_deleted)
+        map("n", "<LocalLeader>hs", gs.stage_hunk, "Stage hunk")
+        map("n", "<LocalLeader>hr", gs.reset_hunk, "Reset hunk")
+        map("v", "<LocalLeader>hs", function() gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") }) end, "Stage hunk")
+        map("v", "<LocalLeader>hr", function() gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") }) end, "Reset hunk")
+        map("n", "<LocalLeader>hS", gs.stage_buffer, "Stage buffer")
+        map("n", "<LocalLeader>hU", gs.undo_stage_hunk, "Undo stage buffer")
+        map("n", "<LocalLeader>hR", gs.reset_buffer, "Reset buffer")
+        map("n", "<LocalLeader>hp", gs.preview_hunk, "Preview hunk")
+        map("n", "<LocalLeader>hb", function() gs.blame_line({ full = true }) end, "Blame line")
+        map("n", "<LocalLeader>tb", gs.toggle_current_line_blame, "Current line blame")
+        map("n", "<LocalLeader>hd", gs.diffthis, "Diff this")
+        map("n", "<LocalLeader>hD", function() gs.diffthis("~") end, "Diff this ~")
+        map("n", "<LocalLeader>td", gs.toggle_deleted, "Toggle deleted")
         -- Text objects
-        map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", { desc = "GitSigns Select Hunk" })
-        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "GitSigns Select Hunk" })
+        map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
         -- stylua: ignore end
       end,
-    },
-  },
-  {
-    "sindrets/diffview.nvim",
-    -- stylua: ignore
-    cmd = {
-      "DiffviewClose", "DiffviewFileHistory",
-      "DiffviewFocusFiles", "DiffviewLog",
-      "DiffviewOpen", "DiffviewRefresh",
-      "DiffviewToggleFiles",
-    },
-    opts = {
-      keymaps = {
-        file_panel = {
-          { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close Diffview" } },
-        },
-        file_history_panel = {
-          { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close Diffview History" } },
-        },
-      },
     },
   },
 }

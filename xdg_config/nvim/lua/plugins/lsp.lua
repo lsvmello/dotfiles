@@ -82,13 +82,13 @@ return {
           end
 
           -- keymaps
-          map("n", "gd", vim.lsp.buf.definition, "[G]o to [D]efinition")
-          map("n", "gi", vim.lsp.buf.implementation, "[G]o to [I]mplementation")
+          map("n", "gd", vim.lsp.buf.definition, "Go to definition")
+          map("n", "gi", vim.lsp.buf.implementation, "Go to implementation")
           map("n", "K", vim.lsp.buf.hover, "Peek definition")
           map({ "n", "i" }, "<C-K>", vim.lsp.buf.signature_help, "Signature help")
           map("n", "<LocalLeader>k", vim.diagnostic.open_float, "View diagnostic")
-          map("n", "<LocalLeader>ca", vim.lsp.buf.code_action, "[C]ode [A]ctions")
-          map("n", "<LocalLeader>r", vim.lsp.buf.rename, "[R]ename")
+          map("n", "<LocalLeader>ca", vim.lsp.buf.code_action, "Code actions")
+          map("n", "<LocalLeader>r", vim.lsp.buf.rename, "Rename")
         end,
       })
 

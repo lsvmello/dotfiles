@@ -20,7 +20,7 @@ return {
           vim.cmd.UndotreeToggle()
           vim.cmd.UndotreeFocus()
         end,
-        desc = "[U]ndoTree Toggle",
+        desc = "UndoTree toggle",
       },
     },
   },
