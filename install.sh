@@ -23,7 +23,7 @@ sudo add-apt-repository --yes ppa:fish-shell/release-3
 # Download and import the Nodesource GPG key
 sudo apt-get install -y ca-certificates curl gnupg
 sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg --yes
 
 # Create dev repository
 NODE_MAJOR=20
