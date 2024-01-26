@@ -68,8 +68,18 @@ return {
       delete_check_events = "TextChanged",
     },
     config = function(_, opts)
-      require("luasnip").setup(opts)
+      local luasnip = require("luasnip")
+      luasnip.setup(opts)
       require("luasnip.loaders.from_vscode").lazy_load()
+
+      vim.keymap.set({"i", "s"}, "<Tab>", function()
+        if luasnip.expand_or_locally_jumpable() then luasnip.jump(1)
+        else return "<Tab>" end
+      end, { expr = true })
+      vim.keymap.set({"i", "s"}, "<S-Tab>", function()
+        if luasnip.locally_jumpable(-1) then luasnip.jump(-1)
+        else return "<S-Tab>" end
+      end, { expr = true })
     end,
   },
 }
