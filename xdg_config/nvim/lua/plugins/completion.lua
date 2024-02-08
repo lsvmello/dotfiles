@@ -82,4 +82,9 @@ return {
       end, { expr = true })
     end,
   },
+  {
+    "github/copilot.vim",
+    cmds = "Copilot",
+    dependencies = { "LuaSnip"}, -- load after <Tab> has been remapped
+  },
 }
