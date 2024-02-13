@@ -51,6 +51,7 @@ return {
       { "<Leader>fo", "<Cmd>Telescope oldfiles<CR>", desc = "Find old files" },
       { "<Leader>fO", "<Cmd>Telescope vim_options<CR>", desc = "Find options" },
       { "<Leader>fr", "<Cmd>Telescope lsp_references<CR>", desc = "Find references" },
+      { "<Leader>fR", "<Cmd>Telescope registers<CR>", desc = "Find registers" },
       { "<Leader>fs", "<Cmd>Telescope lsp_document_symbols<CR>", desc = "Find document symbols" },
       { "<Leader>fS", "<Cmd>Telescope lsp_workspace_symbols<CR>", desc = "Find workspace symbols" },
       { "<Leader>ft", "<Cmd>Telescope builtin<CR>", desc = "Find Telescope" },
