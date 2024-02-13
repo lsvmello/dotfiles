@@ -1,3 +1,9 @@
+# Github copilot configurations
+github-copilot/
+
+# WSDL confgurations
+wslu/
+
 # node and npm
 configstore/
 
