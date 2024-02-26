@@ -42,11 +42,20 @@ vim.api.nvim_create_autocmd("FileType", {
     "PlenaryTestPopup", "checkhealth",
     "fugitive", "help", "lspinfo",
     "man", "notify", "qf", "query",
-    "startuptime",
+    "startuptime", "netrw",
   },
   callback = function(event)
     vim.api.nvim_set_option_value("buflisted", false, { buf = event.buf })
     vim.keymap.set("n", "q", "<Cmd>close<CR>", { buffer = event.buf, silent = true })
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "delete netrw buffers automatically",
+  group = augroup,
+  pattern = "netrw",
+  callback = function(event)
+    vim.opt_local.bufhidden = "wipe"
   end,
 })
 
