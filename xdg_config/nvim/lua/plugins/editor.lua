@@ -4,7 +4,7 @@ return {
     "tpope/vim-commentary",
     dependencies = { "nvim-treesitter" },
     keys = { { "gc", mode = { "n", "v", "o" } } },
-    cmds = { "Commentary" },
+    cmd = { "Commentary" },
   },
   {
     "ThePrimeagen/harpoon",

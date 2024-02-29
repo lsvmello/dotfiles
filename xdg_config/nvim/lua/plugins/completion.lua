@@ -84,7 +84,7 @@ return {
   },
   {
     "github/copilot.vim",
-    cmds = "Copilot",
+    cmd = "Copilot",
     dependencies = { "LuaSnip"}, -- load after <Tab> has been remapped
   },
 }

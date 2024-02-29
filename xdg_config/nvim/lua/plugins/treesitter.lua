@@ -226,7 +226,7 @@ return {
   {
     "Wansmer/treesj",
     dependencies = { "nvim-treesitter" },
-    cmds = { "TSJJoin", "TSJSplit", "TSJToggle" },
+    cmd = { "TSJJoin", "TSJSplit", "TSJToggle" },
     keys = {
       { "<LocalLeader>j", function() require('treesj').toggle() end, desc = "Join/Split node under cursor" },
     },
