@@ -43,6 +43,7 @@ return {
       -- f keymaps
       { "<Leader>f", "<Cmd>Telescope resume<CR>", desc = "Resume Search" },
       { "<Leader>fb", "<Cmd>Telescope buffers show_all_buffers=true<CR>", desc = "Find buffers" },
+      { "<Leader>fc", function() require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find config files" },
       { "<Leader>fd", "<Cmd>Telescope diagnostics<CR>", desc = "Find diagnostics" },
       { "<Leader>ff", find_files, desc = "Find files" },
       { "<Leader>fg", "<Cmd>Telescope live_grep<CR>", desc = "Find by grep" },
