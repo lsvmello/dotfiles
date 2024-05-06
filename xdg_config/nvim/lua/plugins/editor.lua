@@ -23,10 +23,10 @@ return {
   {
     "monaqa/dial.nvim",
     keys = {
-      { "<C-A>",  "<Plug>(dial-increment)",            mode = { "n", "v" } },
-      { "<C-X>",  "<Plug>(dial-decrement)",            mode = { "n", "v" } },
-      { "g<C-A>", "<Plug>(dial-increment-additional)", mode = "v" },
-      { "g<C-X>", "<Plug>(dial-decrement-additional)", mode = "v" },
+      { "<C-A>",  "<Plug>(dial-increment)", mode = { "n", "v" } },
+      { "<C-X>",  "<Plug>(dial-decrement)", mode = { "n", "v" } },
+      { "g<C-A>", "g<Plug>(dial-increment)", mode = { "n", "v" }, remap = true },
+      { "g<C-X>", "g<Plug>(dial-decrement)", mode = { "n", "v" }, remap = true },
     },
     config = function()
       local augend = require("dial.augend")
