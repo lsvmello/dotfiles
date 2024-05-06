@@ -1,27 +1,21 @@
+[user]
+ 	name = Leonardo Mello
+ 	email = lsvmello@gmail.com
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Creset(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[core]
+	editor = nvim
+[color]
+	ui = true
+[help]
+	autoCorrect = 1
 [init]
 	defaultBranch = main
-
-[user]
-  name = Leonardo Mello
-  email = lsvmello@gmail.com
-
-[core]
-  editor = nvim
-
-[help]
-  autocorrect = 1
-
-[color]
-  ui = true
-
-[ui "color"]
-  ui = always
-
 [fetch]
-  prune = true
-
+	prune = true
 [pull]
-  rebase = true
-
+	rebase = true
 [rebase]
-  autoStash = true
+	autoStash = true
+[ui "color"]
+	ui = always
