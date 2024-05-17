@@ -1,12 +1,6 @@
 return {
   { "kylechui/nvim-surround", event = "VeryLazy", config = true },
   {
-    "tpope/vim-commentary",
-    dependencies = { "nvim-treesitter" },
-    keys = { { "gc", mode = { "n", "v", "o" } } },
-    cmd = { "Commentary" },
-  },
-  {
     "ThePrimeagen/harpoon",
     -- stylua: ignore
     keys = {
