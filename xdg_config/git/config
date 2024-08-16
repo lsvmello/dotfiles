@@ -17,5 +17,7 @@
 	rebase = true
 [rebase]
 	autoStash = true
+	autosquash = true
+  updateRefs = true
 [ui "color"]
 	ui = always
