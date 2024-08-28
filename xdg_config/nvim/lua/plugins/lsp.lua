@@ -51,6 +51,17 @@ return {
           prefix = "●",
         },
         severity_sort = true,
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = require('lsvmello.icons').diagnostics.Error,
+            [vim.diagnostic.severity.WARN] = require('lsvmello.icons').diagnostics.Warn,
+            [vim.diagnostic.severity.HINT] = require('lsvmello.icons').diagnostics.Hint,
+            [vim.diagnostic.severity.INFO] = require('lsvmello.icons').diagnostics.Info,
+          },
+        },
+      },
+      inlay_hints = {
+        enabled = true,
       },
       format = {
         formatting_options = nil,
