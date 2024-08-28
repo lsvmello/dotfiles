@@ -145,8 +145,8 @@ return {
       "[w", "]w",
     },
     config = function()
-      local map = function(lhs, rhs, desc)
-        vim.keymap.set({ "n", "x", "o" }, lhs, rhs, { desc = desc })
+      local map = function(lhs, rhs, opts)
+        vim.keymap.set({ "n", "x", "o" }, lhs, rhs, opts)
       end
       local safe_cmd = function(cmd)
         return function()
@@ -161,16 +161,16 @@ return {
       local repeatable = require("nvim-treesitter.textobjects.repeatable_move")
 
       -- stylua: ignore start
-      map(";", repeatable.repeat_last_move, "Repeat lastest f, t, F, T or custom movement")
-      map(",", repeatable.repeat_last_move_opposite, "Repeat lastest f, t, F, T or custom movement in opposite direction")
-      map("f", repeatable.builtin_f, "To [count]'th occurence of {char} to the right")
-      map("F", repeatable.builtin_F, "To [count]'th occurence of {char} to the left")
-      map("t", repeatable.builtin_t, "Till before [count]'th occurence of {char} to the right")
-      map("T", repeatable.builtin_T, "Till after [count]'th occurence of {char} to the left")
+      map(";", repeatable.repeat_last_move, { desc = "Repeat lastest f, t, F, T or custom movement" })
+      map(",", repeatable.repeat_last_move_opposite, { desc = "Repeat lastest f, t, F, T or custom movement in opposite direction" })
+      map("f", repeatable.builtin_f, { desc = "To [count]'th occurence of {char} to the right", expr = true })
+      map("F", repeatable.builtin_F, { desc = "To [count]'th occurence of {char} to the left", expr = true })
+      map("t", repeatable.builtin_t, { desc = "Till before [count]'th occurence of {char} to the right", expr = true })
+      map("T", repeatable.builtin_T, { desc = "Till after [count]'th occurence of {char} to the left", expr = true })
 
       local next_buffer, prev_buffer = repeatable.make_repeatable_move_pair(safe_cmd("bnext"), safe_cmd("bprevious"))
-      map("]b", next_buffer, "Next Buffer")
-      map("[b", prev_buffer, "Previous Buffer")
+      map("]b", next_buffer, { desc = "Next Buffer" })
+      map("[b", prev_buffer, { desc = "Previous Buffer" })
 
       local next_hunk, prev_hunk = repeatable.make_repeatable_move_pair(function()
         if vim.wo.diff then
@@ -185,42 +185,42 @@ return {
           require("gitsigns").prev_hunk()
         end
       end)
-      map("]c", next_hunk, "Jump forward to the next start of a change")
-      map("[c", prev_hunk, "Jump backwards to the previous start of a change")
+      map("]c", next_hunk, { desc = "Jump forward to the next start of a change" })
+      map("[c", prev_hunk, { desc = "Jump backwards to the previous start of a change" })
 
       local next_diagnostic, prev_diagnostic = repeatable.make_repeatable_move_pair(
-        vim.diagnostic.goto_next,
-        vim.diagnostic.goto_prev)
-      map("]d", next_diagnostic, "Next diagnostic")
-      map("[d", prev_diagnostic, "Previous diagnostic")
+        function () vim.diagnostic.jump({ count = 1, float = true }) end,
+        function () vim.diagnostic.jump({ count = -1, float = true }) end)
+      map("]d", next_diagnostic, { desc = "Next diagnostic" })
+      map("[d", prev_diagnostic, { desc = "Previous diagnostic" })
 
       local next_error, prev_error = repeatable.make_repeatable_move_pair(
-        function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
-        function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end)
-      map("]e", next_error, "Next error")
-      map("[e", prev_error, "Previous error")
+        function() vim.diagnostic.jump({ count = 1, float = true, severity = vim.diagnostic.severity.ERROR }) end,
+        function() vim.diagnostic.jump({ count = -1, float = true, severity = vim.diagnostic.severity.ERROR }) end)
+      map("]e", next_error, { desc = "Next error" })
+      map("[e", prev_error, { desc = "Previous error" })
 
       local harpoon = require("harpoon.ui")
       local next_harpoon, prev_harpoon = repeatable.make_repeatable_move_pair(harpoon.nav_next, harpoon.nav_prev)
-      map("]h", next_harpoon, "Next harpoon mark")
-      map("[h", prev_harpoon, "Previous harpoon mark")
+      map("]h", next_harpoon, { desc = "Next harpoon mark" })
+      map("[h", prev_harpoon, { desc = "Previous harpoon mark" })
 
       local next_locationlist, prev_locationlist = repeatable.make_repeatable_move_pair(safe_cmd("lnext"),
         safe_cmd("lprevious"))
-      map("]l", next_locationlist, "Next location list item")
-      map("[l", prev_locationlist, "Previous location list item")
+      map("]l", next_locationlist, { desc = "Next location list item" })
+      map("[l", prev_locationlist, { desc = "Previous location list item" })
 
       local next_quickfix, prev_quickfix = repeatable.make_repeatable_move_pair(safe_cmd("cnext"), safe_cmd("cprevious"))
-      map("]q", next_quickfix, "Next quickfix item")
-      map("[q", prev_quickfix, "Previous quickfix item")
+      map("]q", next_quickfix, { desc = "Next quickfix item" })
+      map("[q", prev_quickfix, { desc = "Previous quickfix item" })
 
       local next_tab, prev_tab = repeatable.make_repeatable_move_pair(safe_cmd("tabnext"), safe_cmd("tabprevious"))
-      map("]t", next_tab, "Next tab")
-      map("[t", prev_tab, "Previous tab")
+      map("]t", next_tab, { desc = "Next tab" })
+      map("[t", prev_tab, { desc = "Previous tab" })
 
       local next_window, prev_window = repeatable.make_repeatable_move_pair(safe_cmd("wnext"), safe_cmd("wprevious"))
-      map("]w", next_window, "Next window")
-      map("[w", prev_window, "Previous window")
+      map("]w", next_window, { desc = "Next window" })
+      map("[w", prev_window, { desc = "Previous window" })
     end,
   },
   {
