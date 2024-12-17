@@ -1,5 +1,6 @@
 # ENVIRONMENT VARIABLES
 $env:EDITOR="nvim"
+$env:FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
 $env:FZF_DEFAULT_OPTS_FILE="${HOME}\.config\.fzf"
 
 # TERMINAL INTEGRATIONS

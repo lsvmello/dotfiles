@@ -3,7 +3,7 @@ set -x XDG_CONFIG_HOME ~/.config
 set -x EDITOR nvim
 set -x DOTFILES ~/personal/dotfiles/xdg_config
 set -x FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
-set -x FZF_DEFAULT_OPTS '--height=~40%'
+set -x FZF_DEFAULT_OPTS_FILE ~/.config/.fzf
 
 # Add cargo, go and pip installation folder to PATH
 set -x PATH ~/.cargo/bin /usr/local/go/bin ~/go/bin ~/.local/bin $PATH
