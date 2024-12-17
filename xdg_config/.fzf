@@ -1,0 +1,14 @@
+--reverse
+--cycle
+--info=inline-right
+--margin=0
+--padding=0
+--bind ctrl-k:preview-half-page-up
+--bind ctrl-j:preview-half-page-down
+--bind ctrl-d:preview-page-down
+--bind ctrl-u:preview-page-up
+--bind ctrl-t:preview-top
+--bind ctrl-b:preview-bottom
+--bind ctrl-w:toggle-preview-wrap
+--bind ctrl-h:hide-preview
+--bind ctrl-l:show-preview

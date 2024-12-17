@@ -6,28 +6,31 @@ Set-ExecutionPolicy Bypass -Scope Process -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 # Install tools
-choco install git oh-my-posh mingw make python3 ripgrep bat --confirm
-
-# Download Oh-My-Posh files
-$ohMyPoshFilePath = "$env:USERPROFILE\lsvmello.omp.toml"
-((New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/lsvmello/dotfiles/main/windows/powershell_profile.ps1', $PROFILE))
-((New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/lsvmello/dotfiles/main/windows/lsvmello.omp.toml', $ohMyPoshFilePath))
+choco install `
+  azure-cli `
+  bat `
+  curl `
+  docker-cli `
+  docker-compose `
+  docker-engine `
+  fzf `
+  git `
+  jq `
+  lazygit `
+  make `
+  mingw `
+  mongodb-shell `
+  openssl `
+  powertoys `
+  python312 `
+  ripgrep `
+  starship `
+  winmerge `
+  yq `
+  --confirm
 
 # Install Neovim (pre-release)
-choco install neovim neovide --pre --confirm
-
-# Add Windows Context Menu for Neovim
-New-Item -Path HKEY_CLASSES_ROOT\*\shell -Name Neovide -Force | Set-ItemProperty -Name '(Default)' -Value 'Open with Neovide'
-New-ItemProperty - Path HKEY_CLASSES_ROOT\*\shell\Neovide -Name Icon -Value '"C:\Program Files\Neovide\neovide.exe"'
-New-Item -Path HKEY_CLASSES_ROOT\*\shell\Neovide\command -Force | Set-ItemProperty -Name '(Default)' -Value '"C:\Program Files\Neovide\neovide.exe" "%1"'
-
-New-Item -Path HKEY_CLASSES_ROOT\Directory\shell -Name Neovide -Force | Set-ItemProperty -Name '(Default)' -Value 'Open with Neovide'
-New-ItemProperty - Path HKEY_CLASSES_ROOT\Directory\shell\Neovide -Name Icon -Value '"C:\Program Files\Neovide\neovide.exe"'
-New-Item -Path HKEY_CLASSES_ROOT\Directory\shell\Neovide\command -Force | Set-ItemProperty -Name '(Default)' -Value '"C:\Program Files\Neovide\neovide.exe" "%V"'
-
-New-Item -Path HKEY_CLASSES_ROOT\Directory\Background\shell -Name Neovide -Force | Set-ItemProperty -Name '(Default)' -Value 'Open with Neovide'
-New-ItemProperty - Path HKEY_CLASSES_ROOT\Directory\Background\shell\Neovide -Name Icon -Value '"C:\Program Files\Neovide\neovide.exe"'
-New-Item -Path HKEY_CLASSES_ROOT\Directory\Background\shell\Neovide\command -Force | Set-ItemProperty -Name '(Default)' -Value '"C:\Program Files\Neovide\neovide.exe" "%V"'
+choco install neovim --pre --confirm
 
 # Clone the repository
 mkdir ~/personal
@@ -36,5 +39,8 @@ git -C ~/personal clone https://github.com/lsvmello/dotfiles.git
 # Copy Neovim's configuration
 xcopy ~/personal/dotfiles/xdg_config/nvim "$env:USERPROFILE\AppData\Local\nvim" /E /H /I /Y
 
-# Copy VsVim configuration
+# Copy other configuration files
+xcopy ~/personal/dotfiles/xdg_config/startship.toml "$env:USERPROFILE\.config" /-I /Y
+xcopy ~/personal/dotfiles/xdg_config/.fzf "$env:USERPROFILE\.config" /-I /Y
 xcopy ~/personal/dotfiles/windows/_vsvimrc "$env:USERPROFILE\_vsvimrc" /-I /Y
+xcopy ~/personal/dotfiles/main/windows/powershell_profile.ps1 $env:PROFILE /-I /Y
