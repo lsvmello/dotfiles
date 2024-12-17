@@ -1,13 +1,14 @@
 return {
   {
     "williamboman/mason.nvim",
-    cmd = "Mason",
+    cmd = {
+      "Mason", "MasonInstall", "MasonLog",
+      "MasonUninstall", "MasonUninstallAll",
+      "MasonUpdate",
+    },
+    build = ":MasonUpdate",
     opts = {
-      ensure_installed = {
-        "shellcheck",
-        "shfmt",
-        "stylua",
-      },
+      ensure_installed = { "shellcheck", "shfmt", },
     },
     config = function(_, opts)
       require("mason").setup(opts)
@@ -26,22 +27,20 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "mason.nvim",   -- already configured
-      "cmp-nvim-lsp", -- already configured in completion.lua
+      "mason.nvim", -- already configured
+      "nvim-cmp", -- already configured
       "williamboman/mason-lspconfig.nvim",
-      {
-        "j-hui/fidget.nvim",
-        tag = "legacy",
-        opts = {
-          text = { spinner = "moon" },
-          window = {
-            relative = "editor",
-            blend = 0,
+      { "j-hui/fidget.nvim", opts = {}, },
+    },
+    opts = {
+      capabilities = {
+        workspace = {
+          fileOperations = {
+            didRename = true,
+            willRename = true,
           },
         },
       },
-    },
-    opts = {
       diagnostics = {
         underline = true,
         update_in_insert = false,
@@ -53,19 +52,21 @@ return {
         severity_sort = true,
         signs = {
           text = {
-            [vim.diagnostic.severity.ERROR] = require('lsvmello.icons').diagnostics.Error,
-            [vim.diagnostic.severity.WARN] = require('lsvmello.icons').diagnostics.Warn,
-            [vim.diagnostic.severity.HINT] = require('lsvmello.icons').diagnostics.Hint,
-            [vim.diagnostic.severity.INFO] = require('lsvmello.icons').diagnostics.Info,
+            [vim.diagnostic.severity.ERROR] = require("custom.icons").diagnostics.Error,
+            [vim.diagnostic.severity.WARN] = require("custom.icons").diagnostics.Warn,
+            [vim.diagnostic.severity.HINT] = require("custom.icons").diagnostics.Hint,
+            [vim.diagnostic.severity.INFO] = require("custom.icons").diagnostics.Info,
           },
         },
       },
       inlay_hints = {
         enabled = true,
       },
-      format = {
-        formatting_options = nil,
-        timeout = nil,
+      codelens = {
+        enabled = true,
+      },
+      document_highlight = {
+        enabled = true,
       },
       servers = {},
       -- you can do any additional lsp server setup here
@@ -82,9 +83,6 @@ return {
       },
     },
     config = function(_, opts)
-      -- setup auto-format
-      require("lsvmello.format").setup(opts.format)
-
       -- setup keymaps
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(event)
@@ -96,21 +94,32 @@ return {
           map("n", "gd", vim.lsp.buf.definition, "Go to definition")
           map("n", "gi", vim.lsp.buf.implementation, "Go to implementation")
           map({ "n", "i" }, "<C-K>", vim.lsp.buf.signature_help, "Signature help")
+          -- TODO: check if lsp defaults are available. See |grr|, |grn|, |gra|, |i_CTRL-S|.
           map("n", "<LocalLeader>k", vim.diagnostic.open_float, "View diagnostic")
           map("n", "<LocalLeader>ca", vim.lsp.buf.code_action, "Code actions")
+          map({ "n", "v" }, "<LocalLeader>cl", vim.lsp.codelens.run, "Run Code lens")
+          map("n", "<LocalLeader>cL", vim.lsp.codelens.refresh, "Refresh Code Lens")
           map("n", "<LocalLeader>r", vim.lsp.buf.rename, "Rename")
+
         end,
       })
 
       -- setup diagnostics
-      for name, icon in pairs(require("lsvmello.icons").diagnostics) do
+      for name, icon in pairs(require("custom.icons").diagnostics) do
         name = "DiagnosticSign" .. name
         vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "", icon = "" })
       end
       vim.diagnostic.config(opts.diagnostics)
 
       local servers = opts.servers
-      local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+      local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+      local capabilities = vim.tbl_deep_extend(
+        "force",
+        {},
+        vim.lsp.protocol.make_client_capabilities(),
+        has_cmp and cmp_nvim_lsp.default_capabilities() or {},
+        opts.capabilities or {}
+      )
 
       local function setup(server)
         local server_opts = servers[server] or {}
@@ -123,11 +132,7 @@ return {
       end
 
       -- get all the servers that are available thourgh mason-lspconfig
-      local have_mason, mlsp = pcall(require, "mason-lspconfig")
-      local all_mslp_servers = {}
-      if have_mason then
-        all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
-      end
+      local all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
 
       local ensure_installed = {} ---@type string[]
       for server, server_opts in pairs(servers) do
@@ -142,8 +147,34 @@ return {
         end
       end
 
+      local mlsp = require("mason-lspconfig")
       mlsp.setup({ ensure_installed = ensure_installed })
       mlsp.setup_handlers({ setup })
+    end,
+  },
+  {
+    "SmiteshP/nvim-navic",
+    lazy = true,
+    init = function()
+      vim.g.navic_silence = true
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local buffer = args.buf ---@type number
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.supports_method("textDocument/documentSymbol") then
+            require("nvim-navic").attach(client, buffer)
+          end
+        end,
+      })
+    end,
+    opts = function()
+      return {
+        highlight = true,
+        depth_limit = 5,
+        icons = require("custom.icons").kinds,
+        lazy_update_context = true,
+        separator = "  ",
+      }
     end,
   },
 }

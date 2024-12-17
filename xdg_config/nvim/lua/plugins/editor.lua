@@ -1,26 +1,30 @@
 return {
-  { "kylechui/nvim-surround", event = "VeryLazy", config = true },
   {
-    "ThePrimeagen/harpoon",
-    -- stylua: ignore
-    keys = {
-      { "<Leader>h",  function() require("harpoon.ui").toggle_quick_menu() end, desc = "Harpoon" },
-      { "<Leader>hh", function() require("harpoon.ui").toggle_quick_menu() end, desc = "Harpoon Toggle Menu" },
-      { "<Leader>hm", function() require("harpoon.mark").add_file() end,        desc = "Harpoon Mark" },
-      { "<Leader>h1", function() require("harpoon.ui").nav_file(1) end,         desc = "Harpoon Go to 1" },
-      { "<Leader>h2", function() require("harpoon.ui").nav_file(2) end,         desc = "Harpoon Go to 2" },
-      { "<Leader>h3", function() require("harpoon.ui").nav_file(3) end,         desc = "Harpoon Go to 3" },
-      { "<Leader>h4", function() require("harpoon.ui").nav_file(4) end,         desc = "Harpoon Go to 4" },
-      { "<Leader>h5", function() require("harpoon.ui").nav_file(5) end,         desc = "Harpoon Go to 5" },
+    "mbbill/undotree",
+    cmd = {
+      "UndotreeFocus", "UndotreeHide",
+      "UndotreePersistUndo",
+      "UndotreeShow", "UndotreeToggle",
     },
+    keys = {
+      { "<LocalLeader>u", "<Cmd>UndotreeToggle<CR>", desc = "Undotree Toggle" },
+    },
+    init = function()
+      vim.g.undotree_WindowLayout = 2
+      vim.g.undotree_DiffAutoOpen = 0
+      vim.g.undotree_SetFocusWhenToggle = 1
+      vim.g.undotree_SplitWidth = 40
+      vim.g.undotree_DiffpanelHeight = 20
+      vim.g.undotree_DiffCommand = "git diff --no-index"
+    end,
   },
   {
     "monaqa/dial.nvim",
     keys = {
-      { "<C-A>",  "<Plug>(dial-increment)", mode = { "n", "v" } },
-      { "<C-X>",  "<Plug>(dial-decrement)", mode = { "n", "v" } },
-      { "g<C-A>", "g<Plug>(dial-increment)", mode = { "n", "v" }, remap = true },
-      { "g<C-X>", "g<Plug>(dial-decrement)", mode = { "n", "v" }, remap = true },
+      { "<C-A>",  "<Plug>(dial-increment)", mode = { "n", "v" }, desc = "Dial increment" },
+      { "<C-X>",  "<Plug>(dial-decrement)", mode = { "n", "v" }, desc = "Dial decrement" },
+      { "g<C-A>", "g<Plug>(dial-increment)", mode = { "n", "v" }, remap = true, desc = "Dial smart increment" },
+      { "g<C-X>", "g<Plug>(dial-decrement)", mode = { "n", "v" }, remap = true, desc = "Dial smart decrement" },
     },
     config = function()
       local augend = require("dial.augend")
@@ -46,23 +50,5 @@ return {
         },
       })
     end,
-  },
-  {
-    "mbbill/undotree",
-    -- stylua: ignore
-    cmd = {
-      "UndotreeFocus", "UndotreeHide",
-      "UndotreeShow", "UndotreeToggle",
-    },
-    keys = {
-      {
-        "<Leader>u",
-        function()
-          vim.cmd.UndotreeToggle()
-          vim.cmd.UndotreeFocus()
-        end,
-        desc = "UndoTree toggle",
-      },
-    },
   },
 }

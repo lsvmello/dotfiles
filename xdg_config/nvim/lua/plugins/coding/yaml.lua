@@ -6,42 +6,43 @@ return {
     end,
   },
   {
+    "b0o/SchemaStore.nvim",
+    lazy = true,
+    version = false,
+  },
+  {
     "neovim/nvim-lspconfig",
-    dependencies = { "b0o/SchemaStore.nvim", },
-    opts = function(_, opts)
-      return vim.tbl_deep_extend("force", opts, {
-        servers = {
-          yamlls = {
-            -- Have to add this for yamlls to understand that we support line folding
-            capabilities = {
-              textDocument = {
-                foldingRange = {
-                  dynamicRegistration = false,
-                  lineFoldingOnly = true,
-                },
+    opts = {
+      servers = {
+        yamlls = {
+          capabilities = {
+            textDocument = {
+              foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true,
               },
             },
-            settings = {
-              redhat = { telemetry = { enabled = false } },
-              yaml = {
-                schemas = require("schemastore").yaml.schemas(),
-                keyOrdering = false,
-                format = {
-                  enable = true,
-                },
-                validate = true,
-                schemaStore = {
-                  -- Must disable built-in schemaStore support to use
-                  -- schemas from SchemaStore.nvim plugin
-                  enable = false,
-                  -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
-                  url = "",
-                },
+          },
+          on_new_config = function(new_config)
+            new_config.settings.yaml.schemas = new_config.settings.yaml.schemas or {}
+            vim.list_extend(new_config.settings.yaml.schemas, require("schemastore").yaml.schemas())
+          end,
+          settings = {
+            redhat = { telemetry = { enabled = false } },
+            yaml = {
+              keyOrdering = false,
+              format = {
+                enable = true,
+              },
+              validate = true,
+              schemaStore = {
+                enable = false,
+                url = "", -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
               },
             },
           },
         },
-      })
-    end,
+      },
+    },
   },
 }

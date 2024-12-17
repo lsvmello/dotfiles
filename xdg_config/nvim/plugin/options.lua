@@ -15,7 +15,7 @@ opt.laststatus = 3 -- global status line
 opt.list = true -- show some invisible characters (tabs...
 opt.listchars:append("tab:»·,trail:·,nbsp:␣,precedes:‹,extends:›") -- strings to use as virtual text with a lot of information opt.mouse = "a" -- enable mouse mode
 opt.number = true -- print line number
-opt.pumblend = 10 -- popup blend
+opt.pumblend = 0 -- popup blend
 opt.pumheight = 10 -- maximum number of entries in a popup
 opt.relativenumber = true -- relative line numbers
 opt.scrolloff = 4 -- lines of context
@@ -36,6 +36,28 @@ opt.splitright = true -- put new windows right of current
 opt.swapfile = false -- disable swap files
 opt.tabstop = 2 -- number of spaces tabs count for
 opt.termguicolors = true -- true color support
-opt.undofile = true -- enable undo files to use UndoTree
+opt.undofile = true -- enable undo files
 opt.wildmode = "longest:full,full" -- command-line completion mode
 opt.wrap = false -- disable line wrap
+
+if vim.fn.has("win32") == 1 then
+  local is_powershell = false
+  -- set powershell as default shell
+  if vim.fn.executable("pwsh") == 1 then
+    opt.shell = "pwsh"
+    is_powershell = true
+  elseif vim.fn.executable("powershell") == 1 then
+    opt.shell = "powershell"
+    is_powershell = true
+  end
+
+  if is_powershell then
+    -- TODO: improve/learn this
+    opt.shellcmdflag =
+    "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues['Out-File:Encoding']='utf8';"
+    opt.shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
+    opt.shellpipe = '2>&1 | %%{ "$_" } | Tee-Object %s; exit $LastExitCode'
+    opt.shellquote = ""
+    opt.shellxquote = ""
+  end
+end

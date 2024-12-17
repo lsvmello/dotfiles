@@ -1,9 +1,21 @@
-local augroup = vim.api.nvim_create_augroup("lsvmello.autocmds", { clear = true })
+local augroup = vim.api.nvim_create_augroup("custom.autocmds", { clear = true })
 
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
   desc = "reload the file when it changed",
   group = augroup,
   command = "checktime"
+})
+
+vim.api.nvim_create_autocmd({ "TermOpen" }, {
+  desc = "set terminal options and start terminal mode",
+  group = augroup,
+  callback = function()
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+    -- Lualine doesn't allow filter by buftype
+    vim.bo.ft = "terminal"
+    vim.cmd.startinsert()
+  end,
 })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -23,7 +35,7 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 })
 
 vim.api.nvim_create_autocmd("BufReadPost", {
-  desc = "go to last loc when opening a buffer",
+  desc = "go to last cursor position when opening a buffer",
   group = augroup,
   callback = function()
     local mark = vim.api.nvim_buf_get_mark(0, '"')
@@ -46,47 +58,18 @@ vim.api.nvim_create_autocmd("FileType", {
   },
   callback = function(event)
     vim.api.nvim_set_option_value("buflisted", false, { buf = event.buf })
-    vim.keymap.set("n", "q", "<Cmd>close<CR>", { buffer = event.buf, silent = true })
-  end,
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  desc = "delete netrw buffers automatically",
-  group = augroup,
-  pattern = "netrw",
-  callback = function(event)
-    vim.opt_local.bufhidden = "wipe"
-  end,
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  desc = "enable spell and wrap for some filetypes",
-  group = augroup,
-  pattern = { "gitcommit", "markdown" },
-  callback = function()
-    vim.opt_local.wrap = true
-    vim.opt_local.spell = true
+    vim.keymap.set("n", "q", "<Cmd>close<CR>", { buffer = event.buf, silent = true, desc = "Close buffer" })
   end,
 })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-  desc = "prompts to create not existing dir when saving a file",
+  desc = "creates not existing directory when saving a file",
   group = augroup,
   callback = function(event)
-    if not event.match:match("^%w%w+://") then
-      local directory = vim.fn.fnamemodify(vim.loop.fs_realpath(event.match) or event.match, ":p:h")
-      if vim.fn.isdirectory(directory) == 0 then
-        vim.ui.input(
-          {
-            prompt = "'" .. directory .. "' does not exits, do you want to create it? (y/n): ",
-            default = "y"
-          },
-          function(input)
-            if input == "y" or input == "Y" then
-              vim.fn.mkdir(directory, "p")
-            end
-          end)
-      end
+    if event.match:match("^%w%w+:[\\/][\\/]") then
+      return
     end
+    local file = vim.loop.fs_realpath(event.match) or event.match
+    vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
   end,
 })
