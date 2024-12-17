@@ -15,11 +15,17 @@ set -g fish_greeting
 bind \cw backward-kill-bigword # ctrl+w delete word backward
 bind \e\[3\;5~ kill-word # ctrl+del delete work forward
 
-# Terminal and prompt
-if status --is-interactive
-  if ! set -q TMUX
-    exec tmux -f ~/.config/tmux/tmux.conf
-  end
+function storePathForWindowsTerminal --on-variable PWD
+    if test -n "$WT_SESSION"
+      printf "\e]9;9;%s\e\\" (wslpath -w "$PWD")
+    end
 end
+
+# Terminal and prompt
+# if status --is-interactive
+#   if ! set -q TMUX
+#     exec tmux -f ~/.config/tmux/tmux.conf
+#   end
+# end
 
 starship init fish | source
