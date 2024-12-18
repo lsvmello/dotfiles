@@ -27,8 +27,8 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "mason.nvim", -- already configured
-      "nvim-cmp", -- already configured
+      "williamboman/mason.nvim", -- already configured
+      "saghen/blink.cmp", -- already configured
       "williamboman/mason-lspconfig.nvim",
       { "j-hui/fidget.nvim", opts = {}, },
     },
@@ -112,12 +112,12 @@ return {
       vim.diagnostic.config(opts.diagnostics)
 
       local servers = opts.servers
-      local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+      local has_blink, blink = pcall(require, "blink.cmp")
       local capabilities = vim.tbl_deep_extend(
         "force",
         {},
         vim.lsp.protocol.make_client_capabilities(),
-        has_cmp and cmp_nvim_lsp.default_capabilities() or {},
+        has_blink and blink.get_lsp_capabilities() or {},
         opts.capabilities or {}
       )
 

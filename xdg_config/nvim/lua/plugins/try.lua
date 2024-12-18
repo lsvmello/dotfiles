@@ -63,8 +63,9 @@ return {
       "BufNewFile **/git/second-brain/*.md",
     },
     dependencies = {
-      "plenary.nvim", "nvim-cmp",
-      "telescope.nvim", "nvim-treesitter",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "nvim-treesitter/nvim-treesitter",
     },
     opts = {
       daily_notes = {

@@ -14,13 +14,6 @@ return {
     },
   },
   {
-    "hrsh7th/nvim-cmp",
-    opts = function(_, opts)
-      opts.auto_brackets = opts.auto_brackets or {} -- TODO: check this
-      table.insert(opts.auto_brackets, "python")
-    end,
-  },
-  {
     "mfussenegger/nvim-dap-python",
     dependencies = {
       "mfussenegger/nvim-dap",
