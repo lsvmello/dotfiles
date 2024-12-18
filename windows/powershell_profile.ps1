@@ -55,7 +55,7 @@ function work {
   $options = @()
     $slnFile = Get-ChildItem -Path . -Recurse -Filter *.sln -ErrorAction SilentlyContinue | Select-Object -First 1
     if ($slnFile) {
-      $options += @{ Name = "Visual Studio (${slnFile})"; Command = { start $slnFile.FullName } }
+      $options += @{ Name = "Visual Studio ($($slnFile.Name))"; Command = { start $slnFile.FullName } }
     }
 
   $ideaFolder = Get-ChildItem -Path . -Directory -Filter .idea -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -69,7 +69,7 @@ function work {
     }
 
   if ($options.Count -eq 1) {
-    Write-Host "Starting ${options[0].Name}"
+    Write-Host "Starting $($options[0].Name)"
     & $options[0].Command
     return
   }
