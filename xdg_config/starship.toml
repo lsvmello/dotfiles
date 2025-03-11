@@ -20,9 +20,9 @@ modified = '[~$count](yellow bold) '
 typechanged = ''
 staged = '[+$count](green bold) '
 untracked = '[?$count](red bold) '
-ahead = '[⇡$count](blue bold) '
-diverged = '[⇕](cyan bold)[⇡$ahead_count](blue bold)[⇣$behind_count](red bold) '
-behind = '[⇣$count](red bold) '
+ahead = '[⇡ $count](blue bold) '
+diverged = '[⇕ ](cyan bold)[⇡ $ahead_count](blue bold)[⇣ $behind_count](red bold) '
+behind = '[⇣ $count](red bold) '
 up_to_date = ''
 disabled = false
 
