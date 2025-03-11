@@ -26,7 +26,7 @@ M.enable = function(name, enable, buf)
     vim.b[vim.api.nvim_get_current_buf()][name] = nil
   end
 
-  vim.notify(name .. " toggled: " .. (enable and "ON" or "OFF"))
+  vim.notify(name .. ' toggled: ' .. (enable and 'ON' or 'OFF'))
 end
 
 ---@param name string
@@ -63,7 +63,7 @@ function M.status()
     end
   end
 
-  return table.concat(statuses, " | ")
+  return table.concat(statuses, ' | ')
 end
 
 return M

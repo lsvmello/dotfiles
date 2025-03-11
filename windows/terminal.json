@@ -15,18 +15,19 @@
         {
             "command": 
             {
-                "action": "sendInput",
-                "input": "\u0000"
-            },
-            "keys": "ctrl+space"
-        },
-        {
-            "command": 
-            {
                 "action": "selectCommand",
                 "direction": "prev"
             },
             "id": "User.selectCommand.D3F0B923"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u0000"
+            },
+            "id": "User.sendInput.72DFEA3B",
+            "keys": "ctrl+space"
         },
         {
             "command": 
@@ -91,12 +92,16 @@
         "defaults": 
         {
             "autoMarkPrompts": true,
-            "colorScheme": "Catppuccin Mocha",
+            "colorScheme": "Catppuccin Latte",
             "cursorShape": "vintage",
             "font": 
             {
-                "face": "JetBrainsMonoNL Nerd Font",
-                "size": 10
+                "face": "Iosevka",
+                "features": 
+                {
+                    "calt": 0
+                },
+                "size": 12
             },
             "showMarksOnScrollbar": true,
             "useAcrylic": true
@@ -140,27 +145,27 @@
     "schemes": 
     [
         {
-            "background": "#0C0C0C",
-            "black": "#0C0C0C",
-            "blue": "#0037DA",
-            "brightBlack": "#767676",
-            "brightBlue": "#3B78FF",
-            "brightCyan": "#61D6D6",
-            "brightGreen": "#16C60C",
-            "brightPurple": "#B4009E",
-            "brightRed": "#E74856",
-            "brightWhite": "#F2F2F2",
-            "brightYellow": "#F9F1A5",
-            "cursorColor": "#FFFFFF",
-            "cyan": "#3A96DD",
-            "foreground": "#CCCCCC",
-            "green": "#13A10E",
-            "name": "Campbell (Copy)",
-            "purple": "#881798",
-            "red": "#C50F1F",
-            "selectionBackground": "#FFFFFF",
-            "white": "#CCCCCC",
-            "yellow": "#C19C00"
+            "background": "#EFF1F5",
+            "black": "#5C5F77",
+            "blue": "#1E66F5",
+            "brightBlack": "#ACB0BE",
+            "brightBlue": "#1E66F5",
+            "brightCyan": "#179299",
+            "brightGreen": "#40A02B",
+            "brightPurple": "#EA76CB",
+            "brightRed": "#D20F39",
+            "brightWhite": "#BCC0CC",
+            "brightYellow": "#DF8E1D",
+            "cursorColor": "#DC8A78",
+            "cyan": "#179299",
+            "foreground": "#4C4F69",
+            "green": "#40A02B",
+            "name": "Catppuccin Latte",
+            "purple": "#EA76CB",
+            "red": "#D20F39",
+            "selectionBackground": "#ACB0BE",
+            "white": "#ACB0BE",
+            "yellow": "#DF8E1D"
         },
         {
             "background": "#1E1E2E",
@@ -186,26 +191,26 @@
             "yellow": "#F9E2AF"
         }
     ],
-    "theme": "Catppuccin Mocha",
+    "theme": "Catppuccin Latte",
     "themes": 
     [
         {
-            "name": "Catppuccin Mocha",
+            "name": "Catppuccin Latte",
             "tab": 
             {
-                "background": "#1E1E2EFF",
+                "background": "#EFF1F5FF",
                 "iconStyle": "default",
                 "showCloseButton": "always",
                 "unfocusedBackground": null
             },
             "tabRow": 
             {
-                "background": "#181825FF",
-                "unfocusedBackground": "#11111BFF"
+                "background": "#E6E9EFFF",
+                "unfocusedBackground": "#DCE0E8FF"
             },
             "window": 
             {
-                "applicationTheme": "dark",
+                "applicationTheme": "light",
                 "experimental.rainbowFrame": false,
                 "frame": null,
                 "unfocusedFrame": null,

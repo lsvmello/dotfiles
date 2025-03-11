@@ -1,36 +1,31 @@
-vim.g.mapleader = "\\"     -- editor-wise mappings
-vim.g.maplocalleader = " " -- editing-wise mappings
+vim.g.mapleader = '\\'     -- editor related mappings
+vim.g.maplocalleader = ' ' -- buffer related mappings
 
-if vim.fn.has("win32") == 1 then
-  vim.g.python3_host_prog = "C:\\Python312\\python.exe"
+if vim.g.neovide then
+  require('neovide')
+else
+  vim.o.background = 'light' -- https://github.com/neovim/neovim/issues/32238
 end
+vim.cmd [[colorscheme default]]
 
 -- bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.uv.fs_stat(lazypath) then
   -- stylua: ignore
   vim.fn.system({
-    "git", "clone", "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", lazypath,
+    'git', 'clone', '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', lazypath,
   })
 end
 vim.opt.rtp:prepend(lazypath)
 
 -- use lazy.nvim
-require("lazy").setup({
+require('lazy').setup({
   spec = {
-    { import = "plugins" },
-    { import = "plugins.coding" },
-  },
-  dev = {
-    path = "~/git",
-  },
-  install = {
-    colorscheme = {
-      "catppuccin",
-      "habamax",
-    },
+    { 'folke/lazy.nvim', version = '*' },
+    { import = 'plugins' },
+    { import = 'plugins.coding' },
   },
   change_detection = {
     notify = false,
@@ -39,9 +34,9 @@ require("lazy").setup({
     rtp = {
       -- stylua: ignore
       disabled_plugins = {
-        "gzip", "matchit", "matchparen",
-        "tarPlugin", "tohtml",
-        "zipPlugin",
+        'gzip', 'matchit',
+        'matchparen', 'tarPlugin',
+        'zipPlugin',
       },
     },
   },

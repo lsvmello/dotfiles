@@ -1,14 +1,14 @@
 return {
   {
-    "nvim-treesitter/nvim-treesitter",
+    'nvim-treesitter/nvim-treesitter',
     opts = {
-      ensure_installed = { "markdown", "markdown_inline" }
+      ensure_installed = { 'markdown', 'markdown_inline' }
     },
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter' },
-    ft = "markdown",
+    ft = 'markdown',
     opts = {
       latex = {
         enabled = false,
