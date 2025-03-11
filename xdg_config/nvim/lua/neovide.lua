@@ -6,6 +6,9 @@ vim.g.neovide_padding_bottom = 2
 vim.g.neovide_padding_right  = 2
 vim.g.neovide_padding_left   = 2
 
+-- https://github.com/neovide/neovide/issues/3049
+vim.o.guicursor = 'n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:block-blinkon500-blinkoff500-blinkwait100-TermCursor'
+
 vim.g.neovide_title_background_color = 'green'
 vim.g.neovide_title_text_color = 'pink'
 
