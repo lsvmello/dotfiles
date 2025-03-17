@@ -1,55 +1,45 @@
-local format_toggle = 'Auto-format'
 return {
   'stevearc/conform.nvim',
-  lazy = true,
-  cmd = 'ConformInfo',
+  cmd = { 'Autoformat', 'ConformInfo' },
   keys = {
-    {
-      '<LocalLeader>f',
-      function()
-        require('conform').format()
-      end,
-      desc = 'Format buffer',
-    },
-    {
-      '<LocalLeader>f',
-      function()
-        require('conform').format()
-        vim.api.nvim_input('<Esc>') -- escape from visual mode
-      end,
-      mode = 'v',
-      desc = 'Format selection',
-    },
-    {
-      '<LocalLeader>tf',
-      function() require('toggler').toggle(format_toggle, vim.api.nvim_get_current_buf()) end,
-      desc = 'Toggle format on current buffer',
-    },
-    {
-      '<Leader>tf',
-      function() require('toggler').toggle(format_toggle) end,
-      desc = 'Toggle format on all buffers',
-    },
+    { 'gq', mode = '' },
+    { 'gw', mode = '' },
   },
   opts = {
-    default_format_opts = {
-      lsp_format = 'fallback',
-    },
-    -- TODO: use format_after_save instead of creating an autocmd?
+    format_on_save = function(bufnr)
+      if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+        return
+      end
+      return { timeout_ms = 500, lsp_format = 'fallback' }
+    end,
   },
-  config = function(_, opts)
-    require('conform').setup(opts)
+  init = function()
+    vim.o.formatexpr = [[v:lua.require'conform'.formatexpr()]]
 
-    require('toggler').set(format_toggle, { buffer = '⌨', global = '⌨+', off = '' })
-
-    local autoformat_group = vim.api.nvim_create_augroup('auto-format', { clear = true })
-    vim.api.nvim_create_autocmd('BufWritePre', {
-      group = autoformat_group,
-      callback = function(event)
-        if require('toggler').enabled(format_toggle, event.buffer) then
-          require('conform').format()
-        end
-      end,
+    vim.api.nvim_create_user_command('Autoformat', function(opts)
+      local scope = opts.bang and vim.g or vim.b
+      if opts.args == '' then
+        scope.disable_autoformat = not scope.disable_autoformat
+      elseif opts.args == 'true' or opts.args == 'enable' then
+        scope.disable_autoformat = false
+      elseif opts.args == 'false' or opts.args == 'disable' then
+        scope.disable_autoformat = true
+      else
+        vim.api.nvim_echo({ { 'Autoformat: Invalid option' } }, false, { err = true })
+        return
+      end
+      local state = scope.disable_autoformat and 'disabled' or 'enabled'
+      local context = opts.bang and ' globally' or ' on current buffer'
+      vim.api.nvim_echo({ { 'Autoformat ' .. state .. context } }, true, {})
+    end, {
+      desc = 'Disable autoformat-on-save',
+      bang = true,
+      nargs = '?',
+      complete = function(arg_lead, cmd_line)
+        return vim.tbl_filter(function(val)
+          return vim.startswith(val, arg_lead)
+        end, { 'disable', 'enabled', 'false', 'true' })
+      end
     })
   end
 }
