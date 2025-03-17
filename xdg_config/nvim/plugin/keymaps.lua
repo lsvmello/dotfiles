@@ -47,6 +47,10 @@ vim.keymap.set({ 'n', 'v' }, '<Leader>P', [["+P]], { desc = 'Put from clipboard 
 vim.keymap.set({ 'n', 'v' }, '<Leader>y', [["+y]], { desc = 'Yank {motion} text into the clipboard' })
 vim.keymap.set({ 'n', 'v' }, '<Leader>y', [["+y]], { desc = 'Yank [count] lines into the clipboard' })
 
+-- subistitute
+vim.keymap.set('n', '<LocalLeader>s', '"syiw:%s/<C-r>s//gc<Left><Left><Left>', { desc = 'Substitute word' })
+vim.keymap.set('v', '<LocalLeader>s', '"sy<Esc>:%s/\\V<C-r>s//gc<Left><Left><Left>', { desc = 'Substitute selection' })
+
 -- duplicate lines
 vim.keymap.set('n', '<LocalLeader>j', function()
   if vim.v.count > 1 then -- consider count and move the cursor to the first copied line
