@@ -4,6 +4,7 @@ set -x EDITOR nvim
 set -x DOTFILES ~/personal/dotfiles/xdg_config
 set -x FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob '!.git'"
 set -x FZF_DEFAULT_OPTS_FILE ~/.config/.fzf
+set -x BAT_THEME ansi
 
 # Add cargo, go and pip installation folder to PATH
 set -x PATH ~/.cargo/bin /usr/local/go/bin ~/go/bin ~/.local/bin $PATH
