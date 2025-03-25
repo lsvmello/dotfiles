@@ -1,23 +1,27 @@
 [user]
- 	name = Leonardo Mello
- 	email = lsvmello@gmail.com
+  email = lsvmello@gmail.com
+  name = Leonardo Mello
 [alias]
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Creset(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-[core]
-	editor = nvim
-[color]
-	ui = true
-[help]
-	autoCorrect = 1
-[init]
-	defaultBranch = main
+  amend = commit --amend --no-edit
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %s %Creset(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  l = lg -10
+  recent = branch --verbose --sort=-committerdate
+  s = status
+  ss = status --short
+  undo = reset --soft HEAD^
+  fixup = "!git log -n 20 --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o git commit --fixup"
 [fetch]
-	prune = true
+  prune = true
+[core]
+  autocrlf = input
+  editor = nvim
+[init]
+  defaultBranch = main
+[help]
+  autoCorrect = 1
 [pull]
-	rebase = true
+  rebase = true
 [rebase]
-	autoStash = true
-	autosquash = true
+  autoStash = true
+  autosquash = true
   updateRefs = true
-[ui "color"]
-	ui = always
