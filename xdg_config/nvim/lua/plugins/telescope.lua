@@ -103,15 +103,15 @@ return {
       function()
         require("telescope.builtin").find_files({
           cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
-          prompt = "Find in plugins",
+          prompt_title = "Find in plugins",
         })
       end,
       desc = "Find in packages",
     },
     {
-      "<Leader>fn",
+      "<Leader>fN",
       function()
-        require("telescope.builtin").find_files({ cwd = vim.env.VIMRUNTIME, prompt = "Find in Neovim" })
+        require("telescope.builtin").find_files({ cwd = vim.env.VIMRUNTIME, prompt_title = "Find in Neovim" })
       end,
       desc = "Find in Neovim runtime files",
     },

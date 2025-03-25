@@ -1,8 +1,5 @@
 return {
-  -- TODO: use templates for notes
-  -- TODO: create keymaps
   "epwalsh/obsidian.nvim",
-  version = "*", -- recommended, use latest release instead of latest commit
   event = {
     "BufReadPre **/git/second-brain/*.md",
     "BufNewFile **/git/second-brain/*.md",
@@ -11,6 +8,16 @@ return {
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope.nvim",
     "nvim-treesitter/nvim-treesitter",
+  },
+  cmd = {
+    "ObsidianOpen", "ObsidianNew", "ObsidianQuickSwitch",
+    "ObsidianFollowLink", "ObsidianBacklinks", "ObsidianTags",
+    "ObsidianToday", "ObsidianYesterday", "ObsidianTomorrow",
+    "ObsidianDailies", "ObsidianTemplate", "ObsidianSearch",
+    "ObsidianLink", "ObsidianLinkNew", "ObsidianLinks",
+    "ObsidianExtractNote", "ObsidianWorkspace", "ObsidianPasteImg",
+    "ObsidianRename", "ObsidianToggleCheckbox", "ObsidianNewFromTemplate",
+    "ObsidianTOC",
   },
   opts = {
     daily_notes = {
@@ -79,5 +86,15 @@ return {
         end
       end,
     },
+  },
+  keys = {
+    {
+      "<Leader>n",
+      function()
+        vim.cmd.tabnew("~/git/second-brain/")
+      end,
+      desc = "Open Notes",
+    },
+    { "<Leader>fn", "<Cmd>ObsidianSearch<CR>", desc = "Find in Notes" },
   },
 }
