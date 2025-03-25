@@ -1,11 +1,13 @@
 -- TODO: add pylint with nvim-lint / do I need mason-tool-installer?
 return {
   {
-    'nvim-treesitter/nvim-treesitter',
-    opts = { ensure_installed = { 'python' } }
+    "nvim-treesitter/nvim-treesitter",
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, { "python" })
+    end,
   },
   {
-    'neovim/nvim-lspconfig',
+    "neovim/nvim-lspconfig",
     opts = {
       -- make sure mason installs the server
       servers = {
@@ -14,24 +16,38 @@ return {
     },
   },
   {
-    'mfussenegger/nvim-dap-python',
+    "mfussenegger/nvim-dap-python",
     dependencies = {
-      'mfussenegger/nvim-dap',
+      "mfussenegger/nvim-dap",
       {
-        'williamboman/mason.nvim',
-        opts = {
-          ensure_installed = { 'debugpy', }
-        },
+        "williamboman/mason.nvim",
+        opts = function(_, opts)
+          vim.list_extend(opts.ensure_installed, { "debugpy" })
+        end,
       },
     },
-    ft = { 'python' },
+    ft = { "python" },
     keys = {
       -- TODO: test this bindings
-      { '<Leader>dPm', function() require('dap-python').test_method() end, desc = 'Debug Python Method', ft = 'python' },
-      { '<Leader>dPc', function() require('dap-python').test_class() end,  desc = 'Debug Python Class',  ft = 'python' },
+      {
+        "<Leader>dPm",
+        function()
+          require("dap-python").test_method()
+        end,
+        desc = "Debug Python Method",
+        ft = "python",
+      },
+      {
+        "<Leader>dPc",
+        function()
+          require("dap-python").test_class()
+        end,
+        desc = "Debug Python Class",
+        ft = "python",
+      },
     },
     config = function()
-      require('dap-python').setup('python')
+      require("dap-python").setup("python")
     end,
   },
 }

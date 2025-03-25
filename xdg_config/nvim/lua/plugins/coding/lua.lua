@@ -1,29 +1,37 @@
--- TODO: add conform? linter? debugger?
+-- TODO: debugger?
 return {
   {
-    'williamboman/mason.nvim',
-    opts = {
-      ensure_installed = { 'stylua', }
-    },
-  },
-  {
-    'nvim-treesitter/nvim-treesitter',
+    "williamboman/mason.nvim",
     opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, { 'lua', 'luap', 'luadoc' })
+      vim.list_extend(opts.ensure_installed, { "stylua" })
     end,
   },
   {
-    'folke/lazydev.nvim',
-    cmd = 'LazyDev',
-    ft = 'lua',
+    "stevearc/conform.nvim",
     opts = {
-      library = {
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      formatters_by_ft = {
+        lua = { "stylua" },
       },
     },
   },
   {
-    'neovim/nvim-lspconfig',
+    "nvim-treesitter/nvim-treesitter",
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, { "lua", "luap", "luadoc" })
+    end,
+  },
+  {
+    "folke/lazydev.nvim",
+    cmd = "LazyDev",
+    ft = "lua",
+    opts = {
+      library = {
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
     opts = {
       servers = {
         lua_ls = {
@@ -36,18 +44,18 @@ return {
                 enable = true,
               },
               completion = {
-                callSnippet = 'Replace',
+                callSnippet = "Replace",
               },
               doc = {
-                privateName = { '^_' },
+                privateName = { "^_" },
               },
               hint = {
                 enable = true,
                 setType = false,
                 paramType = true,
-                paramName = 'Disable',
-                semicolon = 'Disable',
-                arrayIndex = 'Disable',
+                paramName = "Disable",
+                semicolon = "Disable",
+                arrayIndex = "Disable",
               },
             },
           },

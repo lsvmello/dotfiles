@@ -1,4 +1,4 @@
-local groupid = vim.api.nvim_create_augroup('StatusLine', {})
+local groupid = vim.api.nvim_create_augroup("StatusLine", {})
 
 _G._statusline = {}
 
@@ -11,9 +11,8 @@ _G._statusline = {}
 local function stl_hl(str, hl, restore, force)
   restore = restore == nil or restore
   -- Don't add highlight in tty to get a cleaner UI
-  hl = (vim.go.termguicolors or force) and hl or ''
-  return restore and table.concat({ '%#', hl, '#', str or '', '%*' })
-    or table.concat({ '%#', hl, '#', str or '' })
+  hl = (vim.go.termguicolors or force) and hl or ""
+  return restore and table.concat({ "%#", hl, "#", str or "", "%*" }) or table.concat({ "%#", hl, "#", str or "" })
 end
 
 --- Escape '%' with '%' in a string to avoid it being treated as a statusline
@@ -21,26 +20,26 @@ end
 --- @param str string
 --- @return string
 local function stl_escape(str)
-  return str ~= nil and str:gsub('%%', '%%%%') or ''
+  return str ~= nil and str:gsub("%%", "%%%%") or ""
 end
 --- Get string represantation of current git branch and status
 --- @return string
 function _G._statusline.git_info()
   if vim.b.gitsigns_status_dict == nil then
-    return ''
+    return ""
   end
 
   local git_info = vim.b.gitsigns_status_dict
-  local result = { '@ ' .. stl_escape(git_info.head) }
+  local result = { "@ " .. stl_escape(git_info.head) }
   local added = git_info.added or 0
   local changed = git_info.changed or 0
   local removed = git_info.removed or 0
   if added > 0 or removed > 0 or changed > 0 then
-    table.insert(result, ' (')
-    table.insert(result, '+' .. added)
-    table.insert(result, '~' .. changed)
-    table.insert(result, '-' .. removed)
-    table.insert(result, ')')
+    table.insert(result, " (")
+    table.insert(result, "+" .. added)
+    table.insert(result, "~" .. changed)
+    table.insert(result, "-" .. removed)
+    table.insert(result, ")")
   end
   return table.concat(result)
 end
@@ -52,49 +51,44 @@ function _G._statusline.fname(focused)
     return vim.b.fname_str_cache
   end
 
-  local path = vim.fn.expand('%:p:~')
+  local path = vim.fn.expand("%:p:~")
 
   -- Normal buffer
-  if vim.bo.bt == '' then
-    if path == '' then
-      return '[Buffer %n]'
+  if vim.bo.bt == "" then
+    if path == "" then
+      return "[Buffer %n]"
     end
 
     if focused then
-      local cwd = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:~')
+      local cwd = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:~")
 
       if path:find(cwd, 1, true) == 1 then
         path = path:sub(#cwd + 1)
-      elseif path ~= '' then
-        cwd = cwd .. '   '
+      elseif path ~= "" then
+        cwd = cwd .. "   "
       end
 
-      return stl_hl(cwd, 'NonText') ..
-      path ..
-      '%( %m%w%r%)'
+      return stl_hl(cwd, "NonText") .. path .. "%( %m%w%r%)"
     end
   end
 
   -- Terminal buffer, show terminal command and id
-  if vim.bo.bt == 'terminal' then
-    local id, cmd = path:match('^term://.*/(%d+):(.*)')
-    return id and cmd
-        and string.format('[terminal] %s (%s)', vim.fn.fnamemodify(cmd, ':t'):lower(), id)
-      or '[terminal] %F'
+  if vim.bo.bt == "terminal" then
+    local id, cmd = path:match("^term://.*/(%d+):(.*)")
+    return id and cmd and string.format("[terminal] %s (%s)", vim.fn.fnamemodify(cmd, ":t"):lower(), id)
+      or "[terminal] %F"
   end
 
   -- default format
-  return '%h %F %m%w%r'
+  return "%h %F %m%w%r"
 end
 
-vim.api.nvim_create_autocmd('DiagnosticChanged', {
+vim.api.nvim_create_autocmd("DiagnosticChanged", {
   group = groupid,
-  desc = 'Update diagnostics cache for the status line.',
+  desc = "Update diagnostics cache for the status line.",
   callback = function(args)
     local signs_config = vim.diagnostic.config().signs
-    local signs = type(signs_config) == 'table' and
-    type(signs_config.text) == 'table' and
-    signs_config.text or {}
+    local signs = type(signs_config) == "table" and type(signs_config.text) == "table" and signs_config.text or {}
 
     if vim.tbl_isempty(signs) then
       return
@@ -112,7 +106,7 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
       end
     end
 
-    vim.b[args.buf].diag_str_cache = table.concat(diag_str, ' ')
+    vim.b[args.buf].diag_str_cache = table.concat(diag_str, " ")
     vim.cmd.redrawstatus({
       mods = { emsg_silent = true },
     })
@@ -122,7 +116,7 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
 ---Get string representation of diagnostics for current buffer
 ---@return string
 function _G._statusline.diag()
-  return vim.b.diag_str_cache ~= vim.NIL and vim.b.diag_str_cache or ''
+  return vim.b.diag_str_cache ~= vim.NIL and vim.b.diag_str_cache or ""
 end
 
 local spinner_end_keep = 2000 -- ms
@@ -130,7 +124,7 @@ local spinner_status_keep = 600 -- ms
 local spinner_progress_keep = 80 -- ms
 local spinner_timer = vim.uv.new_timer()
 
-local spinner_icon_done = '[done]'
+local spinner_icon_done = "[done]"
 local spinner_icons = {
   "[    ]",
   "[=   ]",
@@ -146,17 +140,13 @@ local spinner_icons = {
 ---@type table<integer, { name: string, timestamp: integer, type: string|nil }>
 local server_info = {}
 
-vim.api.nvim_create_autocmd('LspProgress', {
-  desc = 'Update LSP progress info for the status line.',
+vim.api.nvim_create_autocmd("LspProgress", {
+  desc = "Update LSP progress info for the status line.",
   group = groupid,
-  pattern = { 'begin', 'end' },
+  pattern = { "begin", "end" },
   callback = function(info)
     if spinner_timer then
-      spinner_timer:start(
-        spinner_progress_keep,
-        spinner_progress_keep,
-        vim.schedule_wrap(vim.cmd.redrawstatus)
-      )
+      spinner_timer:start(spinner_progress_keep, spinner_progress_keep, vim.schedule_wrap(vim.cmd.redrawstatus))
     end
 
     local id = info.data.client_id
@@ -164,10 +154,7 @@ vim.api.nvim_create_autocmd('LspProgress', {
     server_info[id] = {
       name = vim.lsp.get_client_by_id(id).name,
       timestamp = now,
-      type = info.data
-        and info.data.params
-        and info.data.params.value
-        and info.data.params.value.kind,
+      type = info.data and info.data.params and info.data.params.value and info.data.params.value.kind,
     } -- Update LSP progress data
     -- Clear client message after a short time if no new message is received
     vim.defer_fn(function()
@@ -191,7 +178,7 @@ vim.api.nvim_create_autocmd('LspProgress', {
 ---@return string
 function _G._statusline.lsp_progress()
   if vim.tbl_isempty(server_info) then
-    return ''
+    return ""
   end
 
   local buf = vim.api.nvim_get_current_buf()
@@ -202,25 +189,22 @@ function _G._statusline.lsp_progress()
     end
   end
   if vim.tbl_isempty(server_ids) then
-    return ''
+    return ""
   end
 
   local now = vim.uv.now()
   ---@return boolean
   local function allow_changing_state()
-    return not vim.b.spinner_state_changed
-      or now - vim.b.spinner_state_changed > spinner_status_keep
+    return not vim.b.spinner_state_changed or now - vim.b.spinner_state_changed > spinner_status_keep
   end
 
-  if #server_ids == 1 and server_info[server_ids[1]].type == 'end' then
+  if #server_ids == 1 and server_info[server_ids[1]].type == "end" then
     if vim.b.spinner_icon ~= spinner_icon_done and allow_changing_state() then
       vim.b.spinner_state_changed = now
       vim.b.spinner_icon = spinner_icon_done
     end
   else
-    local spinner_icon_progress = spinner_icons[math.ceil(
-      now / spinner_progress_keep
-    ) % #spinner_icons + 1]
+    local spinner_icon_progress = spinner_icons[math.ceil(now / spinner_progress_keep) % #spinner_icons + 1]
     if vim.b.spinner_icon ~= spinner_icon_done then
       vim.b.spinner_icon = spinner_icon_progress
     elseif allow_changing_state() then
@@ -229,19 +213,21 @@ function _G._statusline.lsp_progress()
     end
   end
 
-  return stl_hl(string.format(
-    '%s %s',
-    table.concat(
-      vim.tbl_map(function(id)
-        return stl_escape(server_info[id].name)
-      end, server_ids),
-      ', '
+  return stl_hl(
+    string.format(
+      "%s %s",
+      table.concat(
+        vim.tbl_map(function(id)
+          return stl_escape(server_info[id].name)
+        end, server_ids),
+        ", "
+      ),
+      vim.b.spinner_icon
     ),
-    vim.b.spinner_icon
-  ), 'NonText')
+    "NonText"
+  )
 end
 
--- stylua: ignore start
 ---Statusline components
 ---@type table<string, string>
 local components = {
@@ -257,7 +243,6 @@ local components = {
   pos          = [[%3l:%-3c %P]],
   truncate     = [[%<]],
 }
--- stylua: ignore end
 
 local stl = table.concat({
   components.padding,
@@ -267,6 +252,7 @@ local stl = table.concat({
   components.truncate,
   components.align,
   components.lsp_progress,
+  components.padding,
   components.diag,
   components.padding,
   components.filetype,
@@ -290,8 +276,7 @@ setmetatable(_G._statusline, {
   ---Get statusline string
   ---@return string
   __call = function()
-    return vim.g.statusline_winid == vim.api.nvim_get_current_win() and stl
-      or stl_nc
+    return vim.g.statusline_winid == vim.api.nvim_get_current_win() and stl or stl_nc
   end,
 })
 

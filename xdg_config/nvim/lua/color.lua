@@ -55,7 +55,7 @@ end
 --- @param  b number?   The blue
 --- @return   string   # The hex representation
 function M.rgb_to_hex(r, g, b)
-  return string.format('#%02x%02x%02x', r, g, b)
+  return string.format("#%02x%02x%02x", r, g, b)
 end
 
 --- @param  h number?   The hue
@@ -65,8 +65,7 @@ end
 function M.hsl_to_hex(h, s, l)
   local r, g, b = M.hsl_to_rgb(h / 360, s / 100, l / 100)
 
-  return string.format('#%02x%02x%02x', r, g, b)
+  return string.format("#%02x%02x%02x", r, g, b)
 end
-
 
 return M

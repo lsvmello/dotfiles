@@ -1,21 +1,21 @@
 return {
   -- TODO: use templates for notes
   -- TODO: create keymaps
-  'epwalsh/obsidian.nvim',
-  version = '*', -- recommended, use latest release instead of latest commit
+  "epwalsh/obsidian.nvim",
+  version = "*", -- recommended, use latest release instead of latest commit
   event = {
-    'BufReadPre **/git/second-brain/*.md',
-    'BufNewFile **/git/second-brain/*.md',
+    "BufReadPre **/git/second-brain/*.md",
+    "BufNewFile **/git/second-brain/*.md",
   },
   dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-telescope/telescope.nvim',
-    'nvim-treesitter/nvim-treesitter',
+    "nvim-lua/plenary.nvim",
+    "nvim-telescope/telescope.nvim",
+    "nvim-treesitter/nvim-treesitter",
   },
   opts = {
     daily_notes = {
-      folder = 'journal/daily',
-      date_format = '%Y-%m-%d',
+      folder = "journal/daily",
+      date_format = "%Y-%m-%d",
     },
     note_id_func = function(title)
       return title
@@ -23,49 +23,49 @@ return {
     disable_frontmatter = true,
     workspaces = {
       {
-        name = 'second-brain',
-        path = '~/git/second-brain',
+        name = "second-brain",
+        path = "~/git/second-brain",
       },
     },
     ui = {
       enable = false,
       checkboxes = {
-        [' '] = { char = '☐', hl_group = 'ObsidianTodo' },
-        ['x'] = { char = '✔', hl_group = 'ObsidianDone' },
+        [" "] = { char = "☐", hl_group = "ObsidianTodo" },
+        ["x"] = { char = "✔", hl_group = "ObsidianDone" },
       },
     },
     mappings = {
-      ['gf'] = {
+      ["gf"] = {
         action = function()
-          return require('obsidian').util.gf_passthrough()
+          return require("obsidian").util.gf_passthrough()
         end,
         opts = { noremap = false, expr = true, buffer = true },
       },
-      ['<C-]>'] = {
+      ["<C-]>"] = {
         action = function()
-          return require('obsidian').util.gf_passthrough()
+          return require("obsidian").util.gf_passthrough()
         end,
         opts = { noremap = false, expr = true, buffer = true },
       },
-      ['<CR>'] = {
+      ["<CR>"] = {
         action = function()
-          return require('obsidian').util.smart_action()
+          return require("obsidian").util.smart_action()
         end,
         opts = { buffer = true, expr = true },
       },
-      ['<C-W>f'] = {
+      ["<C-W>f"] = {
         action = function()
-          local util = require('obsidian').util
+          local util = require("obsidian").util
           if util.cursor_on_markdown_link(nil, nil, true) then
-            return '<cmd>ObsidianFollowLink hsplit<CR>'
+            return "<cmd>ObsidianFollowLink hsplit<CR>"
           else
-            return '<C-W>f'
+            return "<C-W>f"
           end
         end,
         opts = { noremap = false, expr = true, buffer = true },
       },
     },
-    wiki_link_func = 'use_alias_only',
+    wiki_link_func = "use_alias_only",
     callbacks = {
       pre_write_note = function(client, note)
         if not note:exists() then

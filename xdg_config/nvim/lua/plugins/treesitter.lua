@@ -1,64 +1,75 @@
 return {
-  {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    event = 'BufReadPost',
-    dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', },
-    -- stylua: ignore
-    cmd = {
-      'TSInstall', 'TSInstallSync', 'TSInstallInfo',
-      'TSUpdate', 'TSUpdateSync', 'TSUninstall',
-      'TSBufEnable', 'TSBufDisable', 'TSBufToggle',
-      'TSEnable', 'TSDisable', 'TSToggle',
-      'TSModuleInfo', 'TSEditQuery', 'TSEditQueryUserAfter',
+  "nvim-treesitter/nvim-treesitter",
+  build = ":TSUpdate",
+  event = "BufReadPost",
+  dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+  cmd = {
+    "TSInstall",
+    "TSInstallSync",
+    "TSInstallInfo",
+    "TSUpdate",
+    "TSUpdateSync",
+    "TSUninstall",
+    "TSBufEnable",
+    "TSBufDisable",
+    "TSBufToggle",
+    "TSEnable",
+    "TSDisable",
+    "TSToggle",
+    "TSModuleInfo",
+    "TSEditQuery",
+    "TSEditQueryUserAfter",
+  },
+  config = function(_, opts)
+    require("nvim-treesitter.configs").setup(opts)
+  end,
+  opts = {
+    sync_install = false,
+    auto_install = true,
+    ensure_installed = {
+      "diff",
+      "query",
+      "regex",
+      "vim",
+      "vimdoc",
     },
-    config = function(_, opts)
-      require('nvim-treesitter.configs').setup(opts)
-    end,
-    opts = {
-      sync_install = false,
-      auto_install = true,
-      ensure_installed = {
-        'diff', 'query', 'regex', 'vim', 'vimdoc',
-      },
-      highlight = { enable = true },
-      incremental_selection = { enable = false },
-      textobjects = {
-        select = { enable = false },
-        swap = { enable = false },
-        move = {
-          enable = true,
-          set_jumps = true, -- whether to set jumps in the jumplist
-          goto_next_start = {
-            [']/'] = { query = '@comment.outer', desc = 'Next comment' },
-            [']C'] = { query = '@class.outer', desc = 'Next class' },
-            [']L'] = { query = '@loop.outer', desc = 'Next loop' },
-            [']f'] = { query = '@call.outer', desc = 'Next function call' },
-            [']i'] = { query = '@conditional.inner', desc = 'Next conditional' },
-            [']m'] = { query = '@function.outer', desc = 'Next method' },
-            [']o'] = { query = { '@block.outer', '@conditional.outer', '@loop.outer' }, desc = 'Next code block' },
-            [']r'] = { query = '@return.inner', desc = 'Next return' },
-            [']s'] = { query = '@scope', query_group = 'locals', desc = 'Next scope' },
-            [']z'] = { query = '@fold', query_group = 'folds', desc = 'Next fold' },
-          },
-          goto_previous_start = {
-            ['[/'] = { query = '@comment.outer', desc = 'Previous comment' },
-            ['[C'] = { query = '@class.outer', desc = 'Previous class' },
-            ['[L'] = { query = '@loop.outer', desc = 'Previous loop' },
-            ['[f'] = { query = '@call.outer', desc = 'Previous function call' },
-            ['[i'] = { query = '@conditional.inner', desc = 'Previous conditional' },
-            ['[m'] = { query = '@function.outer', desc = 'Previous method' },
-            ['[o'] = { query = { '@block.outer', '@conditional.outer', '@loop.outer' }, desc = 'Previous code block' },
-            ['[r'] = { query = '@return.inner', desc = 'Previous return' },
-            ['[s'] = { query = '@scope', query_group = 'locals', desc = 'Previous scope' },
-            ['[z'] = { query = '@fold', query_group = 'folds', desc = 'Previous fold' },
-          },
+    highlight = { enable = true },
+    incremental_selection = { enable = false },
+    textobjects = {
+      select = { enable = false },
+      swap = { enable = false },
+      move = {
+        enable = true,
+        set_jumps = true, -- whether to set jumps in the jumplist
+        goto_next_start = {
+          ["]/"] = { query = "@comment.outer", desc = "Next comment" },
+          ["]C"] = { query = "@class.outer", desc = "Next class" },
+          ["]L"] = { query = "@loop.outer", desc = "Next loop" },
+          ["]f"] = { query = "@call.outer", desc = "Next function call" },
+          ["]i"] = { query = "@conditional.inner", desc = "Next conditional" },
+          ["]m"] = { query = "@function.outer", desc = "Next method" },
+          ["]o"] = { query = { "@block.outer", "@conditional.outer", "@loop.outer" }, desc = "Next code block" },
+          ["]r"] = { query = "@return.inner", desc = "Next return" },
+          ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+          ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
         },
-        lsp_interop = {
-          enable = true,
-          peek_definition_code = {
-            ['<LocalLeader>K'] = '@function.outer',
-          },
+        goto_previous_start = {
+          ["[/"] = { query = "@comment.outer", desc = "Previous comment" },
+          ["[C"] = { query = "@class.outer", desc = "Previous class" },
+          ["[L"] = { query = "@loop.outer", desc = "Previous loop" },
+          ["[f"] = { query = "@call.outer", desc = "Previous function call" },
+          ["[i"] = { query = "@conditional.inner", desc = "Previous conditional" },
+          ["[m"] = { query = "@function.outer", desc = "Previous method" },
+          ["[o"] = { query = { "@block.outer", "@conditional.outer", "@loop.outer" }, desc = "Previous code block" },
+          ["[r"] = { query = "@return.inner", desc = "Previous return" },
+          ["[s"] = { query = "@scope", query_group = "locals", desc = "Previous scope" },
+          ["[z"] = { query = "@fold", query_group = "folds", desc = "Previous fold" },
+        },
+      },
+      lsp_interop = {
+        enable = true,
+        peek_definition_code = {
+          ["<LocalLeader>K"] = "@function.outer",
         },
       },
     },
