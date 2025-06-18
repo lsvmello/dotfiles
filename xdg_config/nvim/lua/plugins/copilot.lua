@@ -10,6 +10,12 @@ return {
       local chat = require("CopilotChat")
       chat.setup(opts)
     end,
+    cmd = {
+      "CopilotChat", "CopilotChatOpen", "CopilotChatClose",
+      "CopilotChatToggle", "CopilotChatStop", "CopilotChatReset",
+      "CopilotChatSave", "CopilotChatLoad", "CopilotChatDebugInfo",
+      "CopilotChatModels", "CopilotChatAgents",
+    },
     keys = {
       -- Show prompts actions with telescope
       {

@@ -1,19 +1,10 @@
 vim.diagnostic.config({
-  underline = true,
   update_in_insert = false,
   virtual_text = {
-    source = "if_many",
-    prefix = "░",
-    spacing = 2,
+    prefix = "▓",
+    spacing = 0,
   },
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = "E",
-      [vim.diagnostic.severity.WARN]  = "W",
-      [vim.diagnostic.severity.INFO]  = "I",
-      [vim.diagnostic.severity.HINT]  = "H",
-    },
-  },
+  signs = false,
   float = {
     source = "if_many",
   },
@@ -22,3 +13,8 @@ vim.diagnostic.config({
     float = true,
   },
 })
+
+vim.keymap.set('n', 'gK', function()
+  local new_config = not vim.diagnostic.config().virtual_lines
+  vim.diagnostic.config({ virtual_lines = new_config })
+end, { desc = 'Toggle diagnostic virtual_lines' })

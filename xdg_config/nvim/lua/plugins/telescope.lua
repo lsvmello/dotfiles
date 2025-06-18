@@ -44,11 +44,9 @@ return {
   end,
   keys = {
     -- quick keymaps
-    { "<Leader>/", "<Cmd>Telescope live_grep<CR>", desc = "Live grep search" },
     { "<Leader>:", "<Cmd>Telescope command_history<CR>", desc = "Command history search" },
     { "<Leader><Leader>", "<Cmd>Telescope oldfiles<CR>", desc = "Find old files" },
     { "<Leader><Space>", "<Cmd>Telescope resume<CR>", desc = "Resume search" },
-    { "<LocalLeader>/", "<Cmd>Telescope current_buffer_fuzzy_find<CR>", desc = "Current buffer fuzzy search" },
     -- f keymaps
     { "<Leader>f<Space>", ":Telescope ", desc = "Telescope command" },
     { "<Leader>fa", "<Cmd>Telescope autocommands<CR>", desc = "Find autocommands" },
@@ -103,15 +101,39 @@ return {
       function()
         require("telescope.builtin").find_files({
           cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
-          prompt_title = "Find in plugins",
+          prompt_title = "Find plugin files",
         })
       end,
       desc = "Find in packages",
     },
     {
+      "<Leader>fP",
+      function()
+        require("telescope.builtin").live_grep({
+          cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
+          prompt_title = "Live grep in plugin files",
+          hidden = true,
+        })
+      end,
+      desc = "Find in plugin files",
+    },
+    {
+      "<Leader>fn",
+      function()
+        require("telescope.builtin").find_files({
+          cwd = vim.env.VIMRUNTIME,
+          prompt_title = "Find Neovim files" })
+      end,
+      desc = "Find Neovim runtime files",
+    },
+    {
       "<Leader>fN",
       function()
-        require("telescope.builtin").find_files({ cwd = vim.env.VIMRUNTIME, prompt_title = "Find in Neovim" })
+        require("telescope.builtin").live_grep({
+          cwd = vim.env.VIMRUNTIME,
+          prompt_title = "Live grep in Neovim runtime files",
+          hidden = true,
+        })
       end,
       desc = "Find in Neovim runtime files",
     },

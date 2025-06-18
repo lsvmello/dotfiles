@@ -11,7 +11,7 @@ return {
     "mfussenegger/nvim-dap",
     dependencies = {
       {
-        "williamboman/mason.nvim",
+        "mason-org/mason.nvim",
         opts = function(_, opts)
           vim.list_extend(opts.ensure_installed, { "java-test", "java-debug-adapter" })
         end,
@@ -118,7 +118,7 @@ return {
             bundles = bundles,
           },
           capabilities = capabilities,
-        }, opts.jdtls or {}) -- TODO: check jdtls
+        }, opts.jdtls or {})
 
         -- Existing server will be reused if the root_dir matches.
         require("jdtls").start_or_attach(config)

@@ -3,8 +3,6 @@ vim.g.maplocalleader = " " -- buffer related mappings
 
 if vim.g.neovide then
   require("neovide")
-else
-  vim.o.background = "light" -- https://github.com/neovim/neovim/issues/32238
 end
 vim.cmd([[colorscheme default]])
 
@@ -19,7 +17,7 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- use lazy.nvim
+vim.keymap.set("n", "<Leader>l", "<Cmd>Lazy<CR>", { desc = "Lazy" })
 require("lazy").setup({
   spec = {
     { "folke/lazy.nvim", version = "*" },

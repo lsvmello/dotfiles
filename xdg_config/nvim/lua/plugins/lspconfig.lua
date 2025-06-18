@@ -2,8 +2,8 @@ return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason.nvim",
+    { "mason-org/mason-lspconfig.nvim", dependencies = "neovim/nvim-lspconfig" },
   },
   opts = {
     capabilities = {
@@ -14,7 +14,25 @@ return {
         },
       },
     },
-    servers = {},
+    servers = {
+      ["harper_ls"] = {
+        userDictPath = "",
+        fileDictPath = "",
+        linters = {
+          SpellCheck = false,
+          BoringWords = true,
+        },
+        codeActions = {
+          ForceStable = false
+        },
+        markdown = {
+          IgnoreLinkTitle = false
+        },
+        diagnosticSeverity = "hint",
+        isolateEnglish = false,
+        dialect = "American",
+      },
+    },
   },
   init = function()
     vim.api.nvim_create_autocmd("LspAttach", {
@@ -32,12 +50,6 @@ return {
 
         -- keymaps
         map("n", "<LocalLeader>ca", vim.lsp.buf.code_action, "Code actions")
-        map("n", "<C-K>", vim.lsp.buf.hover, "Code hover")
-
-        if client:supports_method(methods.textDocument_completion) then
-          -- Enable auto-completion
-          vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
-        end
 
         if client:supports_method(methods.textDocument_documentHighlight) then
           local under_cursor_highlights_group = vim.api.nvim_create_augroup("cursor_highlights", { clear = false })
@@ -104,17 +116,9 @@ return {
     })
   end,
   config = function(_, opts)
-    local capabilities =
-      vim.tbl_deep_extend("force", {}, vim.lsp.protocol.make_client_capabilities(), opts.capabilities or {})
 
-    local function setup(server)
-      local server_opts = vim.tbl_deep_extend("force", {
-        capabilities = vim.deepcopy(capabilities),
-      }, opts.servers[server] or {})
-      require("lspconfig")[server].setup(server_opts)
-    end
-    -- get all the servers that are available thourgh mason-lspconfig
-    local all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
+    -- get all the servers that are available through mason-lspconfig
+    local all_mslp_servers = vim.tbl_keys(require("mason-lspconfig").get_mappings().lspconfig_to_package)
 
     local ensure_installed = {} ---@type string[]
     for server, server_opts in pairs(opts.servers) do
@@ -129,6 +133,9 @@ return {
     end
 
     local mlsp = require("mason-lspconfig")
-    mlsp.setup({ ensure_installed = ensure_installed, handlers = { setup } })
+    mlsp.setup({
+      ensure_installed = ensure_installed,
+      automatic_enable = true,
+    })
   end,
 }

@@ -13,8 +13,8 @@ local function blink(start, finish)
 end
 
 vim.keymap.set("n", "g==", function()
-  vim.cmd({ cmd = "lua", range = { vim.fn.line(".") } })
   blink(".", ".")
+  vim.cmd({ cmd = "lua", range = { vim.fn.line(".") } })
 end, { buffer = true, desc = "Execute current line" })
 
 vim.keymap.set("v", "g=", function()
@@ -24,12 +24,12 @@ vim.keymap.set("v", "g=", function()
   local line_start = math.min(curr_line, v_line)
   local line_end = math.max(curr_line, v_line)
 
+  blink({ line_start - 1, -1 }, { line_end - 1, -1 })
   vim.cmd({ cmd = "lua", range = { line_start, line_end } })
   vim.fn.feedkeys("", "n")
-  blink({ line_start - 1, -1 }, { line_end - 1, -1 })
 end, { buffer = true, desc = "Execute current selection" })
 
-vim.keymap.set("n", "g=g", function()
-  vim.cmd.source("%")
+vim.keymap.set("n", "g=g=", function()
   blink({ 0, -1 }, "$")
+  vim.cmd({ cmd = "lua", range = { 1, vim.fn.line("$") } })
 end, { buffer = true, desc = "Execute current file" })

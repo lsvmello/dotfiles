@@ -5,7 +5,7 @@ _G._statusline = {}
 --- Get string representation of a string with highlight
 --- @param str? string sign symbol
 --- @param hl? string name of the highlight group
---- @param restore? boolean restore highlight after the sign, default true
+--- @param restore? boolean restore highlight after the string, default true
 --- @param force? boolean apply highlight even if 'termguicolors' is off
 --- @return string sign string representation of the sign with highlight
 local function stl_hl(str, hl, restore, force)
@@ -47,9 +47,6 @@ end
 --- Get formatted buffer number, buffer type, current directory and file path
 --- @return string
 function _G._statusline.fname(focused)
-  if vim.b.fname_str_cache ~= nil then
-    return vim.b.fname_str_cache
-  end
 
   local path = vim.fn.expand("%:p:~")
 
@@ -83,12 +80,20 @@ function _G._statusline.fname(focused)
   return "%h %F %m%w%r"
 end
 
+local unused = 2
+
 vim.api.nvim_create_autocmd("DiagnosticChanged", {
   group = groupid,
   desc = "Update diagnostics cache for the status line.",
   callback = function(args)
-    local signs_config = vim.diagnostic.config().signs
-    local signs = type(signs_config) == "table" and type(signs_config.text) == "table" and signs_config.text or {}
+    -- local signs_config = vim.diagnostic.config().signs
+    -- local signs = type(signs_config) == "table" and type(signs_config.text) == "table" and signs_config.text or {}
+    local signs = {
+      [vim.diagnostic.severity.ERROR] = "E",
+      [vim.diagnostic.severity.WARN]  = "W",
+      [vim.diagnostic.severity.INFO]  = "I",
+      [vim.diagnostic.severity.HINT]  = "H",
+    }
 
     if vim.tbl_isempty(signs) then
       return
@@ -113,8 +118,8 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
   end,
 })
 
----Get string representation of diagnostics for current buffer
----@return string
+--- Get string representation of diagnostics for current buffer
+--- @return string
 function _G._statusline.diag()
   return vim.b.diag_str_cache ~= vim.NIL and vim.b.diag_str_cache or ""
 end
@@ -125,19 +130,10 @@ local spinner_progress_keep = 80 -- ms
 local spinner_timer = vim.uv.new_timer()
 
 local spinner_icon_done = "[done]"
-local spinner_icons = {
-  "[    ]",
-  "[=   ]",
-  "[==  ]",
-  "[=== ]",
-  "[ ===]",
-  "[  ==]",
-  "[   =]",
-  -- "[    ]",
-}
+local spinner_icons = { "[    ]", "[=   ]", "[==  ]", "[=== ]", "[ ===]", "[  ==]", "[   =]" }
 
----Id and additional info of language servers in progress
----@type table<integer, { name: string, timestamp: integer, type: string|nil }>
+--- Id and additional info of language servers in progress
+--- @type table<integer, { name: string, timestamp: integer, type: string|nil }>
 local server_info = {}
 
 vim.api.nvim_create_autocmd("LspProgress", {
@@ -175,7 +171,7 @@ vim.api.nvim_create_autocmd("LspProgress", {
   end,
 })
 
----@return string
+--- @return string
 function _G._statusline.lsp_progress()
   if vim.tbl_isempty(server_info) then
     return ""
@@ -193,7 +189,7 @@ function _G._statusline.lsp_progress()
   end
 
   local now = vim.uv.now()
-  ---@return boolean
+  --- @return boolean
   local function allow_changing_state()
     return not vim.b.spinner_state_changed or now - vim.b.spinner_state_changed > spinner_status_keep
   end
@@ -228,8 +224,8 @@ function _G._statusline.lsp_progress()
   )
 end
 
----Statusline components
----@type table<string, string>
+--- Statusline components
+--- @type table<string, string>
 local components = {
   align        = [[%=]],
   diag         = [[%{%v:lua._statusline.diag()%}]],
@@ -273,8 +269,8 @@ local stl_nc = table.concat({
 })
 
 setmetatable(_G._statusline, {
-  ---Get statusline string
-  ---@return string
+  --- Get statusline string
+  --- @return string
   __call = function()
     return vim.g.statusline_winid == vim.api.nvim_get_current_win() and stl or stl_nc
   end,

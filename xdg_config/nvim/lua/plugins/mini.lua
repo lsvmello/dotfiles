@@ -8,16 +8,21 @@ return {
     end
 
     vim.g.miniindentscope_disable = true
-    vim.api.nvim_create_user_command("IndentScope", function(opts)
-      vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
-      local state = vim.g.miniindentscope_disable and "disabled" or "enabled"
-      vim.api.nvim_echo({ { "IndentScope " .. state } }, false, {})
-    end, { desc = "Toggle indentation scope marks" })
   end,
   config = function()
     require("mini.icons").setup()
     require("mini.move").setup()
-    require("mini.surround").setup()
+    require("mini.surround").setup({
+      mappings = {
+        add            = "gsa", -- Add surrounding in Normal and Visual modes
+        delete         = "gsd", -- Delete surrounding
+        find           = "gsf", -- Find surrounding (to the right)
+        find_left      = "gsF", -- Find surrounding (to the left)
+        highlight      = "gsh", -- Highlight surrounding
+        replace        = "gsr", -- Replace surrounding
+        update_n_lines = "gsn", -- Update `n_lines`
+      },
+    })
     require("mini.splitjoin").setup()
     require("mini.align").setup({
       mappings = {
@@ -45,8 +50,8 @@ return {
           i = { "@block.inner", "@conditional.inner", "@loop.inner" },
         }),
         r = ai.gen_spec.treesitter({ a = "@return.outer", i = "@return.inner" }),
-        s = ai.gen_spec.treesitter({ a = "@scope", i = "@scope" }),
         z = ai.gen_spec.treesitter({ a = "@fold.outer", i = "@fold.inner" }),
+        T = ai.gen_spec.treesitter({ a = "@field.outer", i = "@field.inner" }),
       },
       silent = true,
     })
@@ -83,12 +88,15 @@ return {
       draw = {
         animation = indentscope.gen_animation.none(),
       },
-      mappings = { -- TODO: resolve conflicts with treesitter and mini.ai
-        object_scope = "",
-        object_scope_with_border = "",
-        goto_top = "",
-        goto_bottom = "",
+      mappings = {
+        object_scope = "is",
+        object_scope_with_border = "as",
+        goto_top = "[s",
+        goto_bottom = "]s",
       },
     })
   end,
+  keys = {
+    { "<Leader>i", "<Cmd>let g:miniindentscope_disable = !g:miniindentscope_disable<CR>", desc = "Toggle indentation scope marks" },
+  },
 }

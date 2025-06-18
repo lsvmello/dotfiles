@@ -50,7 +50,6 @@ return {
           ["]m"] = { query = "@function.outer", desc = "Next method" },
           ["]o"] = { query = { "@block.outer", "@conditional.outer", "@loop.outer" }, desc = "Next code block" },
           ["]r"] = { query = "@return.inner", desc = "Next return" },
-          ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
           ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
         },
         goto_previous_start = {
@@ -62,7 +61,6 @@ return {
           ["[m"] = { query = "@function.outer", desc = "Previous method" },
           ["[o"] = { query = { "@block.outer", "@conditional.outer", "@loop.outer" }, desc = "Previous code block" },
           ["[r"] = { query = "@return.inner", desc = "Previous return" },
-          ["[s"] = { query = "@scope", query_group = "locals", desc = "Previous scope" },
           ["[z"] = { query = "@fold", query_group = "folds", desc = "Previous fold" },
         },
       },

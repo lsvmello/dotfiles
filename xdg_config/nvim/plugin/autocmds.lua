@@ -17,7 +17,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 local resize_augroup = vim.api.nvim_create_augroup("autocmds/resize", { clear = true })
 vim.api.nvim_create_autocmd({ "VimResized" }, {
   desc = "resize splits if window got resized",
-  group = resize,
+  group = resize_augroup,
   callback = function()
     vim.cmd("tabdo wincmd =")
   end,
@@ -85,6 +85,16 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
   group = terminal_augroup,
   callback = function()
     vim.cmd.startinsert()
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "TermClose" }, {
+  desc = "auto close terminal when exit successfully",
+  group = terminal_augroup,
+  callback = function()
+    if type(vim.v.event) == "table" and vim.v.event.status == 0 then
+      vim.api.nvim_input("<CR>")
+    end
   end,
 })
 

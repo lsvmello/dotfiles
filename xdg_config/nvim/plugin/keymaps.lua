@@ -106,6 +106,9 @@ vim.keymap.set("n", "<C-Q>", function()
   vim.cmd.lclose()
 end, { desc = "Close quickfix/location list" })
 
+-- delete buffer
+vim.keymap.set("n", "<C-W><C-Q>", "<Cmd>bdelete<CR>", { desc = "delete buffer" })
+
 -- add undo break-points
 for _, char in ipairs({ ",", ".", ";" }) do
   vim.keymap.set("i", char, char .. "<C-G>u")
@@ -116,7 +119,15 @@ for _, char in ipairs({ "~", "^", "`", "´" }) do
   vim.keymap.set({ "", "!", "l", "t" }, char .. char, char)
 end
 
+--- insert mode
+vim.keymap.set("i", "<C-H>", "<C-O>b", { desc = "move a word backwards" })
+vim.keymap.set("i", "<C-S-H>", "<C-O>B", { desc = "move a WORD backwards" })
+vim.keymap.set("i", "<C-L>", "<C-O>w", { desc = "move a word forwards" })
+vim.keymap.set("i", "<C-S-L>", "<C-O>W", { desc = "move a WORD forwards" })
+
 -- terminal
+vim.keymap.set("n", "<Leader>t", "<Cmd>split | terminal<CR>", { desc = "open split terminal" })
+
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-N>", { desc = "go to Normal mode" })
 vim.keymap.set("t", "<C-C><C-C>", "<C-\\><C-N>", { desc = "go to Normal mode" })
 vim.keymap.set("t", "<C-\\><C-R>", function()
@@ -129,3 +140,7 @@ vim.keymap.set("t", "<C-L>", function()
   vim.bo.scrollback = 1
   vim.bo.scrollback = sb
 end, { desc = "clear terminal scrollback" })
+
+-- lazygit
+vim.keymap.set("n", "<Leader>gl", "<Cmd>tab terminal lazygit<CR>", { desc = "Open Lazygit", silent = true })
+
