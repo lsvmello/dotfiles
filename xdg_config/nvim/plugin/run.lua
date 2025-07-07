@@ -489,5 +489,5 @@ local run_command_args = {
   range = true,
 }
 
-vim.api.nvim_create_user_command("Bang", run_command, run_command_args)
-vim.api.nvim_create_user_command("B", run_command, run_command_args)
+vim.api.nvim_create_user_command("Run", run_command, run_command_args)
+vim.api.nvim_create_user_command("R", run_command, run_command_args)

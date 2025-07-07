@@ -9,7 +9,8 @@ return {
       ["<C-Space>"] = { "show", "fallback" },
       ["<C-I>"] = { "show", "fallback" },
       ["<C-E>"] = { "cancel", "fallback" },
-      ["<C-Y>"] = { "select_and_accept" },
+      ["<C-Y>"] = { "select_and_accept", "fallback_to_mappings" },
+      ["<Tab>"] = { "select_and_accept", "fallback" },
 
       ["<Up>"] = { "select_prev", "fallback" },
       ["<Down>"] = { "select_next", "fallback" },
@@ -26,34 +27,33 @@ return {
     appearance = { nerd_font_variant = "normal" },
     completion = {
       ghost_text = { enabled = true },
-      trigger = {
-        prefetch_on_insert = false,
-        show_in_snippet = false,
-        show_on_keyword = false,
-        show_on_trigger_character = false,
-      },
-      documentation = { auto_show = false },
     },
     cmdline = { enabled = false },
     signature = { enabled = true },
     sources = {
       -- Disable some sources in comments and strings.
       default = function()
-        local sources = { 'lsp', 'buffer' }
+        local sources = { "lsp", "buffer" }
         local ok, node = pcall(vim.treesitter.get_node)
 
         if ok and node then
           local node_type = node:type()
-          if not vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node_type) then
-            table.insert(sources, 'path')
+          if not vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node_type) then
+            table.insert(sources, "path")
           end
-          if node_type ~= 'string' then
-            table.insert(sources, 'snippets')
+          if node_type ~= "string" then
+            table.insert(sources, "snippets")
           end
         end
 
         return sources
       end,
+      per_filetype = {
+        sql = { "snippets", "dadbod", "buffer" },
+      },
+      providers = {
+        dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+      },
     },
   },
   config = function(_, opts)

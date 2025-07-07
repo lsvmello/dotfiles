@@ -13,5 +13,12 @@ return {
       require("lazy").load({ plugins = { "dressing.nvim" } })
       return vim.ui.input(...)
     end
+
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "DressingInput",
+      callback = function()
+        vim.b.completion = false
+      end,
+    })
   end,
 }

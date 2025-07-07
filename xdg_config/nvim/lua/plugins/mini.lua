@@ -97,6 +97,6 @@ return {
     })
   end,
   keys = {
-    { "<Leader>i", "<Cmd>let g:miniindentscope_disable = !g:miniindentscope_disable<CR>", desc = "Toggle indentation scope marks" },
+    { "<Leader>i", "<Cmd>lua vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable<CR>", desc = "Toggle indentation scope marks" },
   },
 }

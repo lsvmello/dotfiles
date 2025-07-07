@@ -6,19 +6,29 @@ return {
       if vim.F.if_nil(vim.b[bufnr].disable_autoformat, vim.g.disable_autoformat, false) then
         return
       end
-      return { timeout_ms = 500, lsp_format = "fallback" }
+      return { timeout_ms = 1500, lsp_format = "fallback" }
     end,
+  },
+  keys = {
+    {
+      "<LocalLeader>f",
+      function()
+        require("conform").format({ async = true })
+      end,
+      mode = "",
+      desc = "Format buffer",
+    },
   },
   init = function()
     vim.o.formatexpr = [[v:lua.require'conform'.formatexpr()]]
 
     vim.api.nvim_create_user_command("Autoformat", function(opts)
       local scope = opts.bang and vim.g or vim.b
-      if opts.args == "" then
+      if opts.args == "toggle" then
         scope.disable_autoformat = not scope.disable_autoformat
-      elseif opts.args == "true" or opts.args == "enable" or opts.args == "on" then
+      elseif opts.args == "true" or opts.args == "on" then
         scope.disable_autoformat = false
-      elseif opts.args == "false" or opts.args == "disable" or opts.args == "off" then
+      elseif opts.args == "false" or opts.args == "off" then
         scope.disable_autoformat = true
       else
         vim.api.nvim_echo({ { "Autoformat: Invalid option" } }, false, { err = true })
@@ -34,7 +44,7 @@ return {
       complete = function(arg_lead, cmd_line)
         return vim.tbl_filter(function(val)
           return vim.startswith(val, arg_lead)
-        end, { "disable", "enable", "false", "true", "off", "on" })
+        end, { "toggle", "false", "true", "off", "on" })
       end,
     })
   end,

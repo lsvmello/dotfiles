@@ -124,6 +124,7 @@ vim.keymap.set("i", "<C-H>", "<C-O>b", { desc = "move a word backwards" })
 vim.keymap.set("i", "<C-S-H>", "<C-O>B", { desc = "move a WORD backwards" })
 vim.keymap.set("i", "<C-L>", "<C-O>w", { desc = "move a word forwards" })
 vim.keymap.set("i", "<C-S-L>", "<C-O>W", { desc = "move a WORD forwards" })
+vim.keymap.set("i", "<C-V>", "<C-R>+", { desc = "put from clipboard" })
 
 -- terminal
 vim.keymap.set("n", "<Leader>t", "<Cmd>split | terminal<CR>", { desc = "open split terminal" })
