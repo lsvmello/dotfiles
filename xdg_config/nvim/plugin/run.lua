@@ -1,60 +1,3 @@
--- TODO: 1. Improve commands
--- Make stdin compatible with fish and bash
--- TODO: 2. Keymaps
--- TODO: 5. Extras
--- Make default messages hardcoded
--- Refactor parse_command_string and benchmark https://stackoverflow.com/questions/829063/how-to-iterate-individual-characters-in-lua-string
--- g< is used for other outputs, so we don't want to override it
-
--- local prompt_string = "\027]133;A\07❯ "
-local prompt_string = "\027]133;A\07"
-
---- @type vim.SystemObj[]
-local active_buffer_jobs = {}
-
-local ansi_styles = {
-  black = "\27[30m",
-  red = "\27[31m",
-  green = "\27[32m",
-  yellow = "\27[33m",
-  blue = "\27[34m",
-  magenta = "\27[35m",
-  cyan = "\27[36m",
-  white = "\27[37m",
-  bright_black = "\27[90m",
-  bright_red = "\27[91m",
-  bright_green = "\27[92m",
-  bright_yellow = "\27[93m",
-  bright_blue = "\27[94m",
-  bright_magenta = "\27[95m",
-  bright_cyan = "\27[96m",
-  bright_white = "\27[97m",
-  bold = "\27[1m",
-  italic = "\27[3m",
-  underline = "\27[4m",
-  strikethrough = "\27[9m",
-  reset = "\27[0m",
-}
-
-local function format_ansi_string(...)
-local formatted_table = {}
-
-  for _, item in ipairs({ ... }) do
-    if type(item) == "string" then
-      table.insert(formatted_table, item)
-    elseif type(item) == "table" then
-      local text = item[1]
-      local styles = ""
-      for i = 2, #item do
-        styles = styles .. (ansi_styles[item[i]] or "")
-      end
-      table.insert(formatted_table, styles .. text .. ansi_styles.reset)
-    end
-  end
-
-  return table.concat(formatted_table)
-end
-
 local function get_or_create_output_window(buf, smods)
   local split = vim.g.run_default_split or "below"
   if smods.split == "aboveleft" then
@@ -78,170 +21,115 @@ local function get_or_create_output_window(buf, smods)
   return win
 end
 
---- @param cmd RunCommand
-local function build_command_table(cmd)
+---@param run_cmd RunCommand
+---@param pty boolean
+local function build_command_table(run_cmd, pty)
   local cmd_tbl = { vim.o.shell }
   vim.list_extend(cmd_tbl, vim.split(vim.o.shellcmdflag, " "))
-  if cmd.stdin then
+  if run_cmd.stdin then
     if vim.o.shell:find("pwsh", 1, true) or vim.o.shell:find("powershell", 1, true) then
-      table.insert(cmd_tbl, string.format("& { Get-Content %s | & %s }", cmd.stdin, cmd.cmd))
+      table.insert(cmd_tbl, string.format("& { Get-Content %s | & %s }", run_cmd.stdin, run_cmd.cmd))
     elseif vim.o.shell:find("fish", 1, true) then
-      table.insert(cmd_tbl, string.format("begin; %s; end < %s", cmd.cmd, cmd.stdin))
+      table.insert(cmd_tbl, string.format("begin; %s; end < %s", run_cmd.cmd, run_cmd.stdin))
     else
-      table.insert(cmd_tbl, string.format("(%s) < %s", cmd.cmd, cmd.stdin))
+      table.insert(cmd_tbl, string.format("(%s) < %s", run_cmd.cmd, run_cmd.stdin))
     end
   else
-    table.insert(cmd_tbl, cmd.cmd)
+    if pty then
+      table.insert(cmd_tbl, "echo \027[4;H\07 && " .. run_cmd.cmd)
+    else
+      table.insert(cmd_tbl, run_cmd.cmd)
+    end
   end
   return cmd_tbl
 end
 
---- Run a command and execute a callback function when it finishes
---- @param cmd RunCommand
---- @param then_func fun(status: boolean, out?: vim.SystemCompleted)
---- @param out_func? fun(data?: string|string[])
---- @return vim.SystemObj
-local function exec_command(cmd, then_func, out_func)
-  then_func = vim.schedule_wrap(then_func)
-  out_func = out_func and vim.schedule_wrap(out_func) or nil
-
-  --- @type fun(string, string)?
-  local std_func = out_func and function(_, data)
-    out_func(data)
-  end or nil
-
-  local start_time = vim.uv.hrtime()
-  if out_func then
-    out_func(
-      format_ansi_string(
-        prompt_string,
-        cmd.stdin and { "stdin", "yellow" } or "",
-        cmd.stdin and " | " or "",
-        cmd.cmd,
-        "\n"
-      )
-    )
-  end
-
-  return vim.system(build_command_table(cmd), {
-    text = true,
-    stdout = std_func,
-    stderr = std_func,
-  }, function(out)
-    local end_time = vim.uv.hrtime()
-    local duration = (end_time - start_time) / 1e9
-    local status = out.code == 0
-    local message = status
-        and format_ansi_string(
-          "Command ",
-          { "finished", "green", "bold" },
-          " at ",
-          os.date(),
-          ", duration ",
-          string.format("%.2f", duration),
-          " s.\n\n"
-        )
-      or format_ansi_string(
-        "Command ",
-        { "exited abnormally", "red", "bold" },
-        " with code ",
-        { out.code, "red" },
-        " at ",
-        os.date(),
-        ", duration ",
-        string.format("%.2f", duration),
-        " s.\n\n"
-      )
-
-    if out_func then
-      out_func(message)
+---@param cmd RunCommand
+---@param out_func fun(data: string[])
+---@param then_func fun(code: number)
+---@param pty boolean
+---@return number
+local function exec_command(cmd, out_func, then_func, pty)
+  return vim.fn.jobstart(build_command_table(cmd, pty), {
+    pty = pty,
+    stdout_buffered = not pty,
+    stderr_buffered = not pty,
+    height = vim.api.nvim_win_get_height(0),
+    width = vim.api.nvim_win_get_width(0),
+    on_stdout = function(_, data, _)
+      out_func(data)
+    end,
+    on_stderr = function(_, data, _)
+      out_func(data)
+    end,
+    on_exit = function(_, code)
+      then_func(code)
     end
-
-    then_func(status, out)
-  end)
+  })
 end
 
---- @param buf integer
-local function run_buffer_sequence(buf)
+---@param buf integer
+local function run_command_output_buffer(buf)
   local chan = vim.api.nvim_open_term(buf, {})
 
   local out_func = function(data)
-    if not data then
-      return
-    end
-    vim.api.nvim_chan_send(chan, data)
+    local content = table.concat(data, "\n")
+                    :gsub("\027%[2J", "") -- remove clear screen
+                    :gsub("\027%[H", "")  -- remove cursor home
+    vim.api.nvim_chan_send(chan, content)
   end
 
-  local then_func = function()
-    out_func(format_ansi_string("Execution finished at ", os.date(), ".\n"))
-    active_buffer_jobs[buf] = nil
+  local cmd = vim.b[buf].run_cmd
+  local start_time = vim.uv.hrtime()
+  local prompt_string = "\027]133;A\07"
+  local cmd_string = "\n" .. prompt_string
+  if cmd.stdin then
+    cmd_string = cmd_string .. "\27[33mstdin\27[0m | "
+  end
+  cmd_string = cmd_string .. cmd.cmd .. "\n"
+  out_func({
+    "Execution started at " .. os.date() .. "; current-directory: " .. vim.fn.getcwd(),
+    cmd_string
+   })
+
+  local then_func = function(code)
+    local end_time = vim.uv.hrtime()
+    local duration = (end_time - start_time) / 1e9
+    local message = "\nExecution "
+    if code == 0 then
+      message = message .. "\27[32m\27[1mfinished\27[0m at " .. os.date()
+            .. ", duration " .. string.format("%.2f", duration) .. " s."
+    else
+      message = message .. "\27[31m\27[1mexited abnormally\27[0m with code \27[31m"
+            .. code .. "\27[0m at " .. os.date() .. ", duration "
+            .. string.format("%.2f", duration) .. " s."
+    end
+    out_func({ message })
+
+    vim.b[buf].run_jobid = nil
     vim.fn.chanclose(chan)
   end
 
-  local sequence = vim.b[buf].run_sequence
-  out_func(format_ansi_string("Execution started at ", os.date(), "; current-directory: " .. vim.fn.getcwd() .. "\n\n"))
-
-  local function skip_command_and_next(index, reason)
-    local cmd = sequence[index]
-    if not cmd then
-      return then_func()
-    end
-
-    out_func(
-      format_ansi_string(
-        prompt_string,
-        cmd.cmd,
-        { " skipped because previous command ", "bright_black", "italic" },
-        reason,
-        { ".\n", "bright_black", "italic" }
-      )
-    )
-
-    skip_command_and_next(index + 1, { "skipped", "bright_black", "underline", "italic" })
-  end
-
-  local function run_command_and_next(index)
-    local cmd = sequence[index]
-    if not cmd then
-      return then_func()
-    end
-
-    local then_run_func = function(status)
-      local next_index = index + 1
-      if cmd.cond == nil or cmd.cond == status then
-        run_command_and_next(next_index)
-      else
-        local reason = status and { "exited successfully", "green", "italic" }
-        or { "exited abnormally", "red", "italic" }
-        skip_command_and_next(next_index, reason)
-      end
-    end
-    local curr_job = exec_command(cmd, then_run_func, out_func)
-    active_buffer_jobs[buf] = curr_job
-  end
-
-  run_command_and_next(1)
+  vim.b[buf].run_jobid = exec_command(cmd, out_func, then_func, true)
 end
 
---- @param sequence RunSequence
---- @return integer, integer
-local function create_output_buffer(sequence, smods)
-  local buf = vim.api.nvim_create_buf(true, false)
+---@param buf number
+local function stop_buffer_job(buf)
+  if vim.b[buf].run_jobid then
+    vim.fn.jobstop(vim.b[buf].run_jobid)
+  end
+end
 
-  vim.bo[buf].buftype = "nofile"
-  vim.bo[buf].swapfile = false
-  vim.bo[buf].modifiable = false
-  vim.bo[buf].modified = false
 
+local function set_buffer_keymaps(buf)
   vim.keymap.set("n", "q", "<Cmd>quit<CR>", { silent = true, buffer = buf })
   vim.keymap.set("n", "<C-r>", function()
-    run_buffer_sequence(buf)
+    if vim.b[buf].run_jobid == nil then
+      run_command_output_buffer(buf)
+    end
   end, { buffer = buf })
   vim.keymap.set("n", "<C-c>", function()
-    local curr_job = active_buffer_jobs[buf]
-    if curr_job and not curr_job:is_closing() then
-      curr_job:kill(2)
-    end
+    stop_buffer_job(buf)
   end, { silent = true, buffer = buf })
   vim.api.nvim_create_autocmd("TextChanged", {
     buffer = buf,
@@ -260,28 +148,20 @@ local function create_output_buffer(sequence, smods)
 
       local last_index = lines_count - empty_lines
       if lines[last_index]:find("[Terminal closed]", 1, true) then
-        vim.api.nvim_set_option_value("modifiable", true, { buf = event.buf })
-        vim.api.nvim_buf_set_lines(buf, last_index - 1, last_index, false, { string.rep(" ", 20) })
-        vim.api.nvim_set_option_value("modifiable", false, { buf = event.buf })
+        vim.bo[event.buf].modifiable = true
+        vim.api.nvim_buf_set_lines(buf, last_index - 1, last_index, false, { })
+        vim.bo[event.buf].modifiable = false
         last_index = last_index - 1
       end
 
-      local win = vim.fn.bufwinid(event.buf)
-      if win > 0 then
-        pcall(vim.api.nvim_win_set_cursor, win, { last_index, 0 })
-      end
+      vim.cmd("norm G")
     end,
   })
-  -- TODO: replace with some extmark?
+  -- TODO: implement or replace with some extmark?
   vim.keymap.set("n", "g?", "<Cmd>echo 'A help should be show now'<CR>", { buffer = buf })
-  -- TODO: implement <C-q> here
-  vim.keymap.set("n", "<C-q>", "<Cmd>echo 'Should populate quickfix list'<CR>", { buffer = buf })
-  -- TODO: implement [e and ]e
-  vim.keymap.set("n", "[e", "<Cmd>echo 'Should go to next error'<CR>", { buffer = buf })
-  vim.keymap.set("n", "]e", "<Cmd>echo 'Should go to previous error'<CR>", { buffer = buf })
   vim.keymap.set("n", "gi", function()
-    local first_command = vim.b[buf].run_sequence[1]
-    if not first_command.stdin then
+    local run_cmd = vim.b[buf].run_cmd
+    if not run_cmd.stdin then
       return
     end
     local win_width = vim.api.nvim_win_get_width(0) - 1
@@ -294,7 +174,7 @@ local function create_output_buffer(sequence, smods)
       col = win_width,
       anchor = "NE",
     })
-    vim.cmd.edit(first_command.stdin)
+    vim.cmd.edit(run_cmd.stdin)
     vim.wo[fwin].number = false
     vim.wo[fwin].relativenumber = false
     vim.wo[fwin].statuscolumn = ""
@@ -314,107 +194,61 @@ local function create_output_buffer(sequence, smods)
         vim.cmd("silent! bdelete! " .. tostring(fbuf))
       end,
     })
-  end, { buffer = buf })
+  end, { buffer = buf, desc = "Show/Edit input file used as stdin" })
+end
+
+---@param run_cmd RunCommand
+---@return integer, integer
+local function create_output_buffer(run_cmd, smods)
+  local buf = vim.api.nvim_create_buf(true, false)
+
+  vim.bo[buf].buftype = "nofile"
+  vim.bo[buf].swapfile = false
+  vim.bo[buf].modifiable = false
+  vim.bo[buf].modified = false
+
+  set_buffer_keymaps(buf)
 
   vim.api.nvim_create_autocmd("TermEnter", { buffer = buf, command = "stopinsert" })
   vim.api.nvim_create_autocmd("BufDelete", {
     buffer = buf,
     callback = function()
-      local curr_job = active_buffer_jobs[buf]
-      if curr_job and not curr_job:is_closing() then
-        curr_job:kill(15)
-      end
+      stop_buffer_job(buf)
     end,
   })
 
   local win = get_or_create_output_window(buf, smods)
   vim.api.nvim_win_set_buf(win, buf)
 
-  vim.api.nvim_buf_set_name(buf, string.format("Run output[%d]: %s", buf, sequence))
-  vim.b[buf].run_sequence = sequence
+  vim.api.nvim_buf_set_name(buf, string.format("Run output[%d]: %s", buf, run_cmd.cmd))
+  vim.b[buf].run_cmd = run_cmd
 
   return buf, win
 end
---- @class RunCommand
---- @field cmd string
---- @field stdin? string
---- @field cond? boolean Condition on which the next command should run
-
----@alias RunSequence RunCommand[]
-
-local sequence_mt = {
-  __tostring = function(tbl)
-    local str = {}
-    for i, val in ipairs(tbl) do
-      if val.cond == nil then
-        table.insert(str, val.cmd .. (i < #tbl and ";" or ""))
-      else
-        table.insert(str, val.cmd .. (val.cond and " &&" or " ||"))
-      end
-    end
-    return table.concat(str, " ")
-  end,
-}
-
----Parses a string into a RunSequence
----@param cmd string Command string to parse
----@return RunSequence Parsed RunSequence
-local function parse_commands_string(cmd)
-  local result = {} ---@as RunSequence
-
-  local cmd_index = 1
-  local in_single_quotes = false
-  local in_double_quotes = false
-
-  for i = 1, #cmd do
-    local char = cmd:sub(i, i)
-
-    if char == "'" and not in_double_quotes then
-      in_single_quotes = not in_single_quotes
-    elseif char == '"' and not in_single_quotes then
-      in_double_quotes = not in_double_quotes
-    elseif char == ";" and not in_single_quotes and not in_double_quotes then
-      local segment = vim.trim(cmd:sub(cmd_index, i - 1))
-      table.insert(result, { cmd = vim.trim(segment) })
-      cmd_index = i + 1
-    elseif char == "&" and cmd:sub(i + 1, i + 1) == char and not in_single_quotes and not in_double_quotes then
-      local segment = vim.trim(cmd:sub(cmd_index, i - 1))
-      table.insert(result, { cmd = segment, cond = true })
-      cmd_index = i + 2
-    elseif char == "|" and cmd:sub(i + 1, i + 1) == char and not in_single_quotes and not in_double_quotes then
-      local segment = vim.trim(cmd:sub(cmd_index, i - 1))
-      table.insert(result, { cmd = segment, cond = false })
-      cmd_index = i + 2
-    end
-  end
-
-  if cmd_index <= #cmd then
-    local segment = vim.trim(cmd:sub(cmd_index))
-    table.insert(result, { cmd = vim.trim(segment) })
-  end
-
-  return setmetatable(result, sequence_mt)
-end
+---@class RunCommand
+---@field cmd string
+---@field stdin? string
 
 local run_ns = vim.api.nvim_create_namespace("run")
 
---- @param buf number
---- @param opts table
---- @param cmd string
---- @param timer? uv.uv_timer_t
---- @return number extmark id
-local function create_loading_extmark(buf, opts, cmd, timer)
+---@param buf number
+---@param line_start number
+---@param line_end number
+---@param cmd_str string
+---@return number, uv.uv_timer_t?
+local function create_loading_extmark(buf, line_start, line_end, cmd_str)
     local spinner_idx = 1
     local spinner_tbl = { "🌕", "🌔", "🌓", "🌒", "🌑", "🌘", "🌗", "🌖" }
+    local timer = vim.uv.new_timer()
 
-    local extmark_id = vim.api.nvim_buf_set_extmark(buf, run_ns, opts.line1 - 1, 0, {
-      end_row = opts.line2 - 1,
-      end_col = #vim.fn.getline(opts.line2),
+    local extmark_id = vim.api.nvim_buf_set_extmark(buf, run_ns, line_start, 0, {
+      end_row = line_end - 1,
+      end_col = #vim.fn.getline(line_end),
       hl_group = "NonText",
       strict = false,
       hl_mode = "combine",
       hl_eol = true,
-      virt_text = { { cmd, "NonText" } },
+      virt_text = { { cmd_str, "NonText" } },
     })
 
     if timer then
@@ -433,7 +267,7 @@ local function create_loading_extmark(buf, opts, cmd, timer)
           details.id = extmark_id
           details.ns_id = nil -- clean ns_id for nvim_buf_set_extmark
           details.hl_mode = "combine" -- TODO: this should already exist, open an issue
-          details.virt_text = { { spinner_tbl[spinner_idx] .. " " .. cmd, "NonText" } }
+          details.virt_text = { { spinner_tbl[spinner_idx] .. " " .. cmd_str, "NonText" } }
           vim.api.nvim_buf_set_extmark(buf, run_ns, row, col, details)
           spinner_idx = spinner_idx % #spinner_tbl + 1
 
@@ -441,43 +275,58 @@ local function create_loading_extmark(buf, opts, cmd, timer)
       )
     end
 
-    return extmark_id
+    return extmark_id, timer
+end
+
+---@param run_cmd RunCommand
+---@param buf number
+---@param line_start number
+---@param line_end number
+local run_command_replace_lines = function(run_cmd, buf, line_start, line_end)
+    local extmark_id, timer = create_loading_extmark(buf, line_start, line_end, run_cmd.cmd)
+
+    local output = {}
+    local out_func = function(data)
+      for _, line in ipairs(data) do
+        local content = line:gsub("\r", "")
+        table.insert(output, content)
+      end
+    end
+
+    local then_func = function(_)
+      if timer then
+        timer:stop()
+        timer:close()
+      end
+      pcall(vim.api.nvim_buf_del_extmark, buf, run_ns, extmark_id)
+
+      vim.api.nvim_buf_set_lines(buf, line_start, line_end, false, output)
+    end
+    exec_command(run_cmd, out_func, then_func, false)
 end
 
 local function run_command(opts)
-  if opts.args == "" and (opts.bang and not vim.t.last_run_sequence) then
+  if opts.args == "" then
     return vim.api.nvim_echo({ { opts.name ..": No command provided.", "ErrorMsg" } }, false, { err = true })
   end
 
   local curr_buf = vim.api.nvim_get_current_buf()
+  local run_cmd = { cmd = opts.args }
   if opts.range > 0 then
-    -- TODO: Improve the "sometimes command/sometimes sequence" situation
     local tempfile = vim.fn.tempname()
     local lines = vim.api.nvim_buf_get_lines(curr_buf, opts.line1 - 1, opts.line2, true)
     if vim.fn.writefile(lines, tempfile) == -1 then
       return vim.api.nvim_echo({ { opts.name ..": Could not write temporary file to use as stdin.", "ErrorMsg" } }, false, { err = true })
     end
-    local cmd = { cmd = opts.bang and vim.t.last_run_sequence[1] or opts.args, stdin = tempfile }
 
-    local timer = vim.uv.new_timer()
-    local extmark_id = create_loading_extmark(curr_buf, opts, cmd.cmd, timer)
+    run_cmd.stdin = tempfile
+  end
 
-    exec_command(cmd, function(status, out)
-      if timer then
-        timer:stop()
-        timer:close()
-      end
-      pcall(vim.api.nvim_buf_del_extmark, curr_buf, run_ns, extmark_id)
-
-      local replacement = status and out.stdout or out.stderr .. out.stdout
-      vim.api.nvim_buf_set_lines(curr_buf, opts.line1 - 1, opts.line2, false, vim.split(replacement or "", "\n"))
-    end)
-    vim.t.last_run_sequence = { cmd }
+  if opts.bang then
+    run_command_replace_lines(run_cmd, curr_buf, opts.line1 - 1, opts.line2)
   else
-    local run_sequence = opts.bang and vim.t.last_run_sequence or parse_commands_string(opts.args)
-    local buf = create_output_buffer(run_sequence, opts.smods)
-    run_buffer_sequence(buf)
-    vim.t.last_run_sequence = run_sequence
+    local buf = create_output_buffer(run_cmd, opts.smods)
+    run_command_output_buffer(buf)
   end
 end
 

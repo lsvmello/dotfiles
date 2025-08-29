@@ -44,7 +44,6 @@ return {
         i = ai.gen_spec.treesitter({ a = "@conditional.outer", i = "@conditional.inner" }),
         l = ai.gen_spec.treesitter({ a = "@loop.outer", i = "@loop.inner" }),
         m = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
-        n = gen_ai_spec.number(),
         o = ai.gen_spec.treesitter({ -- code block
           a = { "@block.outer", "@conditional.outer", "@loop.outer" },
           i = { "@block.inner", "@conditional.inner", "@loop.inner" },

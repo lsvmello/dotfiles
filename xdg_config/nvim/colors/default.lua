@@ -74,10 +74,5 @@ for name, attr in pairs(hlgroups) do
   vim.api.nvim_set_hl(0, name, attr)
 end
 -- }}}
-local useless = 1
---- @type fun(a: number, b: number, c: number): string
-local function pop(a, b, c)
-  return a, posss
-end
 
 -- vim:ts=2:sw=2:sts=2:fdm=marker
