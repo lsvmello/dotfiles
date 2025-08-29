@@ -9,8 +9,7 @@
                 "action": "sendInput",
                 "input": "\u001d"
             },
-            "id": "User.sendInput.905E79A6",
-            "keys": "ctrl+]"
+            "id": "User.sendInput.905E79A6"
         },
         {
             "command": 
@@ -19,33 +18,6 @@
                 "direction": "prev"
             },
             "id": "User.selectCommand.D3F0B923"
-        },
-        {
-            "command": 
-            {
-                "action": "sendInput",
-                "input": "\u0000"
-            },
-            "id": "User.sendInput.72DFEA3B",
-            "keys": "ctrl+space"
-        },
-        {
-            "command": 
-            {
-                "action": "scrollToMark",
-                "direction": "previous"
-            },
-            "id": "User.scrollToMark.D3F0B923",
-            "keys": "ctrl+up"
-        },
-        {
-            "command": 
-            {
-                "action": "scrollToMark",
-                "direction": "next"
-            },
-            "id": "User.scrollToMark.2A0DA8E0",
-            "keys": "ctrl+down"
         },
         {
             "command": 
@@ -70,6 +42,30 @@
                 "direction": "next"
             },
             "id": "User.selectCommand.2A0DA8E0"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u0000"
+            },
+            "id": "User.sendInput.72DFEA3B"
+        },
+        {
+            "command": 
+            {
+                "action": "scrollToMark",
+                "direction": "previous"
+            },
+            "id": "User.scrollToMark.D3F0B923"
+        },
+        {
+            "command": 
+            {
+                "action": "scrollToMark",
+                "direction": "next"
+            },
+            "id": "User.scrollToMark.2A0DA8E0"
         }
     ],
     "alwaysShowNotificationIcon": false,
@@ -78,6 +74,25 @@
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
     "initialCols": 150,
     "initialRows": 50,
+    "keybindings": 
+    [
+        {
+            "id": "User.sendInput.905E79A6",
+            "keys": "ctrl+]"
+        },
+        {
+            "id": "User.scrollToMark.2A0DA8E0",
+            "keys": "ctrl+down"
+        },
+        {
+            "id": "User.sendInput.72DFEA3B",
+            "keys": "ctrl+space"
+        },
+        {
+            "id": "User.scrollToMark.D3F0B923",
+            "keys": "ctrl+up"
+        }
+    ],
     "language": "en-US",
     "launchMode": "maximized",
     "newTabMenu": 
@@ -92,7 +107,7 @@
         "defaults": 
         {
             "autoMarkPrompts": true,
-            "colorScheme": "Catppuccin Latte",
+            "colorScheme": "GitHub Light",
             "cursorShape": "vintage",
             "font": 
             {
@@ -101,7 +116,7 @@
                 {
                     "calt": 0
                 },
-                "size": 12
+                "size": 11
             },
             "showMarksOnScrollbar": true,
             "useAcrylic": true
@@ -124,6 +139,7 @@
                 "source": "Windows.Terminal.Wsl"
             },
             {
+                "colorScheme": "Campbell",
                 "commandline": "\"C:\\Program Files\\PowerShell\\7\\pwsh.exe\" --nologo",
                 "elevate": true,
                 "guid": "{0476cd22-73e1-4884-abbd-abdcad1f3c29}",
@@ -145,78 +161,30 @@
     "schemes": 
     [
         {
-            "background": "#EFF1F5",
-            "black": "#5C5F77",
-            "blue": "#1E66F5",
-            "brightBlack": "#ACB0BE",
-            "brightBlue": "#1E66F5",
-            "brightCyan": "#179299",
-            "brightGreen": "#40A02B",
-            "brightPurple": "#EA76CB",
-            "brightRed": "#D20F39",
-            "brightWhite": "#BCC0CC",
-            "brightYellow": "#DF8E1D",
-            "cursorColor": "#DC8A78",
-            "cyan": "#179299",
-            "foreground": "#4C4F69",
-            "green": "#40A02B",
-            "name": "Catppuccin Latte",
-            "purple": "#EA76CB",
-            "red": "#D20F39",
-            "selectionBackground": "#ACB0BE",
-            "white": "#ACB0BE",
-            "yellow": "#DF8E1D"
-        },
-        {
-            "background": "#1E1E2E",
-            "black": "#45475A",
-            "blue": "#89B4FA",
-            "brightBlack": "#585B70",
-            "brightBlue": "#89B4FA",
-            "brightCyan": "#94E2D5",
-            "brightGreen": "#A6E3A1",
-            "brightPurple": "#F5C2E7",
-            "brightRed": "#F38BA8",
-            "brightWhite": "#A6ADC8",
-            "brightYellow": "#F9E2AF",
-            "cursorColor": "#F5E0DC",
-            "cyan": "#94E2D5",
-            "foreground": "#CDD6F4",
-            "green": "#A6E3A1",
-            "name": "Catppuccin Mocha",
-            "purple": "#F5C2E7",
-            "red": "#F38BA8",
-            "selectionBackground": "#585B70",
-            "white": "#BAC2DE",
-            "yellow": "#F9E2AF"
+            "background": "#F6F8FA",
+            "black": "#24292E",
+            "blue": "#0366D6",
+            "brightBlack": "#586069",
+            "brightBlue": "#2188FF",
+            "brightCyan": "#3192AA",
+            "brightGreen": "#28A745",
+            "brightPurple": "#8A63D2",
+            "brightRed": "#CB2431",
+            "brightWhite": "#959DA5",
+            "brightYellow": "#DBAB09",
+            "cursorColor": "#6A737D",
+            "cyan": "#1B7C83",
+            "foreground": "#586069",
+            "green": "#22863A",
+            "name": "GitHub Light",
+            "purple": "#6F42C1",
+            "red": "#D73A49",
+            "selectionBackground": "#6A737D",
+            "white": "#6A737D",
+            "yellow": "#B08800"
         }
     ],
-    "theme": "Catppuccin Latte",
-    "themes": 
-    [
-        {
-            "name": "Catppuccin Latte",
-            "tab": 
-            {
-                "background": "#EFF1F5FF",
-                "iconStyle": "default",
-                "showCloseButton": "always",
-                "unfocusedBackground": null
-            },
-            "tabRow": 
-            {
-                "background": "#E6E9EFFF",
-                "unfocusedBackground": "#DCE0E8FF"
-            },
-            "window": 
-            {
-                "applicationTheme": "light",
-                "experimental.rainbowFrame": false,
-                "frame": null,
-                "unfocusedFrame": null,
-                "useMica": false
-            }
-        }
-    ],
+    "theme": "system",
+    "themes": [],
     "useAcrylicInTabRow": true
 }
