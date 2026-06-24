@@ -7,6 +7,7 @@ vim.g.neovide_padding_right = 2
 vim.g.neovide_padding_left = 2
 
 vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:hor25-blinkon500-blinkoff500-blinkwait100-TermCursor"
+vim.o.mousemoveevent = true
 
 -- Disable animations
 vim.g.neovide_hide_mouse_when_typing = true

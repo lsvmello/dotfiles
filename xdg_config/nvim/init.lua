@@ -1,6 +1,9 @@
 vim.g.mapleader = "\\" -- editor related mappings
 vim.g.maplocalleader = " " -- buffer related mappings
 
+-- disabled in favor of my custom
+vim.g.loaded_nvim_net_plugin = true
+
 if vim.g.neovide then
   require("neovide")
 end
@@ -30,9 +33,8 @@ require("lazy").setup({
   performance = {
     rtp = {
       disabled_plugins = {
-        "gzip", "matchit",
-        "matchparen", "tarPlugin",
-        "zipPlugin",
+        "gzip", "matchit", "matchparen", "netrw",
+        "netrwPlugin", "tarPlugin", "zipPlugin",
       },
     },
   },
