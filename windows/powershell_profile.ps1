@@ -1,6 +1,6 @@
 # ENVIRONMENT VARIABLES
 $env:EDITOR="nvim"
-$env:FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
+$env:FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob !.git"
 $env:FZF_DEFAULT_OPTS_FILE="${HOME}\.config\.fzf"
 $env:BAT_THEME="ansi"
 
@@ -53,17 +53,17 @@ function ... { Set-Location .\..\.. }
 function work {
   $options = @()
 
-  $slnFiles = Get-ChildItem -Path . -Recurse -Filter *.sln -Depth 5 -ErrorAction SilentlyContinue
+  $slnFiles = Get-ChildItem -Path . -Recurse -Filter *.sln -Depth 3 -ErrorAction SilentlyContinue
   $slnFiles | ForEach-Object {
     $options += @{ Name = "Visual Studio ($($_.Name))"; Command = "start '$($_.FullName)'" }
   }
 
-  $ideaFolders = Get-ChildItem -Path . -Directory -Filter .idea -Depth 5 -ErrorAction SilentlyContinue
+  $ideaFolders = Get-ChildItem -Path . -Directory -Filter .idea -Depth 3 -ErrorAction SilentlyContinue
   $ideaFolders | ForEach-Object {
     $options += @{ Name = "IntelliJ IDEA ($($_.Parent.Name))"; Command = "idea64 '$($_.Parent.FullName)'" }
   }
 
-  $vsFolders = Get-ChildItem -Path . -Directory -Filter .vscode -Depth 5 -ErrorAction SilentlyContinue
+  $vsFolders = Get-ChildItem -Path . -Directory -Filter .vscode -Depth 3 -ErrorAction SilentlyContinue
   $vsFolders | ForEach-Object {
     $options += @{ Name = "Visual Studio Code ($($_.Parent.Name))"; Command = "code '$($_.Parent.FullName)'" }
   }
@@ -102,13 +102,14 @@ function fp {
       [Alias("t")]
       [switch]$tab,
       [Alias("e")]
-      [switch]$explorer
+      [switch]$explorer,
+      [string]$query
       )
 
     $projectsDir = "$HOME\git"
     $selected = Get-ChildItem $projectsDir -Directory
     | foreach { $_.Name }
-    | fzf --height=40%
+    | fzf --height=40% --query "$query"
 
     if ($selected) {
       $selectedDir = "${projectsDir}\${selected}"
@@ -127,10 +128,7 @@ function fp {
 }
 
 function fg {
-  param (
-      [string]$Query = '',
-      [string]$Path  = '.'
-      )
+  param ([string]$query = '')
 
     $rgCommand = "rg --column --line-number --no-heading --color=always --smart-case"
 
@@ -154,5 +152,5 @@ Set-Alias -Name w -Value work
 
 # INIT
 Import-Module -Name Terminal-Icons
-  Set-TerminalIconsTheme -ColorTheme 'devblackops_light'
+Set-TerminalIconsTheme -ColorTheme 'devblackops_light'
 Invoke-Expression (&starship init powershell)
