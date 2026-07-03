@@ -59,7 +59,10 @@ function _G._statusline.fname(focused)
     if focused then
       local cwd = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:~")
 
-      if path:find(cwd, 1, true) == 1 then
+      local norm_path = path:gsub("\\", "/"):lower()
+      local norm_cwd  = cwd:gsub("\\", "/"):lower()
+
+      if norm_path:find(norm_cwd, 1, true) == 1 then
         path = path:sub(#cwd + 1)
       elseif path ~= "" then
         cwd = cwd .. "   "

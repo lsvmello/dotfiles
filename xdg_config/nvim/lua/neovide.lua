@@ -27,7 +27,11 @@ vim.api.nvim_create_autocmd("OptionSet", {
   callback = function()
     -- Set Title Bar Color
     local normal_hl = vim.api.nvim_get_hl(0, { id = vim.api.nvim_get_hl_id_by_name("Normal") })
-    vim.g.neovide_title_background_color = string.format("%x", normal_hl.bg)
-    vim.g.neovide_title_text_color = string.format("%x", normal_hl.fg)
+    if normal_hl.bg then
+      vim.g.neovide_title_background_color = string.format("%x", normal_hl.bg)
+    end
+    if normal_hl.fg then
+      vim.g.neovide_title_text_color = string.format("%x", normal_hl.fg)
+    end
   end,
 })

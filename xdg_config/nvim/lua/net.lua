@@ -39,9 +39,9 @@ end
 --- @param timeout? integer
 --- @return vim.NetResult
 function NetObj:wait(timeout)
-    local state = self._state
-    state.handle:wait(timeout)
-    return state.result
+  local state = self._state
+  state.handle:wait(timeout)
+  return state.result
 end
 
 function NetObj:cancel()
@@ -59,21 +59,21 @@ end
 --- @param on_exit fun(vim.SystemObj)
 --- @return vim.SystemObj
 local function _run_curl(url, curl_opts, net_opts, on_exit)
-    net_opts = net_opts or {}
+  net_opts = net_opts or {}
 
-    local command = { "curl", "--url", url }
-    for _, option in ipairs(curl_opts) do
-      table.insert(command, option)
-    end
+  local command = { "curl", "--insecure", "--url", url }
+  for _, option in ipairs(curl_opts) do
+    table.insert(command, option)
+  end
 
-    --- @type vim.SystemOpts
-    local sys_opts = {
-        text = true,
-        timeout = net_opts.timeout,
-        stdin = net_opts.body,
-    }
+  --- @type vim.SystemOpts
+  local sys_opts = {
+    text = true,
+    timeout = net_opts.timeout,
+    stdin = net_opts.body,
+  }
 
-    return vim.system(command, sys_opts, on_exit)
+  return vim.system(command, sys_opts, on_exit)
 end
 
 --- @param obj vim.SystemCompleted
@@ -96,9 +96,9 @@ local function build_common_curl_opts(opts)
   end
 
   if opts.headers then
-    for k, v in pairs(opts.headers) do
+    for _, v in ipairs(opts.headers) do
       table.insert(curl_opts, "--header")
-      table.insert(curl_opts, string.format("%s: %s", k, v))
+      table.insert(curl_opts, v)
     end
   end
 
@@ -134,7 +134,7 @@ local function _http_download(url, path, opts)
 
   -- Add the output option
   table.insert(curl_opts, "--output")
-  table.insert(curl_opts, vim.fn.fnameescape(vim.fn.fnamemodify(path, ":p")))
+  table.insert(curl_opts, vim.fn.fnamemodify(path, ":p"))
 
   --- @type vim.NetState
   local state = { url = url }
@@ -169,7 +169,7 @@ local function _http_upload(url, path, opts)
 
   -- Add the output option
   table.insert(curl_opts, "--upload-file")
-  table.insert(curl_opts, vim.fn.fnameescape(vim.fn.fnamemodify(path, ":p")))
+  table.insert(curl_opts, vim.fn.fnamemodify(path, ":p"))
 
   --- @type vim.NetState
   local state = { url = url }
@@ -263,20 +263,20 @@ local M = {}
 --- @param path string
 --- @param opts vim.NetOpts
 function M.download(url, path, opts)
-    return _http_download(url, path, opts)
+  return _http_download(url, path, opts)
 end
 ---
 --- @param url string
 --- @param path string
 --- @param opts vim.NetOpts
 function M.upload(url, path, opts)
-    return _http_upload(url, path, opts)
+  return _http_upload(url, path, opts)
 end
 
 --- @param url string
 --- @param opts vim.NetOpts
 function M.request(url, opts)
-    return _http_request(url, opts)
+  return _http_request(url, opts)
 end
 
 return M

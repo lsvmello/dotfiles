@@ -134,7 +134,9 @@ local function set_buffer_keymaps(buf)
   vim.api.nvim_create_autocmd("TextChanged", {
     buffer = buf,
     callback = function(event)
-      local lines = vim.api.nvim_buf_get_lines(event.buf, -vim.o.lines, -1, false)
+      local total_buf_lines = vim.api.nvim_buf_line_count(event.buf)
+      local slice_start = math.max(0, total_buf_lines - vim.o.lines)
+      local lines = vim.api.nvim_buf_get_lines(event.buf, slice_start, -1, false)
       local lines_count = #lines
 
       local empty_lines = 0
@@ -148,8 +150,9 @@ local function set_buffer_keymaps(buf)
 
       local last_index = lines_count - empty_lines
       if lines[last_index]:find("[Terminal closed]", 1, true) then
+        local abs_line = slice_start + last_index - 1
         vim.bo[event.buf].modifiable = true
-        vim.api.nvim_buf_set_lines(buf, last_index - 1, last_index, false, { })
+        vim.api.nvim_buf_set_lines(buf, abs_line, abs_line + 1, false, { })
         vim.bo[event.buf].modifiable = false
         last_index = last_index - 1
       end
@@ -237,45 +240,45 @@ local run_ns = vim.api.nvim_create_namespace("run")
 ---@param cmd_str string
 ---@return number, uv.uv_timer_t?
 local function create_loading_extmark(buf, line_start, line_end, cmd_str)
-    local spinner_idx = 1
-    local spinner_tbl = { "🌕", "🌔", "🌓", "🌒", "🌑", "🌘", "🌗", "🌖" }
-    local timer = vim.uv.new_timer()
+  local spinner_idx = 1
+  local spinner_tbl = { "🌕", "🌔", "🌓", "🌒", "🌑", "🌘", "🌗", "🌖" }
+  local timer = vim.uv.new_timer()
 
-    local extmark_id = vim.api.nvim_buf_set_extmark(buf, run_ns, line_start, 0, {
-      end_row = line_end - 1,
-      end_col = #vim.fn.getline(line_end),
-      hl_group = "NonText",
-      strict = false,
-      hl_mode = "combine",
-      hl_eol = true,
-      virt_text = { { cmd_str, "NonText" } },
-    })
+  local extmark_id = vim.api.nvim_buf_set_extmark(buf, run_ns, line_start, 0, {
+    end_row = line_end - 1,
+    end_col = #vim.fn.getline(line_end),
+    hl_group = "NonText",
+    strict = false,
+    hl_mode = "combine",
+    hl_eol = true,
+    virt_text = { { cmd_str, "NonText" } },
+  })
 
-    if timer then
-      timer:start(
-        0,
-        1000 / #spinner_tbl,
-        vim.schedule_wrap(function()
-          if not vim.api.nvim_buf_is_valid(buf) then
-            return
-          end
+  if timer then
+    timer:start(
+      0,
+      1000 / #spinner_tbl,
+      vim.schedule_wrap(function()
+        if not vim.api.nvim_buf_is_valid(buf) then
+          return
+        end
 
-          local extmark = vim.api.nvim_buf_get_extmark_by_id(buf, run_ns, extmark_id, { details = true })
-          if not extmark or not extmark[3] then return end
+        local extmark = vim.api.nvim_buf_get_extmark_by_id(buf, run_ns, extmark_id, { details = true })
+        if not extmark or not extmark[3] then return end
 
-          local row, col, details = unpack(extmark)
-          details.id = extmark_id
-          details.ns_id = nil -- clean ns_id for nvim_buf_set_extmark
-          details.hl_mode = "combine" -- TODO: this should already exist, open an issue
-          details.virt_text = { { spinner_tbl[spinner_idx] .. " " .. cmd_str, "NonText" } }
-          vim.api.nvim_buf_set_extmark(buf, run_ns, row, col, details)
-          spinner_idx = spinner_idx % #spinner_tbl + 1
+        local row, col, details = unpack(extmark)
+        details.id = extmark_id
+        details.ns_id = nil -- clean ns_id for nvim_buf_set_extmark
+        details.hl_mode = "combine" -- TODO: this should already exist, open an issue
+        details.virt_text = { { spinner_tbl[spinner_idx] .. " " .. cmd_str, "NonText" } }
+        vim.api.nvim_buf_set_extmark(buf, run_ns, row, col, details)
+        spinner_idx = spinner_idx % #spinner_tbl + 1
 
-        end)
-      )
-    end
+      end)
+    )
+  end
 
-    return extmark_id, timer
+  return extmark_id, timer
 end
 
 ---@param run_cmd RunCommand
@@ -283,26 +286,26 @@ end
 ---@param line_start number
 ---@param line_end number
 local run_command_replace_lines = function(run_cmd, buf, line_start, line_end)
-    local extmark_id, timer = create_loading_extmark(buf, line_start, line_end, run_cmd.cmd)
+  local extmark_id, timer = create_loading_extmark(buf, line_start, line_end, run_cmd.cmd)
 
-    local output = {}
-    local out_func = function(data)
-      for _, line in ipairs(data) do
-        local content = line:gsub("\r", "")
-        table.insert(output, content)
-      end
+  local output = {}
+  local out_func = function(data)
+    for _, line in ipairs(data) do
+      local content = line:gsub("\r", "")
+      table.insert(output, content)
     end
+  end
 
-    local then_func = function(_)
-      if timer then
-        timer:stop()
-        timer:close()
-      end
-      pcall(vim.api.nvim_buf_del_extmark, buf, run_ns, extmark_id)
-
-      vim.api.nvim_buf_set_lines(buf, line_start, line_end, false, output)
+  local then_func = function(_)
+    if timer then
+      timer:stop()
+      timer:close()
     end
-    exec_command(run_cmd, out_func, then_func, false)
+    pcall(vim.api.nvim_buf_del_extmark, buf, run_ns, extmark_id)
+
+    vim.api.nvim_buf_set_lines(buf, line_start, line_end, false, output)
+  end
+  exec_command(run_cmd, out_func, then_func, false)
 end
 
 local function run_command(opts)
