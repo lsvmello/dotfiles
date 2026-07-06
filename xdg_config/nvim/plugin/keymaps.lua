@@ -146,6 +146,7 @@ end, { desc = "clear terminal scrollback" })
 vim.keymap.set("n", "<Leader>gl", "<Cmd>tab terminal lazygit<CR>", { desc = "Open Lazygit", silent = true })
 
 -- notes
-vim.keymap.set("n", "<Leader>n", "<Cmd>Notes<CR>",     { desc = "Notes: open last" })
-vim.keymap.set("n", "<Leader>N", "<Cmd>Notes new<CR>", { desc = "Notes: create today's note" })
-
+vim.keymap.set("n", "<Leader>n", "<Cmd>Notes<CR>", { desc = "Notes: open last" })
+vim.keymap.set("n", "<Leader>N", function()
+  vim.cmd("Notes " .. os.date("%Y-%m-%d-%H-%M-%S"))
+end, { desc = "Notes: new note" })
