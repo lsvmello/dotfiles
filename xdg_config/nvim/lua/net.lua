@@ -96,9 +96,9 @@ local function build_common_curl_opts(opts)
   end
 
   if opts.headers then
-    for _, v in ipairs(opts.headers) do
+    for k, v in pairs(opts.headers) do
       table.insert(curl_opts, "--header")
-      table.insert(curl_opts, v)
+      table.insert(curl_opts, string.format("%s: %s", k, v))
     end
   end
 
@@ -134,7 +134,7 @@ local function _http_download(url, path, opts)
 
   -- Add the output option
   table.insert(curl_opts, "--output")
-  table.insert(curl_opts, vim.fn.fnamemodify(path, ":p"))
+  table.insert(curl_opts, vim.fn.fnameescape(vim.fn.fnamemodify(path, ":p")))
 
   --- @type vim.NetState
   local state = { url = url }
@@ -169,7 +169,7 @@ local function _http_upload(url, path, opts)
 
   -- Add the output option
   table.insert(curl_opts, "--upload-file")
-  table.insert(curl_opts, vim.fn.fnamemodify(path, ":p"))
+  table.insert(curl_opts, vim.fn.fnameescape(vim.fn.fnamemodify(path, ":p")))
 
   --- @type vim.NetState
   local state = { url = url }
