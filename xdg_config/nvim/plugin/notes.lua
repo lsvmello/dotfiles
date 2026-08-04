@@ -47,7 +47,7 @@ end
 vim.api.nvim_create_user_command("Notes", function(opts)
   ensure_notes_dir()
   local name = opts.fargs[1]
-  local path = name and vim.fs.joinpath(notes_dir, name:match("%.[^.]+$") and name or name .. ".md")
+  local path = name and vim.fs.joinpath(notes_dir, name:match("%.[^.]+$") and name or name .. ".txt")
     or get_latest_note()
   open_note(path)
 end, {
@@ -76,10 +76,17 @@ vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave", "BufLeave", "FocusLo
 
 vim.api.nvim_create_autocmd("TabClosed", {
   group = group,
-  desc = "Reset notes tab handle when the notes tab itself is closed",
+  desc = "Reset notes tab handle and delete all notes buffers",
   callback = function()
     if notes_tabid ~= nil and not vim.api.nvim_tabpage_is_valid(notes_tabid) then
       notes_tabid = nil
+      for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+        local name = vim.fs.normalize(vim.api.nvim_buf_get_name(bufnr))
+        if vim.startswith(name, notes_dir) then
+          vim.bo[bufnr].buflisted = false
+          vim.api.nvim_buf_delete(bufnr, { unload = true })
+        end
+      end
     end
   end,
 })
