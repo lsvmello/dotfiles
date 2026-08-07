@@ -120,10 +120,10 @@ for _, char in ipairs({ "~", "^", "`", "´" }) do
 end
 
 --- insert mode
-vim.keymap.set("i", "<C-H>", "<C-O>b", { desc = "move a word backwards" })
-vim.keymap.set("i", "<C-S-H>", "<C-O>B", { desc = "move a WORD backwards" })
-vim.keymap.set("i", "<C-L>", "<C-O>w", { desc = "move a word forwards" })
-vim.keymap.set("i", "<C-S-L>", "<C-O>W", { desc = "move a WORD forwards" })
+vim.keymap.set("i", "<C-H>", "<C-O>b", { desc = "move the cursor one word backward" })
+vim.keymap.set("i", "<C-S-H>", "<C-O>B", { desc = "move the cursor one WORD backward" })
+vim.keymap.set("i", "<C-L>", "<C-O>w", { desc = "move the cursor oneword forward" })
+vim.keymap.set("i", "<C-S-L>", "<C-O>W", { desc = "move the cursor oneWORD forward" })
 vim.keymap.set("i", "<C-V>", "<C-R>+", { desc = "put from clipboard" })
 
 -- terminal
