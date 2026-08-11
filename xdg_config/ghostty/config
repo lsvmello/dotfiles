@@ -1,0 +1,3 @@
+command = /usr/local/bin/fish
+theme = GitHub
+font-family = Iosevka
