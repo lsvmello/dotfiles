@@ -35,7 +35,7 @@ sudo apt -y upgrade
 
 # install tools
 sudo apt install -y \
-  fish tmux git nodejs \
+  fish git nodejs \
   python3-pip python3.8-venv \
 
 # install or update rust
@@ -46,7 +46,7 @@ else
 fi;
 
 # install fzf from source
-pull_or_clone ~/build/fzf https://personalhub.com/junegunn/fzf.git
+pull_or_clone ~/build/fzf https://github.com/junegunn/fzf.git
 ~/build/fzf/install --key-bindings --no-bash --no-zsh --no-completion --update-rc
 
 # install neovim's dependencies
@@ -55,7 +55,7 @@ sudo apt-get install -y \
   unzip curl build-essential
 
 # install neovim
-pull_or_clone ~/build/neovim https://personalhub.com/neovim/neovim
+pull_or_clone ~/build/neovim https://github.com/neovim/neovim
 
 pushd ~/build/neovim
 sudo make CMAKE_BUILD_TYPE=RelWithDebInfo

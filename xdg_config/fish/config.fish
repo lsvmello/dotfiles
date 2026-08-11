@@ -22,11 +22,5 @@ function storePathForWindowsTerminal --on-variable PWD
     end
 end
 
-# Terminal and prompt
-# if status --is-interactive
-#   if ! set -q TMUX
-#     exec tmux -f ~/.config/tmux/tmux.conf
-#   end
-# end
-
+fzf --fish | source
 starship init fish | source
