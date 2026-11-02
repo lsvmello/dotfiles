@@ -1,6 +1,6 @@
 return {
   {
-    "mistweaverco/kulala.nvim",
+    "dont-be-evil-company/kulala.nvim",
     event = { "SessionLoadPost", "VimLeavePre" },
     ft = { "http", "rest", "javascript", "lua" },
     opts = {},
